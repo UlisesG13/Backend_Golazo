@@ -1,0 +1,50 @@
+from __future__ import annotations
+
+from typing import Optional
+from datetime import datetime
+
+from pydantic import BaseModel, EmailStr, Field
+
+class UserCreateDTO(BaseModel):
+	"""Payload para crear un usuario."""
+
+	nombre: str = Field(..., example="Juan Pérez")
+	email: EmailStr = Field(..., example="juan@example.com")
+	password: str = Field(..., min_length=6, example="secreto123")
+	telefono: Optional[str] = Field(None, example="5512345678")
+	direccion_id: Optional[int] = Field(None, example=1)
+	rol: Optional[str] = Field(None, example="cliente")
+
+
+class UserUpdateDTO(BaseModel):
+	"""Payload para actualizar un usuario (todos campos opcionales)."""
+
+	nombre: Optional[str] = Field(None, example="Juan Pérez")
+	email: Optional[EmailStr] = Field(None, example="juan@example.com")
+	password: Optional[str] = Field(None, min_length=6, example="nuevo123")
+	telefono: Optional[str] = Field(None, example="5512345678")
+	direccion_id: Optional[int] = Field(None, example=1)
+	rol: Optional[str] = Field(None, example="cliente")
+
+
+class UserDTO(BaseModel):
+	"""Representación pública de un usuario para respuestas API."""
+
+	usuario_id: str
+	nombre: str
+	email: EmailStr
+	telefono: Optional[str]
+	direccion_id: Optional[int]
+	rol: Optional[str]
+	fecha_creacion: datetime
+
+	class Config:
+		orm_mode = True
+
+class UserLoginDTO(BaseModel):
+    """Payload para login de usuario."""
+
+    email: EmailStr = Field(..., example="juan@example.com")
+    password: str = Field(..., min_length=6, example="secreto123")
+
+__all__ = ["UserCreateDTO", "UserUpdateDTO", "UserDTO", "UserLoginDTO"]
