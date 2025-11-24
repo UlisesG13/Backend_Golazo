@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 @dataclass
-class User:
+class UserModel:
     usuario_id: str
     nombre: str
     email: str

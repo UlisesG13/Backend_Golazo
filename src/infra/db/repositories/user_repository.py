@@ -1,16 +1,16 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from src.domain.models.user_model import User
+from src.domain.models.user_model import UserModel
 from src.domain.ports.user_port import UserService
-from src.infra.db.models.user_table import Usuario   # SQLAlchemy model
+from src.infra.db.models.user_table import UserTable   # SQLAlchemy model
 from src.core.exceptions import NotFoundError
 
 class UserRepository(UserService):
     def __init__(self, session: Session):
         self.session = session
 
-    def _to_domain(self, r: Usuario) -> User:
-        return User(
+    def _to_domain(self, r: UserTable) -> UserModel:
+        return UserModel(
             usuario_id=r.usuario_id,
             nombre=r.nombre,
             email=r.email,
@@ -21,24 +21,24 @@ class UserRepository(UserService):
             fecha_creacion=r.fecha_creacion,
         )
 
-    def get_all(self) -> List[User]:
-        rows = self.session.query(Usuario).all()
+    def get_all(self) -> List[UserModel]:
+        rows = self.session.query(UserTable).all()
         return [self._to_domain(r) for r in rows]
 
-    def get_by_id(self, usuario_id: str) -> Optional[User]:
-        r = self.session.query(Usuario).filter(Usuario.usuario_id == usuario_id).first()
+    def get_by_id(self, usuario_id: str) -> Optional[UserModel]:
+        r = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
         if not r:
             return None
         return self._to_domain(r)
 
-    def get_by_email(self, email: str) -> Optional[User]:
-        r = self.session.query(Usuario).filter(Usuario.email == email).first()
+    def get_by_email(self, email: str) -> Optional[UserModel]:
+        r = self.session.query(UserTable).filter(UserTable.email == email).first()
         if not r:
             return None
         return self._to_domain(r)
 
-    def create(self, user: User) -> User:
-        model = Usuario(
+    def create(self, user: UserModel) -> UserModel:
+        model = UserTable(
             usuario_id=user.usuario_id,
             nombre=user.nombre,
             email=user.email,
@@ -52,8 +52,8 @@ class UserRepository(UserService):
         self.session.refresh(model)
         return self._to_domain(model)
 
-    def update(self, usuario_id: str, user: User) -> User:
-        model = self.session.query(Usuario).filter(Usuario.usuario_id == usuario_id).first()
+    def update(self, usuario_id: str, user: UserModel) -> UserModel:
+        model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
         if not model:
             raise NotFoundError(f"Usuario {usuario_id} no existe")
 
@@ -70,7 +70,7 @@ class UserRepository(UserService):
         return self._to_domain(model)
 
     def delete(self, usuario_id: str) -> None:
-        model = self.session.query(Usuario).filter(Usuario.usuario_id == usuario_id).first()
+        model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
         if not model:
             raise NotFoundError(f"Usuario {usuario_id} no existe")
         self.session.delete(model)

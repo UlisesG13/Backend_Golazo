@@ -1,27 +1,27 @@
 #interface
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from src.domain.models.user_model import User
+from src.domain.models.user_model import UserModel
 
 class UserService(ABC):
     @abstractmethod
-    def get_all(self) -> List[User]:
+    def get_all(self) -> List[UserModel]:
         """Lista todos los usuarios (solo para debug/testing)"""
 
     @abstractmethod
-    def get_by_id(self, usuario_id: str) -> Optional[User]:
+    def get_by_id(self, usuario_id: str) -> Optional[UserModel]:
         """Obtiene un usuario por su ID"""
 
     @abstractmethod
-    def get_by_email(self, email: str) -> Optional[User]:
+    def get_by_email(self, email: str) -> Optional[UserModel]:
         """Obtiene un usuario por su email (para signin)"""
 
     @abstractmethod
-    def create(self, user: User) -> User:
+    def create(self, user: UserModel) -> UserModel:
         """Registra un usuario nuevo (para signup)"""
 
     @abstractmethod
-    def update(self, usuario_id: str, user: User) -> User:
+    def update(self, usuario_id: str, user: UserModel) -> UserModel:
         """Actualiza datos del usuario"""
 
     @abstractmethod

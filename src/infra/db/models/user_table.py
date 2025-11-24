@@ -6,7 +6,7 @@ from src.infra.db.database import Base
 from sqlalchemy.types import Enum
 from sqlalchemy.orm import relationship
 
-class Usuario(Base):
+class UserTable(Base):
     __tablename__ = "usuario"
     
     usuario_id = Column(String, primary_key=True)
