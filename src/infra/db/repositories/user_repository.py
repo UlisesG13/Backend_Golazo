@@ -75,3 +75,11 @@ class UserRepository(UserService):
             raise NotFoundError(f"Usuario {usuario_id} no existe")
         self.session.delete(model)
         self.session.commit()
+
+    def reset_password(self, usuario_id: str, new_password: str) -> None:
+        model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
+        if not model:
+            raise NotFoundError(f"Usuario {usuario_id} no existe")
+        model.password = new_password
+        self.session.add(model)
+        self.session.commit()

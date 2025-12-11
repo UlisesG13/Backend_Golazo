@@ -27,3 +27,7 @@ class UserService(ABC):
     @abstractmethod
     def delete(self, usuario_id: str) -> None:
         """Elimina un usuario"""
+    
+    @abstractmethod
+    def reset_password(self, usuario_id: str, new_password: str) -> None:
+        """Resetea la contraseña del usuario"""
