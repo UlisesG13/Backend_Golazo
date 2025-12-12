@@ -8,6 +8,8 @@ from email.mime.text import MIMEText
 from email.utils import formataddr, make_msgid, formatdate
 import smtplib
 from typing import List
+from uuid import uuid4
+from src.api.schemas.user_dto import UserCreateDTO, UserUpdateDTO, UserDTO, UserLoginDTO, LoginResponseDTO, TokenUserDTO
 from src.domain.models.user_model import UserModel
 from src.domain.ports.user_port import UserService
 from src.core.config import settings
@@ -29,20 +31,63 @@ class UserUsecases:
             raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
         return user
 
+    def get_by_google_id(self, uid: str, email: str, nombre: str) -> UserModel:
+        user = self.repo.get_by_google_id(uid)
+
+        if not user:
+            user = UserModel(
+                usuario_id=str(uuid4()),
+                google_id=uid,
+                email=email,
+                nombre=nombre,
+                password=None,      
+                telefono="",         
+                direccion_id=None,
+                rol="cliente",
+                fecha_creacion=datetime.now(),
+                is_authenticated=True
+            )
+            user = self.repo.create(user)
+
+        return user
+
     def get_user_by_email(self, email: str) -> UserModel:
         user = self.repo.get_by_email(email)
         if not user:
             raise ValueError(f"Usuario con email {email} no encontrado")
         return user
 
-    def create_user(self, user: UserModel) -> UserModel:
-        user.password = self.hash_password(user.password)
+    def create_user(self, dto: UserCreateDTO) -> UserModel:
+        user = UserModel(
+            usuario_id=str(uuid4()),
+            nombre=dto.nombre,
+            email=dto.email,
+            password=self.hash_password(dto.password),
+
+            rol="cliente",
+            fecha_creacion=datetime.utcnow(),
+            is_authenticated=False,
+
+            telefono="",
+            direccion_id=None,
+            google_id=None
+        )
         return self.repo.create(user)
 
-    def update_user(self, usuario_id: str, user: UserModel) -> UserModel:
-        if not self.repo.get_by_id(usuario_id):
-            raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
-        user.password = self.hash_password(user.password)
+    def update_user(self, usuario_id: str, dto: UserUpdateDTO) -> UserModel:
+        user = self.repo.get_by_id(usuario_id)
+        if not user:
+            raise ValueError("Usuario no encontrado")
+
+        if dto.nombre is not None:
+            user.nombre = dto.nombre
+
+        if dto.telefono is not None:
+            user.telefono = dto.telefono
+
+        if dto.password is not None:
+            user.password = self.hash_password(dto.password)
+
         return self.repo.update(usuario_id, user)
 
     def delete_user(self, usuario_id: str) -> bool:
@@ -63,14 +108,11 @@ class UserUsecases:
         charset = string.digits
         code = ''.join(secrets.choice(charset) for _ in range(6))
         expires_at = datetime.now() + timedelta(minutes=15)
-        print("GENERATED CODE:", code)
         hashed = hashlib.sha256(code.encode()).hexdigest()
-        print("HASHED CODE:", hashed)
         verification_store[user_id] = {
             "code": hashed,
             "expires_at": expires_at
         }
-
         return {
             "code": code,
             "expires_at": expires_at
@@ -92,8 +134,8 @@ class UserUsecases:
         return True
 
     def reset_password(self, usuario_id: str, new_password: str) -> UserModel:
-        password = self.hash_password(new_password)
-        return self.repo.reset_password(usuario_id, password)
+        hashed_password = self.hash_password(new_password)
+        return self.repo.reset_password(usuario_id, hashed_password)
 
     @staticmethod
     def hash_password(password: str) -> str:
@@ -158,5 +200,5 @@ class UserUsecases:
         if not self.is_code_valid(usuario_id, code):
             raise ValueError("Código inválido o expirado")
         user.is_authenticated = True
-        self.repo.update(usuario_id, user)
+        self.repo.update_authentication(usuario_id, user)
         return user

@@ -15,13 +15,15 @@ class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = os.getenv("ALGORITHM")
     TIME_MINUTES: int = int(os.getenv("TIME_MINUTES", "30"))
-
+    GOOGLE_CLIENT_ID = str = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET = str = os.getenv("GOOGLE_CLIENT_SECRET")
+    GOOGLE_REDIRECT_URI = str = os.getenv("GOOGLE_REDIRECT_URI")
 settings = Settings()
 
 app = FastAPI(
     title="Golazo",
     description="Backend del e-commerce Golazo",
-    version="1.0.0"
+    version="1.0.5"
 )
 origins = [
     "http://localhost:8000",

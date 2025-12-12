@@ -13,6 +13,10 @@ class UserService(ABC):
         """Obtiene un usuario por su ID"""
 
     @abstractmethod
+    def get_by_google_id(self, google_id: str) -> Optional[UserModel]:
+        """Obtiene un usuario por su ID de Google (para auth Google)"""
+
+    @abstractmethod
     def get_by_email(self, email: str) -> Optional[UserModel]:
         """Obtiene un usuario por su email (para signin)"""
 
@@ -31,3 +35,7 @@ class UserService(ABC):
     @abstractmethod
     def reset_password(self, usuario_id: str, new_password: str) -> None:
         """Resetea la contraseña del usuario"""
+
+    @abstractmethod
+    def update_authentication(self, usuario_id: str, is_authenticated: bool) -> None:
+        """Actualiza el estado de autenticación del usuario"""

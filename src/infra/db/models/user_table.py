@@ -12,7 +12,7 @@ class UserTable(Base):
     usuario_id = Column(String, primary_key=True)
     nombre = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    password = Column(String, nullable=False)
+    password = Column(String, nullable=True)
     telefono = Column(String, nullable=True)
     direccion_id = Column(Integer, ForeignKey("direccion.direccion_id"), nullable=True)
     rol = Column(Enum(Rol), default=Rol.cliente)
@@ -20,5 +20,6 @@ class UserTable(Base):
         DateTime(timezone=True), default=lambda: datetime.now(ZoneInfo("America/Mexico_City"))
     )
     is_authenticated = Column(Boolean, default=False)
+    google_id = Column(String, unique=True, nullable=True)
     
     direccion = relationship("DireccionTable", back_populates="usuario")

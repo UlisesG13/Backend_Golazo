@@ -11,20 +11,14 @@ class UserCreateDTO(BaseModel):
 	nombre: str = Field(..., example="Juan Pérez")
 	email: EmailStr = Field(..., example="juan@example.com")
 	password: str = Field(..., min_length=6, example="secreto123")
-	telefono: Optional[str] = Field(None, example="5512345678")
-	direccion_id: Optional[int] = Field(None, example=1)
-	rol: Optional[str] = Field(None, example="cliente")
 
 
 class UserUpdateDTO(BaseModel):
 	"""Payload para actualizar un usuario (todos campos opcionales)."""
 
 	nombre: Optional[str] = Field(None, example="Juan Pérez")
-	email: Optional[EmailStr] = Field(None, example="juan@example.com")
 	password: Optional[str] = Field(None, min_length=6, example="nuevo123")
 	telefono: Optional[str] = Field(None, example="5512345678")
-	direccion_id: Optional[int] = Field(None, example=1)
-	rol: Optional[str] = Field(None, example="cliente")
 
 
 class UserDTO(BaseModel):
@@ -38,9 +32,11 @@ class UserDTO(BaseModel):
 	rol: Optional[str]
 	fecha_creacion: datetime
 	is_authenticated: bool | None = False
-
+	google_id: Optional[str] | None = None
+	password: Optional[str] | None = None
+	
 	class Config:
-		orm_mode = True
+		from_attributes = True
 
 class UserLoginDTO(BaseModel):
     """Payload para login de usuario."""

@@ -1,7 +1,6 @@
 from datetime import datetime
 import secrets
 from typing import List, Optional
-from zoneinfo import ZoneInfo
 from sqlalchemy.orm import Session
 from src.domain.models.user_model import UserModel
 from src.domain.ports.user_port import UserService
@@ -23,6 +22,7 @@ class UserRepository(UserService):
             rol=str(r.rol.value) if r.rol is not None else None,
             fecha_creacion=r.fecha_creacion,
             is_authenticated=r.is_authenticated,
+            google_id=r.google_id
         )
 
     def get_all(self) -> List[UserModel]:
@@ -35,6 +35,12 @@ class UserRepository(UserService):
             return None
         return self._to_domain(r)
 
+    def get_by_google_id(self, google_id: str) -> Optional[UserModel]:
+        r = self.session.query(UserTable).filter(UserTable.google_id == google_id).first()
+        if not r:
+            return None
+        return self._to_domain(r)
+    
     def get_by_email(self, email: str) -> Optional[UserModel]:
         r = self.session.query(UserTable).filter(UserTable.email == email).first()
         if not r:
@@ -42,26 +48,23 @@ class UserRepository(UserService):
         return self._to_domain(r)
 
     def create(self, user: UserModel) -> UserModel:
-        id = secrets.token_hex(16)
-        if user.direccion_id is None or user.direccion_id == "" or user.direccion_id == 0:
-            user.direccion_id = None
-        fecha = datetime.now()
-        if user.telefono is None or user.telefono == "" or user.telefono == 0:
-            user.telefono = ""
         model = UserTable(
-            usuario_id=id,
+            usuario_id=user.usuario_id,
             nombre=user.nombre,
             email=user.email,
             password=user.password,
-            telefono=user.telefono,
+            telefono=user.telefono or "",
             direccion_id=user.direccion_id,
             rol=user.rol,
-            fecha_creacion=fecha,
+            fecha_creacion=user.fecha_creacion,
+            google_id=user.google_id,
+            is_authenticated=user.is_authenticated
         )
         self.session.add(model)
         self.session.commit()
         self.session.refresh(model)
         return self._to_domain(model)
+
 
     def update(self, usuario_id: str, user: UserModel) -> UserModel:
         model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
@@ -69,16 +72,20 @@ class UserRepository(UserService):
             raise NotFoundError(f"Usuario {usuario_id} no existe")
 
         model.nombre = user.nombre
-        model.email = user.email
-        model.password = user.password
         model.telefono = user.telefono
-        model.direccion_id = user.direccion_id
-        model.rol = user.rol
-        model.is_authenticated = user.is_authenticated
-        self.session.add(model)
+        model.password = user.password
+
         self.session.commit()
         self.session.refresh(model)
         return self._to_domain(model)
+    
+    def update_authentication(self, usuario_id: str, is_authenticated: bool) -> None:
+        model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
+        if not model:
+            raise NotFoundError(f"Usuario {usuario_id} no existe")
+        model.is_authenticated = is_authenticated
+        self.session.add(model)
+        self.session.commit()
 
     def delete(self, usuario_id: str) -> None:
         model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
