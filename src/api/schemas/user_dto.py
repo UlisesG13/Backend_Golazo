@@ -37,6 +37,7 @@ class UserDTO(BaseModel):
 	direccion_id: Optional[int]
 	rol: Optional[str]
 	fecha_creacion: datetime
+	is_authenticated: bool | None = False
 
 	class Config:
 		orm_mode = True
@@ -47,4 +48,15 @@ class UserLoginDTO(BaseModel):
     email: EmailStr = Field(..., example="juan@example.com")
     password: str = Field(..., min_length=6, example="secreto123")
 
-__all__ = ["UserCreateDTO", "UserUpdateDTO", "UserDTO", "UserLoginDTO"]
+class TokenUserDTO(BaseModel):
+    usuario_id: str
+    email: str
+    rol: str
+
+class LoginResponseDTO(BaseModel):
+    token: str
+    usuario_id: str
+    email: str
+    rol: str
+
+__all__ = ["UserCreateDTO", "UserUpdateDTO", "UserDTO", "UserLoginDTO", "LoginResponseDTO", "TokenUserDTO"]

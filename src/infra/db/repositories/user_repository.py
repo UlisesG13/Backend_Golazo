@@ -1,4 +1,7 @@
+from datetime import datetime
+import secrets
 from typing import List, Optional
+from zoneinfo import ZoneInfo
 from sqlalchemy.orm import Session
 from src.domain.models.user_model import UserModel
 from src.domain.ports.user_port import UserService
@@ -19,6 +22,7 @@ class UserRepository(UserService):
             direccion_id=r.direccion_id,
             rol=str(r.rol.value) if r.rol is not None else None,
             fecha_creacion=r.fecha_creacion,
+            is_authenticated=r.is_authenticated,
         )
 
     def get_all(self) -> List[UserModel]:
@@ -38,14 +42,21 @@ class UserRepository(UserService):
         return self._to_domain(r)
 
     def create(self, user: UserModel) -> UserModel:
+        id = secrets.token_hex(16)
+        if user.direccion_id is None or user.direccion_id == "" or user.direccion_id == 0:
+            user.direccion_id = None
+        fecha = datetime.now()
+        if user.telefono is None or user.telefono == "" or user.telefono == 0:
+            user.telefono = ""
         model = UserTable(
-            usuario_id=user.usuario_id,
+            usuario_id=id,
             nombre=user.nombre,
             email=user.email,
             password=user.password,
             telefono=user.telefono,
             direccion_id=user.direccion_id,
             rol=user.rol,
+            fecha_creacion=fecha,
         )
         self.session.add(model)
         self.session.commit()
@@ -63,7 +74,7 @@ class UserRepository(UserService):
         model.telefono = user.telefono
         model.direccion_id = user.direccion_id
         model.rol = user.rol
-
+        model.is_authenticated = user.is_authenticated
         self.session.add(model)
         self.session.commit()
         self.session.refresh(model)

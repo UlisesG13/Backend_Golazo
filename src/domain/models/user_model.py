@@ -11,3 +11,4 @@ class UserModel:
     direccion_id: int | None
     rol: str
     fecha_creacion: datetime
+    is_authenticated: bool | None = False

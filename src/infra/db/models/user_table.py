@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from src.infra.db.models.rol_enum import Rol
@@ -19,5 +19,6 @@ class UserTable(Base):
     fecha_creacion = Column(
         DateTime(timezone=True), default=lambda: datetime.now(ZoneInfo("America/Mexico_City"))
     )
+    is_authenticated = Column(Boolean, default=False)
     
-    # direccion = relationship("Direccion", back_populates="usuario")
+    direccion = relationship("DireccionTable", back_populates="usuario")

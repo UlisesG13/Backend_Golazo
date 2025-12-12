@@ -40,10 +40,16 @@ class UserUsecases:
         return self.repo.create(user)
 
     def update_user(self, usuario_id: str, user: UserModel) -> UserModel:
+        if not self.repo.get_by_id(usuario_id):
+            raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
+        user.password = self.hash_password(user.password)
         return self.repo.update(usuario_id, user)
 
-    def delete_user(self, usuario_id: str) -> None:
+    def delete_user(self, usuario_id: str) -> bool:
+        if not self.repo.get_by_id(usuario_id):
+            raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
         self.repo.delete(usuario_id)
+        return True
 
     def login(self, credentials: UserModel) -> UserModel:
         user = self.repo.get_by_email(credentials.email)
@@ -57,9 +63,9 @@ class UserUsecases:
         charset = string.digits
         code = ''.join(secrets.choice(charset) for _ in range(6))
         expires_at = datetime.now() + timedelta(minutes=15)
-
+        print("GENERATED CODE:", code)
         hashed = hashlib.sha256(code.encode()).hexdigest()
-
+        print("HASHED CODE:", hashed)
         verification_store[user_id] = {
             "code": hashed,
             "expires_at": expires_at
@@ -133,7 +139,7 @@ class UserUsecases:
         msg = MIMEMultipart("alternative")
         msg['Message-ID'] = make_msgid()
         msg['Date'] = formatdate(localtime=True)
-        msg["Subject"] = "Código de recuperación"
+        msg["Subject"] = "Código de verificacion"
         msg["From"] = formataddr(("Soporte Golazo", mail_username))
         msg["To"] = to_email
 
@@ -143,3 +149,14 @@ class UserUsecases:
             server.starttls()
             server.login(mail_username, mail_password)
             server.sendmail(mail_username, to_email, msg.as_string())
+        return True
+
+    def authenticate_user(self, usuario_id: str, code: str) -> UserModel:
+        user = self.repo.get_by_id(usuario_id)
+        if not user:
+            raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
+        if not self.is_code_valid(usuario_id, code):
+            raise ValueError("Código inválido o expirado")
+        user.is_authenticated = True
+        self.repo.update(usuario_id, user)
+        return user
