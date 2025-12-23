@@ -70,7 +70,8 @@ class UserUsecases:
 
             telefono="",
             direccion_id=None,
-            google_id=None
+            google_id=None,
+            fecha_eliminacion=None
         )
         return self.repo.create(user)
 
@@ -94,6 +95,14 @@ class UserUsecases:
         if not self.repo.get_by_id(usuario_id):
             raise ValueError(f"Usuario con ID {usuario_id} no encontrado")
         self.repo.delete(usuario_id)
+        return True
+
+    def soft_delete_user(self, usuario_id: str) -> bool:
+        user = self.repo.get_by_id(usuario_id)
+        if not user:
+            raise ValueError("Usuario no encontrado")
+
+        self.repo.anonymize_and_soft_delete(usuario_id)
         return True
 
     def login(self, credentials: UserModel) -> UserModel:

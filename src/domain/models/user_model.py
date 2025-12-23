@@ -16,3 +16,4 @@ class UserModel:
     telefono: Optional[str] = ""
     direccion_id: Optional[int] = None
     google_id: Optional[str] = None
+    fecha_eliminacion: Optional[datetime] = None

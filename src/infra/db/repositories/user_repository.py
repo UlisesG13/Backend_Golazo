@@ -30,19 +30,19 @@ class UserRepository(UserService):
         return [self._to_domain(r) for r in rows]
 
     def get_by_id(self, usuario_id: str) -> Optional[UserModel]:
-        r = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
+        r = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id, UserTable.fecha_eliminacion == None).first()
         if not r:
             return None
         return self._to_domain(r)
 
     def get_by_google_id(self, google_id: str) -> Optional[UserModel]:
-        r = self.session.query(UserTable).filter(UserTable.google_id == google_id).first()
+        r = self.session.query(UserTable).filter(UserTable.google_id == google_id, UserTable.fecha_eliminacion == None).first()
         if not r:
             return None
         return self._to_domain(r)
     
     def get_by_email(self, email: str) -> Optional[UserModel]:
-        r = self.session.query(UserTable).filter(UserTable.email == email).first()
+        r = self.session.query(UserTable).filter(UserTable.email == email, UserTable.fecha_eliminacion == None).first()
         if not r:
             return None
         return self._to_domain(r)
@@ -58,13 +58,13 @@ class UserRepository(UserService):
             rol=user.rol,
             fecha_creacion=user.fecha_creacion,
             google_id=user.google_id,
-            is_authenticated=user.is_authenticated
+            is_authenticated=user.is_authenticated,
+            fecha_eliminacion=user.fecha_eliminacion
         )
         self.session.add(model)
         self.session.commit()
         self.session.refresh(model)
         return self._to_domain(model)
-
 
     def update(self, usuario_id: str, user: UserModel) -> UserModel:
         model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
@@ -92,6 +92,25 @@ class UserRepository(UserService):
         if not model:
             raise NotFoundError(f"Usuario {usuario_id} no existe")
         self.session.delete(model)
+        self.session.commit()
+
+    def anonymize_and_soft_delete(self, usuario_id: str) -> None:
+        user = (
+            self.session
+            .query(UserTable)
+            .filter(UserTable.usuario_id == usuario_id)
+            .first()
+        )
+        if not user:
+            raise NotFoundError("Usuario no existe")
+        user.nombre = "USUARIO ELIMINADO"
+        user.email = f"deleted_{usuario_id}@deleted.local"
+        user.password = "!"
+        user.telefono = None
+        user.google_id = None
+        user.is_authenticated = False
+        user.fecha_eliminacion = datetime.utcnow()
+
         self.session.commit()
 
     def reset_password(self, usuario_id: str, new_password: str) -> None:

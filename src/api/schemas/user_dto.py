@@ -34,6 +34,7 @@ class UserDTO(BaseModel):
 	is_authenticated: bool | None = False
 	google_id: Optional[str] | None = None
 	password: Optional[str] | None = None
+	fecha_eliminacion: Optional[datetime] | None = None
 	
 	class Config:
 		from_attributes = True

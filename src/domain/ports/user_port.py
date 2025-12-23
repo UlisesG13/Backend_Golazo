@@ -1,5 +1,6 @@
 #interface
 from abc import ABC, abstractmethod
+import datetime
 from typing import List, Optional
 from src.domain.models.user_model import UserModel
 
@@ -32,6 +33,10 @@ class UserService(ABC):
     def delete(self, usuario_id: str) -> None:
         """Elimina un usuario"""
     
+    @abstractmethod
+    def anonymize_and_soft_delete(self, usuario_id: str, fecha_eliminacion: datetime) -> None:
+        """Elimina lógicamente un usuario"""
+
     @abstractmethod
     def reset_password(self, usuario_id: str, new_password: str) -> None:
         """Resetea la contraseña del usuario"""
