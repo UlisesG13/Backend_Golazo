@@ -28,7 +28,6 @@ class UserDTO(BaseModel):
 	nombre: str
 	email: EmailStr
 	telefono: Optional[str]
-	direccion_id: Optional[int]
 	rol: Optional[str]
 	fecha_creacion: datetime
 	is_authenticated: bool | None = False

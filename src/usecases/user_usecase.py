@@ -42,7 +42,6 @@ class UserUsecases:
                 nombre=nombre,
                 password=None,      
                 telefono="",         
-                direccion_id=None,
                 rol="cliente",
                 fecha_creacion=datetime.now(),
                 is_authenticated=True
@@ -69,7 +68,6 @@ class UserUsecases:
             is_authenticated=False,
 
             telefono="",
-            direccion_id=None,
             google_id=None,
             fecha_eliminacion=None
         )
