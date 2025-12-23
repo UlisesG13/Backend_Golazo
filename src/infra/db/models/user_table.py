@@ -14,11 +14,9 @@ class UserTable(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=True)
     telefono = Column(String, nullable=True)
-    direccion_id = Column(Integer, ForeignKey("direccion.direccion_id"), nullable=True)
     rol = Column(Enum(Rol), default=Rol.cliente)
     fecha_creacion = Column(DateTime(timezone=True))
     is_authenticated = Column(Boolean, default=False)
     google_id = Column(String, unique=True, nullable=True)
     fecha_eliminacion = Column(DateTime(timezone=True), nullable=True)
 
-    direccion = relationship("DireccionTable", back_populates="usuario")
