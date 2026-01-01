@@ -60,7 +60,7 @@ def delete_user(
     user = Depends(auth),
     uc: UserUsecases = Depends(get_user_service),
 ):
-    return uc.delete_user(user.usuario_id)
+    return uc.soft_delete_user(user.usuario_id)
 
 @router.post("/auth/authenticate/", response_model=UserDTO)
 def authenticate_user(usuario_id: str, code: str, uc: UserUsecases = Depends(get_user_service)):
