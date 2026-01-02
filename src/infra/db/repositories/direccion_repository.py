@@ -31,7 +31,7 @@ class DireccionRepository(DireccionPort):
             return self._to_domain(direccion)
         return None
     
-    def get_direcciones_by_usuario_id(self, usuario_id: str) -> Optional[DireccionModel]:
+    def get_direcciones_by_usuario_id(self, usuario_id: str) -> List[DireccionModel]:
         direcciones = self.session.query(DireccionTable).filter_by(usuario_id=usuario_id).all()
         return [self._to_domain(direccion) for direccion in direcciones]
     
