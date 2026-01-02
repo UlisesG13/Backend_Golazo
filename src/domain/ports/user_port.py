@@ -4,7 +4,7 @@ import datetime
 from typing import List, Optional
 from src.domain.models.user_model import UserModel
 
-class UserService(ABC):
+class UserPort(ABC):
     @abstractmethod
     def get_all(self) -> List[UserModel]:
         """Lista todos los usuarios (solo para debug/testing)"""

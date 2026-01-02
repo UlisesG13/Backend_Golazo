@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 from src.domain.models.direccion_model import DireccionModel
 
-class DireccionService(ABC):
+class DireccionPort(ABC):
 
     @abstractmethod
     def get_direccion_by_id(self, direccion_id: int) -> Optional[DireccionModel]:
         """Obtiene una dirección por su ID."""
 
     @abstractmethod
-    def get_direcciones_by_usuario_id(self, usuario_id: str) -> Optional[DireccionModel]:
+    def get_direcciones_by_usuario_id(self, usuario_id: str) -> List[DireccionModel]:
         """Obtiene una dirección por el ID del usuario."""
 
     @abstractmethod

@@ -1,10 +1,10 @@
 from typing import List
-from src.domain.ports.direccion_port import DireccionService
+from src.domain.ports.direccion_port import DireccionPort
 from src.api.schemas.direccion_dto import DireccionDTO, DireccionCreateDTO, DireccionUpdateDTO
 from src.domain.models.direccion_model import DireccionModel
 
 class DireccionUsecases:
-    def __init__(self, repo: DireccionService):
+    def __init__(self, repo: DireccionPort):
         self.repo = repo
 
     def get_direcciones(self, usuario_id: str) -> list[DireccionModel]:

@@ -11,13 +11,13 @@ from typing import List
 from uuid import uuid4
 from src.api.schemas.user_dto import UserCreateDTO, UserUpdateDTO, UserDTO, UserLoginDTO, LoginResponseDTO, TokenUserDTO
 from src.domain.models.user_model import UserModel
-from src.domain.ports.user_port import UserService
+from src.domain.ports.user_port import UserPort
 from src.core.config import settings
 
 verification_store = {}
 
 class UserUsecases:
-    def __init__(self, repo: UserService):
+    def __init__(self, repo: UserPort):
         self.repo = repo
         self.mail_username = settings.MAIL_USERNAME
         self.mail_password = settings.MAIL_PASSWORD

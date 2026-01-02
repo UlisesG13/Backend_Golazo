@@ -2,12 +2,12 @@ from datetime import datetime
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from src.domain.models.direccion_model import DireccionModel
-from src.domain.ports.direccion_port import DireccionService
+from src.domain.ports.direccion_port import DireccionPort
 from src.infra.db.models.direccion_table import DireccionTable 
 from src.infra.db.models.user_table import UserTable
 from src.core.exceptions import NotFoundError
 
-class DireccionRepository(DireccionService):
+class DireccionRepository(DireccionPort):
     def __init__(self, session: Session):
         self.session = session
 

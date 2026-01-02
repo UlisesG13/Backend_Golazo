@@ -3,11 +3,11 @@ import secrets
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from src.domain.models.user_model import UserModel
-from src.domain.ports.user_port import UserService
+from src.domain.ports.user_port import UserPort
 from src.infra.db.models.user_table import UserTable   # SQLAlchemy model
 from src.core.exceptions import NotFoundError
 
-class UserRepository(UserService):
+class UserRepository(UserPort):
     def __init__(self, session: Session):
         self.session = session
 
