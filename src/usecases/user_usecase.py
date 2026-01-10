@@ -2,7 +2,7 @@ import os
 import hashlib
 import secrets
 import string
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr, make_msgid, formatdate
@@ -64,7 +64,7 @@ class UserUsecases:
             password=self.hash_password(dto.password),
 
             rol="cliente",
-            fecha_creacion=datetime.utcnow(),
+            fecha_creacion=datetime.now(timezone.utc),
             is_authenticated=False,
 
             telefono="",

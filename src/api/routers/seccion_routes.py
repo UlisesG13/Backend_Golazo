@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from typing import List
 from src.usecases.seccion_usecase import SeccionUsecases
-from core.dependency_inyection.seccion_di import get_seccion_service
+from src.core.dependency_inyection.seccion_di import get_seccion_service
 from src.api.schemas.seccion_dto import SeccionDTO, SeccionCreateDTO, SeccionUpdateDTO
 
 router = APIRouter(prefix="/api/secciones", tags=["secciones"])
