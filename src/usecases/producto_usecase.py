@@ -38,7 +38,7 @@ class ProductoUsecases:
         producto.esta_activo = dto.esta_activo
         producto.esta_destacado = dto.esta_destacado
         producto.categoria_id = dto.categoria_id
-        return self.repo.update_producto(producto)
+        return self.repo.update_producto(producto_id, producto)
     
     def delete_producto(self, producto_id: str) -> None:
         return self.repo.delete_producto(producto_id)
@@ -46,19 +46,19 @@ class ProductoUsecases:
     def mark_producto_as_destacado(self, producto_id: str) -> ProductoModel:
         producto = self.repo.get_by_id(producto_id) # si no lo encuentra lanza NotFoundError desde el repositorio
         producto.esta_destacado = True
-        return self.repo.update_producto(producto)
+        return self.repo.update_producto(producto_id, producto)
     
     def unmark_producto_as_destacado(self, producto_id: str) -> ProductoModel:
         producto = self.repo.get_by_id(producto_id) # si no lo encuentra lanza NotFoundError desde el repositorio
         producto.esta_destacado = False
-        return self.repo.update_producto(producto)
+        return self.repo.update_producto(producto_id, producto)
     
     def desactivar_producto(self, producto_id: str) -> ProductoModel:
         producto = self.repo.get_by_id(producto_id) # si no lo encuentra lanza NotFoundError desde el repositorio
         producto.esta_activo = False
-        return self.repo.update_producto(producto)
+        return self.repo.update_producto(producto_id, producto)
     
     def activar_producto(self, producto_id: str) -> ProductoModel:
         producto = self.repo.get_by_id(producto_id) # si no lo encuentra lanza NotFoundError desde el repositorio
         producto.esta_activo = True
-        return self.repo.update_producto(producto)
+        return self.repo.update_producto(producto_id, producto)

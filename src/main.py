@@ -4,7 +4,8 @@ from src.core.routers import (
     auth_google_router, 
     direccion_router, 
     seccion_router, 
-    categoria_router
+    categoria_router,
+    producto_router
 )
 
 app.include_router(user_router)
@@ -12,6 +13,7 @@ app.include_router(auth_google_router)
 app.include_router(direccion_router)
 app.include_router(seccion_router)
 app.include_router(categoria_router)
+app.include_router(producto_router)
 
 print("Docs: http://127.0.0.1:8000/docs")
 @app.get("/")
