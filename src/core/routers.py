@@ -8,3 +8,4 @@ from src.api.routers.color_routes import router as color_router
 from src.api.routers.producto_color_routes import router as producto_color_router
 from src.api.routers.talla_routes import router as talla_router
 from src.api.routers.producto_talla_routes import router as producto_talla_router
+from src.api.routers.carrito_routes import router as carrito_router

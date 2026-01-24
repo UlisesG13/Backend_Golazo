@@ -9,7 +9,8 @@ from src.core.routers import (
     color_router,
     producto_color_router,
     talla_router,
-    producto_talla_router
+    producto_talla_router,
+    carrito_router
 )
 
 app.include_router(user_router)
@@ -22,6 +23,7 @@ app.include_router(color_router)
 app.include_router(producto_color_router)
 app.include_router(talla_router)
 app.include_router(producto_talla_router)
+app.include_router(carrito_router)
 
 print("Docs: http://127.0.0.1:8000/docs")
 @app.get("/")
