@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from sqlalchemy import Column, ForeignKey, DateTime, String
 from src.infra.db.database import Base
 
@@ -8,3 +9,5 @@ class CarritoTable(Base):
     usuario_id = Column(String, ForeignKey("usuario.usuario_id"), nullable=False)
     fecha_creacion = Column(DateTime(timezone=True), nullable=False)
     fecha_actualizacion = Column(DateTime(timezone=True), nullable=True)
+
+    items = relationship("CarritoItemTable", back_populates="carrito")
