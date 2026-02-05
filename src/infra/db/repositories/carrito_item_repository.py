@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from domain.models.carrito_item_model import CarritoItemModel
-from domain.ports.carrito_item_port import CarritoItemPort
-from infra.db.models.carrito_item_table import CarritoItemTable
-from infra.db.models.carrito_table import CarritoTable
+from src.domain.models.carrito_item_model import CarritoItemModel
+from src.domain.ports.carrito_item_port import CarritoItemPort
+from src.infra.db.models.carrito_item_table import CarritoItemTable
+from src.infra.db.models.carrito_table import CarritoTable
 from src.core.exceptions import NotFoundError
 
 class CarritoItemRepository(CarritoItemPort):

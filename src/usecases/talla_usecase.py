@@ -8,6 +8,7 @@ class TallaUsecases:
 
     def create_talla(self, dto: TallaCreateDTO) -> TallaModel:
         talla = TallaModel(
+            talla_id=0,  # El ID será asignado por la base de datos
             nombre=dto.nombre
         )
         return self.repo.create_talla(talla)
