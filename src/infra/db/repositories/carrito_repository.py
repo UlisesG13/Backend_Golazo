@@ -25,6 +25,7 @@ class CarritoRepository(CarritoPort):
         
     def create_carrito(self, carrito: CarritoModel) -> CarritoModel:
         nuevo_carrito = CarritoTable(
+            carrito_id=carrito.carrito_id,
             usuario_id=carrito.usuario_id,
             fecha_creacion=carrito.fecha_creacion,
             fecha_actualizacion=carrito.fecha_actualizacion
@@ -34,7 +35,7 @@ class CarritoRepository(CarritoPort):
         self.db_session.refresh(nuevo_carrito)
         return self._to_domain(nuevo_carrito)
     
-    def udate_carrito(self, carrito_id: str, updated_data: CarritoModel) -> CarritoModel:
+    def update_carrito(self, carrito_id: str, updated_data: CarritoModel) -> CarritoModel:
         carrito_db = self.db_session.query(CarritoTable).filter_by(carrito_id=carrito_id).first()
         if not carrito_db:
             raise NotFoundError("Carrito no encontrado")

@@ -15,6 +15,7 @@ class CarritoItemUseCases:
     def add_item_to_carrito(self, carrito_id: str, dto: CarritoItemCreateDTO) -> CarritoItemModel:
         item_model = CarritoItemModel(
             carrito_item_id=str(uuid4()),
+            carrito_id=carrito_id,
             producto_id=dto.producto_id,
             color_id=dto.color_id,
             talla_id=dto.talla_id,

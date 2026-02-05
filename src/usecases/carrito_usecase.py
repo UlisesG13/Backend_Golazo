@@ -26,7 +26,7 @@ class CarritoUseCases:
         updated_data = CarritoModel(
             fecha_actualizacion=datetime.now()
         )
-        return self.repo.udate_carrito(existing_carrito.carrito_id, updated_data)
+        return self.repo.update_carrito(existing_carrito.carrito_id, updated_data)
         
     def delete_carrito(self, usuario_id: str) -> None:
         existing_carrito = self.repo.get_by_user_id(usuario_id)

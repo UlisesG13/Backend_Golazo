@@ -20,15 +20,6 @@ def add_item_to_carrito(
 ):
     return service.add_item_to_carrito(carrito_id, dto)
 
-@router.put("/{carrito_id}/item/{item_id}", response_model=CarritoItemDTO)
-def update_carrito_item(
-    carrito_id: str,
-    item_id: str,
-    dto: CarritoItemUpdateDTO,
-    service: CarritoItemUseCases = Depends(get_carrito_item_service),
-):
-    return service.update_item_in_carrito(carrito_id, item_id, dto)
-
 @router.delete("/{carrito_id}/item/{item_id}", response_model=None)
 def remove_item_from_carrito(
     carrito_id: str,

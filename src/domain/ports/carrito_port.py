@@ -12,7 +12,7 @@ class CarritoPort(ABC):
         """Crea un nuevo carrito"""
 
     @abstractmethod
-    def udate_carrito(self, carrito_id: str, updated_data: CarritoModel) -> CarritoModel:
+    def update_carrito(self, carrito_id: str, updated_data: CarritoModel) -> CarritoModel:
         """Actualiza un carrito existente"""
     
     @abstractmethod

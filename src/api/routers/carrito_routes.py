@@ -19,13 +19,6 @@ def create_carrito(
 ):
     return service.create_carrito(dto)
 
-@router.put("/", response_model=CarritoDTO)
-def update_carrito(
-    dto: UpdateCarritoDTO,
-    service: CarritoUseCases = Depends(get_carrito_service),
-):
-    return service.update_carrito(dto)
-
 @router.delete("/usuario/{usuario_id}", status_code=204)
 def delete_carrito(
     usuario_id: str,
