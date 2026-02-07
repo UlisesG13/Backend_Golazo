@@ -11,3 +11,4 @@ from src.api.routers.producto_talla_routes import router as producto_talla_route
 from src.api.routers.carrito_routes import router as carrito_router
 from src.api.routers.carrito_item_routes import router as carrito_item_router
 from src.api.routers.imagen_routes import router as imagen_router
+from src.api.routers.pedido_routes import router as pedido_router
