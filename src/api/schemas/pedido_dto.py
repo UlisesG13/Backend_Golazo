@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field
-from supabase_auth import datetime
+from datetime import datetime
 
 class PedidoDto(BaseModel):
     pedido_id: int = Field(None, example=1)
@@ -16,7 +16,7 @@ class PedidoDto(BaseModel):
     direccion: dict = Field(None, example={"calle": "123 Main St", "ciudad": "Ciudad", "codigo_postal": "12345"})
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 class PedidoCreateDto(BaseModel):
     usuario_id: str = Field(..., example="USER12345")

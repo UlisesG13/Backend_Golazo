@@ -1,0 +1,10 @@
+from fastapi import Depends
+from src.infra.db.database import get_session
+from src.infra.db.repositories.pedido_item_repository import PedidoItemRepository
+from src.usecases.pedido_usecase import PedidoUsecases
+
+def get_pedido_item_repository(session=Depends(get_session)):
+    return PedidoItemRepository(session)
+
+def get_pedido_item_service(repo=Depends(get_pedido_item_repository)):
+    return PedidoUsecases(repo)
