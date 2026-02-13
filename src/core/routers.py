@@ -13,3 +13,5 @@ from src.api.routers.carrito_item_routes import router as carrito_item_router
 from src.api.routers.imagen_routes import router as imagen_router
 from src.api.routers.pedido_routes import router as pedido_router
 from src.api.routers.pedido_item_routes import router as pedido_item_router
+from src.api.routers.factura_routes import router as factura_router
+from src.api.routers.promocion_routes import router as promocion_router
