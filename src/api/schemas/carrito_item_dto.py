@@ -17,7 +17,6 @@ class CarritoItemDTO(BaseModel):
 class CarritoItemCreateDTO(BaseModel):
     """Payload para crear un item en el carrito."""
     producto_id: str = Field(..., example="prod-123")
-    carrito_id: str = Field(..., example="carrito-123")
     color_id: int = Field(..., example=1)
     talla_id: int = Field(..., example=1)
     cantidad: int = Field(..., example=2)

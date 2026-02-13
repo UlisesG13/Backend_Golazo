@@ -19,7 +19,7 @@ class ProductoDTO(BaseModel):
 
 class ProductoCreateDTO(BaseModel):
     nombre: str = Field(..., description="Nombre del producto", example="Camiseta de fútbol")
-    precio: int = Field(..., description="Precio del producto", example=29.99)
+    precio: int = Field(..., description="Precio del producto", example=29)
     descripcion: Optional[str] = Field(None, description="Descripción del producto", example="Camiseta oficial del equipo")
     esta_activo: bool = Field(..., description="Indica si el producto está activo", example=True)
     esta_destacado: bool = Field(..., description="Indica si el producto está destacado", example=False)

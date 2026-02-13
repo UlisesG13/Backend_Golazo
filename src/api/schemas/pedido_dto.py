@@ -16,7 +16,7 @@ class PedidoDto(BaseModel):
     direccion: dict = Field(None, example={"calle": "123 Main St", "ciudad": "Ciudad", "codigo_postal": "12345"})
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PedidoCreateDto(BaseModel):
     usuario_id: str = Field(..., example="USER12345")

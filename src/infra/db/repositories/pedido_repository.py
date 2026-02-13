@@ -4,7 +4,6 @@ from src.domain.models.pedido_model import PedidoModel
 from src.domain.ports.pedido_port import PedidoPort
 from src.infra.db.models.pedido_table import PedidoTable
 from src.core.exceptions import NotFoundError
-from src.infra.db.models.promocion_table import PromocionTable # importando para que cargue el modelo
 
 class PedidoRepository(PedidoPort):
     def __init__(self, db_session: Session):
