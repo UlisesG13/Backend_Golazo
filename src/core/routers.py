@@ -15,3 +15,8 @@ from src.api.routers.pedido_routes import router as pedido_router
 from src.api.routers.pedido_item_routes import router as pedido_item_router
 from src.api.routers.factura_routes import router as factura_router
 from src.api.routers.promocion_routes import router as promocion_router
+
+
+# nuevas rutas
+from src.modules.auth.presentation.routes import router as auth_routes
+from src.modules.usuarios.presentation.routes import router as usuario_routes

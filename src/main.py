@@ -16,11 +16,11 @@ from src.core.routers import (
     pedido_router,
     pedido_item_router,
     factura_router,
-    promocion_router
+    promocion_router,
+    auth_routes,
+    usuario_routes
 )
 
-app.include_router(user_router)
-app.include_router(auth_google_router)
 app.include_router(direccion_router)
 app.include_router(seccion_router)
 app.include_router(categoria_router)
@@ -36,6 +36,12 @@ app.include_router(pedido_router)
 app.include_router(pedido_item_router)
 app.include_router(factura_router)
 app.include_router(promocion_router)
+
+# nuevas rutas
+
+app.include_router(auth_routes)
+app.include_router(usuario_routes)
+
 
 print("Docs: http://127.0.0.1:8000/docs")
 @app.get("/")

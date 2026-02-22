@@ -1,0 +1,8 @@
+from modules.auth.domain.ports import AuthPort
+
+class VerifyUser:
+    def __init__(self, repo: AuthPort):
+        self.repo = repo
+
+    def execute(self, user_id: str):
+        return self.repo.verify_user(user_id)

@@ -25,12 +25,14 @@ class Settings:
     ALGORITHM: str = os.getenv("ALGORITHM")
     TIME_MINUTES: int = int(os.getenv("TIME_MINUTES", "30"))
 
+    BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
+
 settings = Settings()
 
 app = FastAPI(
     title="Golazo",
     description="Backend del e-commerce Golazo",
-    version="1.0.5"
+    version="1.1.0"
 )
 origins = [
     "http://localhost:8000",

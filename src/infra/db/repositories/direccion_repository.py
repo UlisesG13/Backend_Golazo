@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from src.domain.models.direccion_model import DireccionModel
 from src.domain.ports.direccion_port import DireccionPort
 from src.infra.db.models.direccion_table import DireccionTable 
-from src.infra.db.models.user_table import UserTable
+from src.modules.usuarios.infra.tables import UserTable
 from src.core.exceptions import NotFoundError
 
 class DireccionRepository(DireccionPort):

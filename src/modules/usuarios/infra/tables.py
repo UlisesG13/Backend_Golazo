@@ -1,10 +1,11 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
-from datetime import datetime
-from zoneinfo import ZoneInfo
-from src.infra.db.models.rol_enum import Rol
+from sqlalchemy import Column, String, DateTime, Boolean
 from src.infra.db.database import Base
 from sqlalchemy.types import Enum
-from sqlalchemy.orm import relationship
+from enum import Enum as PyEnum
+
+class Rol(PyEnum):
+    cliente = "cliente"
+    administrador = "administrador"
 
 class UserTable(Base):
     __tablename__ = "usuario"
@@ -19,4 +20,5 @@ class UserTable(Base):
     is_authenticated = Column(Boolean, default=False)
     google_id = Column(String, unique=True, nullable=True)
     fecha_eliminacion = Column(DateTime(timezone=True), nullable=True)
+
 
