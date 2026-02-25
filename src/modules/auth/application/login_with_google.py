@@ -1,3 +1,4 @@
+from src.modules.auth.domain.models import TokenResult
 from src.modules.auth.domain.ports import GoogleOAuthPort, AuthPort, TokenPort
 from src.modules.auth.domain.models import AuthUser, TokenPayload
 from datetime import datetime, timezone
@@ -15,7 +16,7 @@ class LoginWithGoogle:
         self.user_repo = user_repo
         self.token_service = token_service
 
-    def execute(self, code: str) -> str:
+    def execute(self, code: str) -> TokenResult:
 
         tokens = self.google_oauth.exchange_code(code)
         user_info = self.google_oauth.verify_id_token(tokens["id_token"])
@@ -54,4 +55,11 @@ class LoginWithGoogle:
             exp=...  # definido por tu TokenService
         )
         self.user_repo.verify_user(user.usuario_id)
-        return self.token_service.generate(payload)
+        token = self.token_service.generate(payload)
+
+        return TokenResult(
+            token=token,
+            usuario_id=user.usuario_id,
+            email=user.email,
+            rol=user.rol
+        )

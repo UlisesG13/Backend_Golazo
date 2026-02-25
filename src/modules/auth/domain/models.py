@@ -32,6 +32,13 @@ class TokenPayload:
     exp: datetime
 
 @dataclass
+class TokenResult:
+    token: str
+    usuario_id: str
+    email: str
+    rol: str
+
+@dataclass
 class RecoveryCode:
     id: int | None
     usuario_id: str

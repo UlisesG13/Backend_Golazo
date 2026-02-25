@@ -1,4 +1,4 @@
-from modules.auth.domain.ports import AuthPort
+from src.modules.auth.domain.ports import AuthPort
 
 class VerifyUser:
     def __init__(self, repo: AuthPort):

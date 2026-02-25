@@ -1,4 +1,4 @@
-from src.modules.usuarios.application.container import build_get_user_by_id_service, build_get_user_by_email_service, anonymize_user_service, build_delete_user_service, build_get_all_users_service, build_update_user_service
+from src.modules.usuarios.presentation.dependencies import build_get_user_by_id_service, build_get_user_by_email_service, anonymize_user_service, build_delete_user_service, build_get_all_users_service, build_update_user_service
 from src.modules.usuarios.application import GetUserById, AnonymizeUser, GetUserByEmail, DeleteUser, GetAllUsers, UpdateUser
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.shared.security import get_current_user

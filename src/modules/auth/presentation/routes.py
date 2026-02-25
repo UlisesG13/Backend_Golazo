@@ -13,6 +13,7 @@ from src.modules.auth.presentation.dependencies import (
     send_recovery_code_service,
     verify_recovery_code_service,
     reset_password_service,
+    verify_user_service
 )
 
 from src.modules.auth.presentation.schemas import (
@@ -83,9 +84,11 @@ def verify_code(
         usuario_id: str,
         code: str,
         usecase_code=Depends(verify_recovery_code_service),
-        usecase_auth=Depends()
+        usecase_auth=Depends(verify_user_service)
 ):
-    return usecase_code.execute(usuario_id, code)
+    if usecase_code.execute(usuario_id, code):
+        return usecase_auth.execute(usuario_id)
+    return None
 
 
 @router.post("/recovery/reset")
