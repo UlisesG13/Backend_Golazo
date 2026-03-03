@@ -19,4 +19,5 @@ from src.api.routers.promocion_routes import router as promocion_router
 
 # nuevas rutas
 from src.modules.auth.presentation.routes import router as auth_routes
-from src.modules.usuarios.presentation.routes import router as usuario_routes
+from src.modules.usuarios.presentation.user_routes import router as usuario_routes
+from src.modules.usuarios.presentation.direccion_routes import router as direccion_routes

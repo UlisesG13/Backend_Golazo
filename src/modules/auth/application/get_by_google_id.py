@@ -12,5 +12,5 @@ class GetByGoogle:
     def execute(self, uid: str) -> AuthUser:
         user = self.auth_repo.get_by_google_id(uid)
         if not user:
-            raise ValueError("Usuario no encontrado") # obteniendo el error en `routes.py` procedera a crear el usuario
+            raise ValueError("Usuario no encontrado") # obteniendo el error en `user_routes.py` procedera a crear el usuario
         return user
