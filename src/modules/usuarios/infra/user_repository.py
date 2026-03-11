@@ -1,5 +1,6 @@
+from src.modules.auth.domain.models import AuthUser
 from src.modules.usuarios.domain.models import UserModel
-from src.modules.usuarios.infra.tables import UserTable
+from src.modules.usuarios.infra.tables import UserTable, Rol
 from src.modules.usuarios.domain.ports import UserPort
 from src.core.exceptions import NotFoundError
 from sqlalchemy.orm import Session
@@ -89,3 +90,26 @@ class UserRepository(UserPort):
         user.fecha_eliminacion = datetime.now(timezone.utc)
 
         self.session.commit()
+
+    def create_admin(self, user: AuthUser) -> UserModel:
+        model = UserTable(
+            usuario_id=user.usuario_id,
+            nombre=user.nombre,
+            email=user.email,
+            password=user.password,
+            telefono=user.telefono or "",
+            rol=user.rol,
+            fecha_creacion=user.fecha_creacion,
+            google_id=user.google_id,
+            is_authenticated=user.is_authenticated,
+            fecha_eliminacion=user.fecha_eliminacion
+        )
+        self.session.add(model)
+        self.session.commit()
+        self.session.refresh(model)
+        return _to_domain(model)
+
+    def get_all_admins(self) -> List[UserModel]:
+        stmt = select(UserTable).where(UserTable.rol == Rol.administrador.value)
+        rows = self.session.execute(stmt).scalars().all()
+        return [_to_domain(r) for r in rows]

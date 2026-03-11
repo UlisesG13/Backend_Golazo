@@ -5,7 +5,9 @@ AnonymizeUser,
 GetUserByEmail,
 DeleteUser,
 GetAllUsers,
-UpdateUser
+UpdateUser,
+CreateAdmin,
+GetAllAdmins
 )
 from .direccion import (
 GetAllDirecciones,
@@ -22,6 +24,8 @@ __all__ = [
     DeleteUser,
     GetAllUsers,
     UpdateUser,
+    CreateAdmin,
+    GetAllAdmins,
 
     GetDireccionById,
     GetAllDirecciones,

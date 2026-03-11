@@ -1,10 +1,11 @@
 from src.modules.auth.domain.ports import AuthPort, PasswordPort, TokenPort
 from src.modules.auth.domain.models import AuthUser, TokenPayload
+from src.modules.auth.presentation.schemas import UserRegister
 from datetime import datetime, timedelta, timezone
 from src.modules.usuarios.infra.tables import Rol
 from uuid import uuid4
 
-class RegisterUser:
+class CreateAdmin:
 
     def __init__(
         self,
@@ -16,7 +17,7 @@ class RegisterUser:
         self.password_repo = password_port
         self.token_repo = token_port
 
-    def execute(self, user: AuthUser):
+    def execute(self, user: UserRegister):
         existing = self.auth_repo.get_by_email(user.email)
         if existing:
             raise ValueError("Email already registered")
@@ -27,9 +28,9 @@ class RegisterUser:
             usuario_id=str(uuid4()),
             nombre=user.nombre,
             email=user.email,
-            rol=Rol.cliente.value,
+            rol=Rol.administrador.value,
             fecha_creacion=datetime.now(timezone.utc),
-            is_authenticated=False,
+            is_authenticated=True,
             password=hashed,
             telefono="",
             google_id=None,

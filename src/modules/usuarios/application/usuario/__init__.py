@@ -5,12 +5,16 @@ from .delete_user import DeleteUser
 from .get_all_users import GetAllUsers
 from .update_user import UpdateUser
 from .get_all_users import GetAllUsers
+from .create_admin import CreateAdmin
+from .get_admins import GetAllAdmins
 
 __all__ = [
-    "GetUserById",
-    "AnonymizeUser",
-    "GetUserByEmail",
-    "DeleteUser",
-    "GetAllUsers",
-    "UpdateUser",
+    GetUserById,
+    AnonymizeUser,
+    GetUserByEmail,
+    DeleteUser,
+    GetAllUsers,
+    UpdateUser,
+    CreateAdmin,
+    GetAllAdmins
 ]
