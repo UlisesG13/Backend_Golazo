@@ -1,6 +1,4 @@
-from src.api.routers.user_routes import router as user_router
 from src.api.routers.auth_google_routes import router as auth_google_router
-from src.api.routers.direccion_routes import router as direccion_router
 from src.api.routers.seccion_routes import router as seccion_router
 from src.api.routers.categoria_routes import router as categoria_router
 from src.api.routers.producto_routes import router as producto_router
@@ -21,3 +19,4 @@ from src.api.routers.promocion_routes import router as promocion_router
 from src.modules.auth.presentation.routes import router as auth_routes
 from src.modules.usuarios.presentation.user_routes import router as usuario_routes
 from src.modules.usuarios.presentation.direccion_routes import router as direccion_routes
+from src.modules.catalogo.presentation.products.products_routes import router as products_routes

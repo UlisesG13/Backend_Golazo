@@ -2,7 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from src.domain.models.producto_model import ProductoModel
 from src.domain.ports.producto_port import ProductoPort
-from src.infra.db.models.producto_table import ProductoTable 
+from src.modules.catalogo.infra.products.product_table import ProductoTable
 from src.core.exceptions import NotFoundError
 
 class ProductoRepository(ProductoPort):
