@@ -44,6 +44,14 @@ def get_productos_by_categoria(categoria_id: int, uc: GetProductoByCategoria = D
 def create_producto(dto: ProductoCreateDTO, uc: CreateProducto = Depends(create_producto_service)):
     return uc.execute(dto)
 
+@router.put("/{producto_id}/alter-destacado/", response_model=ProductoDTO)
+def change_destacado(producto_id: str, destacado: bool ,uc: ChangeDestacado = Depends(change_destacado_service)):
+    return uc.execute(producto_id, destacado)
+
+@router.put("/{producto_id}/alter-status/", response_model=ProductoDTO)
+def change_status(producto_id: str,status: bool, uc: ChangeStatus = Depends(change_status_service)):
+    return uc.execute(producto_id, status)
+
 @router.put("/{producto_id}/", response_model=ProductoDTO)
 def update_producto(producto_id: str, dto: ProductoUpdateDTO, uc: UpdateProducto = Depends(update_producto_service)):
     return uc.execute(producto_id, dto)
@@ -51,12 +59,3 @@ def update_producto(producto_id: str, dto: ProductoUpdateDTO, uc: UpdateProducto
 @router.delete("/{producto_id}/", status_code=204)
 def delete_producto(producto_id: str, uc: DeleteProducto = Depends(delete_producto_service)):
     return uc.execute(producto_id)
-
-@router.put("/{producto_id}/alter-destacado/", response_model=ProductoDTO)
-def change_destacado(producto_id: str, destacado: bool ,uc: ChangeDestacado = Depends(change_destacado_service)):
-    return uc.execute(producto_id, destacado)
-
-
-@router.put("/{producto_id}/alter-status/", response_model=ProductoDTO)
-def change_status(producto_id: str,status: bool, uc: ChangeStatus = Depends(change_status_service)):
-    return uc.execute(producto_id, status)

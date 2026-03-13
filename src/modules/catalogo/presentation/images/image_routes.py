@@ -63,6 +63,13 @@ def get_imagenes_por_producto(
 
     return [ImagenDTO(imagen_id=img.imagen_id, path=img.path, orden=img.orden) for img in imagenes]
 
+@router.delete("/producto/{producto_id}/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
+def desasociar_imagen(
+    producto_id: str,
+    imagen_id: int,
+    service: DesasociarImageFromProduct = Depends(desasociar_image_service)
+):
+    service.execute(producto_id, imagen_id)
 
 @router.delete("/producto/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_imagenes_producto(
@@ -77,11 +84,3 @@ def eliminar_imagen(
     service: DeleteImage = Depends(delete_image_service)
 ):
     service.execute(imagen_id)
-
-@router.delete("/producto/{producto_id}/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
-def desasociar_imagen(
-    producto_id: str,
-    imagen_id: int,
-    service: DesasociarImageFromProduct = Depends(desasociar_image_service)
-):
-    service.execute(producto_id, imagen_id)

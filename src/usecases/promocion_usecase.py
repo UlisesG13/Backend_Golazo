@@ -51,3 +51,6 @@ class PromocionUsecases:
     
     def desactivar_promocion(self, id: int) -> PromocionModel:
         return self.repo.desactivar(id)
+
+    def delete(self, promocion_id: int) -> None:
+        return self.repo.delete(promocion_id)
