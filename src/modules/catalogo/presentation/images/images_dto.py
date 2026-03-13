@@ -1,32 +1,41 @@
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, field_validator
 from fastapi import Form
+from src.core.config import settings
+
+
+class ProductoImagenCreateDTO(BaseModel):
+    producto_id: str
+    imagen_id: int
+    es_principal: Optional[bool]
+
 
 class ImagenCreateDTO(BaseModel):
-    """Payload para crear una imagen."""
-    orden: int = Field(..., example=1)
+    orden: int
 
     @classmethod
     def as_form(cls, orden: int = Form(...)):
         return cls(orden=orden)
 
 class ImagenDTO(BaseModel):
-    """Respuesta para las imagenes."""
     imagen_id: int
     path: str
     orden: int
 
+    @field_validator("path")
+    @classmethod
+    def build_url(cls, v: str) -> str:
+        return (
+            f"{settings.SUPABASE_URL}"
+            f"/storage/v1/object/public/"
+            f"{settings.SUPABASE_BUCKET}/{v}"
+        )
+
     class Config:
         from_attributes = True
 
-class ProductoImagenCreateDTO(BaseModel):
-    """Payload para asociar una imagen a un producto."""
-    producto_id: str = Field(..., example="PROD12345")
-    imagen_id: int = Field(..., example=1)
-    es_principal: Optional[bool] = Field(False, example=True)
 
 class ProductoImagenDTO(BaseModel):
-    """Respuesta para las imagenes asociadas a un producto."""
     producto_imagen_id: int
     producto_id: str
     imagen_id: int

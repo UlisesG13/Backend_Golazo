@@ -1,5 +1,9 @@
-from src.core.database import get_session
 from fastapi import Depends
+from src.core.database import get_session
+
+from src.modules.catalogo.app.images.get_images import GetImages
+from src.modules.catalogo.infra.images.db.image_repository import ImageRepository
+from src.modules.catalogo.infra.images.db.product_image_repository import ProductImageRepository
 
 from src.modules.catalogo.infra.products.product_repository import ProductoRepository
 
@@ -15,16 +19,27 @@ ChangeDestacado,
 )
 
 def get_all_productos_service(session = Depends(get_session)):
-    repo = ProductoRepository(session)
-    return ListProducts(repo)
+    imagen_repo = ImageRepository(session)
+    product_image_repo = ProductImageRepository(session)
+    get_images_uc = GetImages(imagen_repo, product_image_repo)
+    producto_repo = ProductoRepository(session)
 
-def get_product_by_id_service(session = Depends(get_session)):
-    repo = ProductoRepository(session)
-    return GetProductoById(repo)
+    return ListProducts(producto_repo, get_images_uc)
+
+
+def get_product_by_id_service(session=Depends(get_session)):
+    imagen_repo = ImageRepository(session)
+    product_image_repo = ProductImageRepository(session)
+    get_images_uc = GetImages(imagen_repo, product_image_repo)
+    producto_repo = ProductoRepository(session)
+    return GetProductoById(producto_repo, get_images_uc)
 
 def get_producto_by_categoria_service(session = Depends(get_session)):
-    repo = ProductoRepository(session)
-    return GetProductoByCategoria(repo)
+    imagen_repo = ImageRepository(session)
+    product_image_repo = ProductImageRepository(session)
+    get_images_uc = GetImages(imagen_repo, product_image_repo)
+    producto_repo = ProductoRepository(session)
+    return GetProductoByCategoria(producto_repo, get_images_uc)
 
 def create_producto_service(session = Depends(get_session)):
     repo = ProductoRepository(session)
