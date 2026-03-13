@@ -63,13 +63,6 @@ def create_admin(
 ):
     return uc.execute(user)
 
-@router.delete("/admin/{usuario_id}", status_code=204)
-def delete_admin(
-        usuario_id: str,
-        uc: DeleteUser = Depends(delete_user_service()),
-):
-    return uc.execute(usuario_id)
-
 @router.get("/admins", response_model=List[UserDTO])
 def get_admins(
         uc: GetAllAdmins = Depends(get_all_admins_service)
