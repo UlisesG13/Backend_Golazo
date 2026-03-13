@@ -63,7 +63,7 @@ def create_admin(
 ):
     return uc.execute(user)
 
-@router.delete("/admin/{usuario_id}", response_model=LoginResponseDTO)
+@router.delete("/admin/{usuario_id}", status_code=204)
 def delete_admin(
         usuario_id: str,
         uc: DeleteUser = Depends(delete_user_service),
