@@ -8,7 +8,6 @@ from src.core.routers import (
     producto_talla_router,
     carrito_router,
     carrito_item_router,
-    imagen_router,
     pedido_router,
     pedido_item_router,
     factura_router,
@@ -16,7 +15,8 @@ from src.core.routers import (
     auth_routes,
     usuario_routes,
     direccion_routes,
-    products_routes
+    products_routes,
+    images_routes
 )
 
 app.include_router(seccion_router)
@@ -27,7 +27,6 @@ app.include_router(talla_router)
 app.include_router(producto_talla_router)
 app.include_router(carrito_router)
 app.include_router(carrito_item_router)
-app.include_router(imagen_router)
 app.include_router(pedido_router)
 app.include_router(pedido_item_router)
 app.include_router(factura_router)
@@ -39,6 +38,7 @@ app.include_router(auth_routes)
 app.include_router(usuario_routes)
 app.include_router(direccion_routes)
 app.include_router(products_routes)
+app.include_router(images_routes)
 
 print("Docs: http://127.0.0.1:8000/docs")
 @app.get("/")

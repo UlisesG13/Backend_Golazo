@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.infra.db.database import get_session
+from src.core.database import get_session
 from src.infra.db.repositories.categoria_repository import CategoriaRepository
 from src.usecases.categoria_usecase import CategoriaUsecases
 

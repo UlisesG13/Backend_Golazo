@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, DateTime, Integer, ForeignKey
-from src.infra.db.database import Base
+from src.core.database import Base
 
 class RecoveryCodeTable(Base):
     __tablename__ = "recovery_code"

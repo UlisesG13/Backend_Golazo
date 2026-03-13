@@ -6,7 +6,6 @@ from src.api.routers.talla_routes import router as talla_router
 from src.api.routers.producto_talla_routes import router as producto_talla_router
 from src.api.routers.carrito_routes import router as carrito_router
 from src.api.routers.carrito_item_routes import router as carrito_item_router
-from src.api.routers.imagen_routes import router as imagen_router
 from src.api.routers.pedido_routes import router as pedido_router
 from src.api.routers.pedido_item_routes import router as pedido_item_router
 from src.api.routers.factura_routes import router as factura_router
@@ -18,3 +17,4 @@ from src.modules.auth.presentation.routes import router as auth_routes
 from src.modules.usuarios.presentation.user_routes import router as usuario_routes
 from src.modules.usuarios.presentation.direccion_routes import router as direccion_routes
 from src.modules.catalogo.presentation.products.products_routes import router as products_routes
+from src.modules.catalogo.presentation.images.image_routes import router as images_routes

@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.infra.db.database import get_session
+from src.core.database import get_session
 from src.infra.db.repositories.talla_repository import TallaRepository
 from src.usecases.talla_usecase import TallaUsecases
 

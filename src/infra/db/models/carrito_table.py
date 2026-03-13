@@ -1,6 +1,6 @@
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, ForeignKey, DateTime, String
-from src.infra.db.database import Base
+from src.core.database import Base
 
 class CarritoTable(Base):
     __tablename__ = "carrito"

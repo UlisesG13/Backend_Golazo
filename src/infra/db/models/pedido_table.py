@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Float, ForeignKey, Integer, String, DateTime, JSON
-from src.infra.db.database import Base
+from src.core.database import Base
 from sqlalchemy.types import Enum
 from src.infra.db.models.estado_pedido_enum import EstadoPedido
 

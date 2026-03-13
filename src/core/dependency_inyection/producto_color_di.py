@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.infra.db.database import get_session
+from src.core.database import get_session
 from src.infra.db.repositories.producto_color_repository import ProductoColorRepository
 from src.usecases.producto_color_usecase import ProductoColorUsecases
 

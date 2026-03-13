@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey
-from src.infra.db.database import Base
+from src.core.database import Base
 from sqlalchemy.types import Enum
 from enum import Enum as PyEnum
 

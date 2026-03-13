@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.infra.db.database import get_session
+from src.core.database import get_session
 from src.infra.db.repositories.pedido_item_repository import PedidoItemRepository
 from src.usecases.pedido_item_usecase import PedidoItemUsecases
 

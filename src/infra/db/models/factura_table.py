@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
-from src.infra.db.database import Base
+from src.core.database import Base
 
 class FacturaTable(Base):
     __tablename__ = "factura"

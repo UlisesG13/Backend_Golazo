@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
-from src.infra.db.database import Base
+from src.core.database import Base
 
 class ProductoImagenTable(Base):
     __tablename__ = "producto_imagen"

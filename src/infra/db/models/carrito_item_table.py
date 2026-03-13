@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Numeric
-from src.infra.db.database import Base
+from src.core.database import Base
 from sqlalchemy.orm import relationship
 
 class CarritoItemTable(Base):

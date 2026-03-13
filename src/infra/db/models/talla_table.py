@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from src.infra.db.database import Base
+from src.core.database import Base
 
 class TallaTable(Base):
     __tablename__ = "talla"
