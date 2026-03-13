@@ -3,7 +3,7 @@ from src.modules.usuarios.application import GetUserById, AnonymizeUser, GetUser
 from src.modules.auth.presentation.schemas import LoginResponseDTO, UserRegister
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.shared.security import get_current_user
-from src.api.schemas.user_dto import UserDTO, UserUpdateDTO
+from src.modules.usuarios.presentation.schemas import UserDTO, UserUpdateDTO
 from fastapi import APIRouter, Depends
 from typing import List
 
