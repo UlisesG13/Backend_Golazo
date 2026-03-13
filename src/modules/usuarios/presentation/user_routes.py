@@ -56,14 +56,14 @@ def update_user(
 ):
     return uc.execute(user.usuario_id, user_update)
 
-@router.post("/admin", response_model=LoginResponseDTO)
+@router.post("/admins", response_model=LoginResponseDTO)
 def create_admin(
         user: UserRegister,
         uc: CreateAdmin = Depends(register_admin_service),
 ):
     return uc.execute(user)
 
-@router.delete("/admin/{usuario_id}", status_code=204)
+@router.delete("/admins/{usuario_id}", status_code=204)
 def delete_admin(
         usuario_id: str,
         uc: DeleteUser = Depends(delete_user_service),
@@ -75,3 +75,11 @@ def get_admins(
         uc: GetAllAdmins = Depends(get_all_admins_service)
 ):
     return uc.execute()
+
+@router.put("/admins/{usuario_id}", response_model=UserDTO)
+def update_admin(
+    user_update: UserUpdateDTO,
+    usuario_id: str,
+    uc: UpdateUser = Depends(update_user_service),
+):
+    return uc.execute(usuario_id, user_update)
