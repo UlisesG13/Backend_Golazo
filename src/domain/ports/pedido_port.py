@@ -8,6 +8,10 @@ class PedidoPort(ABC):
         """Obtiene los pedidos del usuario"""
 
     @abstractmethod
+    def get_all(self) -> list[PedidoModel]:
+        """Obtiene todos los pedidos"""
+
+    @abstractmethod
     def get_by_id(self, pedido_id: int) -> PedidoModel:
         """Obtiene un pedido por su ID"""
 

@@ -23,6 +23,10 @@ class PedidoRepository(PedidoPort):
             notas=r.notas,
             direccion=r.direccion
         )
+    def get_all(self) -> list[PedidoModel]:
+        pedidos = self.db_session.query(PedidoTable).all()
+        return [self._to_domain(p) for p in pedidos]
+
     def get_by_id(self, pedido_id: int) -> PedidoModel:
         pedido = self.db_session.query(PedidoTable).filter_by(pedido_id=pedido_id).first()
         if not pedido:

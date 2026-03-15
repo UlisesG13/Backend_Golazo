@@ -29,6 +29,9 @@ class PedidoUsecases:
         )
         return self.repo.create(pedido)
 
+    def get_all(self) -> list[PedidoModel]:
+        return self.repo.get_all()
+
     def get_pedido_by_id(self, pedido_id: int) -> PedidoModel:
         return self.repo.get_by_id(pedido_id)
     
