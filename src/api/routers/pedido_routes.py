@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, status
 
-from domain.models.pedido_model import PedidoModel
+from src.domain.models.pedido_model import PedidoModel
 from src.usecases.pedido_usecase import PedidoUsecases
 from src.core.dependency_inyection.pedido_di import get_pedido_service
 from src.api.schemas.pedido_dto import PedidoCreateDto, PedidoDto, PedidoUpdateDto
