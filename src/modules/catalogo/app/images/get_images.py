@@ -1,4 +1,3 @@
-from typing import List
 from src.modules.catalogo.domain.ports import ProductImagePort, ImagePort
 from src.modules.catalogo.domain.models import ImagenModel
 
@@ -7,7 +6,7 @@ class GetImages:
         self.imagen_repo = imagen_repo
         self.producto_imagen_repo = producto_imagen_repo
 
-    def execute(self, producto_id: str) -> List[ImagenModel]:
+    def execute(self, producto_id: str) -> list[ImagenModel]:
         relaciones = self.producto_imagen_repo.get_by_producto(producto_id)
         imagenes = []
         for rel in relaciones:

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from typing import List
 
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.modules.usuarios.presentation.schemas import DireccionDTO, DireccionRequestDTO
@@ -9,11 +8,11 @@ from src.modules.usuarios.application.direccion import GetAllDirecciones, GetDir
 
 router = APIRouter(prefix="/api/users/direcciones", tags=["direcciones"])
 
-@router.get("/{direccion_id}", response_model=List[DireccionDTO])
+@router.get("/{direccion_id}", response_model=list[DireccionDTO])
 def get_direccion(direccion_id: int, user = Depends(get_current_user), uc: GetDireccionById = Depends(get_direccion_service)):
     return uc.execute(direccion_id, user.usuario_id)
 
-@router.get("/", response_model=List[DireccionDTO])
+@router.get("/", response_model=list[DireccionDTO])
 def list_direcciones(user = Depends(get_current_user), uc: GetAllDirecciones = Depends(get_all_direcciones_service)):
     return uc.execute(user.usuario_id)
 

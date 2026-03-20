@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel
 from src.modules.catalogo.presentation.images.images_dto import ImagenDTO
@@ -13,7 +13,7 @@ class ProductoDTO(BaseModel):
     esta_destacado: bool
     categoria_id: int
     fecha_creacion: datetime
-    imagenes: List[ImagenDTO] = []
+    imagenes: list[ImagenDTO] = []
 
     class Config:
         from_attributes = True

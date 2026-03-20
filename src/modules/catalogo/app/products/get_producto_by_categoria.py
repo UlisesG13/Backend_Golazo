@@ -1,4 +1,3 @@
-from typing import List
 from src.modules.catalogo.domain.models import ProductoModel
 from src.modules.catalogo.domain.ports import ProductoPort
 from src.modules.catalogo.app.images.get_images import GetImages
@@ -9,7 +8,7 @@ class GetProductoByCategoria:
         self.repo = repo
         self.img_uc = uc
 
-    def execute(self, categoria_id: int) -> List[ProductoModel]:
+    def execute(self, categoria_id: int) -> list[ProductoModel]:
         productos = self.repo.get_by_categoria(categoria_id)
 
         for p in productos:

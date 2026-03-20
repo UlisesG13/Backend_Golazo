@@ -2,7 +2,7 @@ from src.modules.usuarios.domain.models import DireccionModel
 from src.modules.usuarios.infra.tables import DireccionTable
 from src.modules.usuarios.domain.ports import DireccionPort
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy import select, update
 
 def _to_domain(r: DireccionTable) -> DireccionModel:
@@ -23,7 +23,7 @@ class DireccionRepository(DireccionPort):
     def __init__(self, session: Session):
         self.db = session
 
-    def get_direcciones_by_usuario_id(self, usuario_id: str) -> List[DireccionModel]:
+    def get_direcciones_by_usuario_id(self, usuario_id: str) -> list[DireccionModel]:
         stmt = select(DireccionTable).where(DireccionTable.usuario_id == usuario_id)
         rows = self.db.execute(stmt).scalars().all()
         return [_to_domain(r) for r in rows]

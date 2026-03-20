@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from src.modules.catalogo.domain.models import ProductoModel
@@ -27,12 +27,12 @@ class ProductoRepository(ProductoPort):
         r = self.db_session.execute(stmt).scalar_one_or_none()
         return _to_domain(r)
 
-    def get_all(self) -> List[ProductoModel]:
+    def get_all(self) -> list[ProductoModel]:
         stmt = select(ProductoTable)
         rows = self.db_session.execute(stmt).scalars().all()
         return [_to_domain(r) for r in rows]
 
-    def get_by_categoria(self, categoria_id: int) -> List[ProductoModel]:
+    def get_by_categoria(self, categoria_id: int) -> list[ProductoModel]:
         stmt = select(ProductoTable).filter_by(categoria_id=categoria_id)
         rows = self.db_session.execute(stmt).scalars()
         return [_to_domain(r) for r in rows]

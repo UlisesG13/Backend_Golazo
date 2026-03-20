@@ -1,4 +1,3 @@
-from typing import List
 from fastapi import APIRouter, Depends, UploadFile, status
 from fastapi.params import File
 
@@ -54,7 +53,7 @@ def asociar_imagen(
     relacion = service.execute(dto)
     return relacion
 
-@router.get("/producto/{producto_id}", response_model=List[ImagenDTO])
+@router.get("/producto/{producto_id}", response_model=list[ImagenDTO])
 def get_imagenes_por_producto(
     producto_id: str,
     service: GetImagesByProduct = Depends(get_by_product_service)

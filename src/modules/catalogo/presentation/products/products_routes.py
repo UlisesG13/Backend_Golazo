@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from typing import List
 
 from src.modules.catalogo.presentation.products.product_dto import (
     ProductoDTO,
@@ -28,7 +27,7 @@ from src.modules.catalogo.app.products import (
 )
 router = APIRouter(prefix="/api/productos", tags=["catalogo"])
 
-@router.get("/", response_model=List[ProductoDTO])
+@router.get("/", response_model=list[ProductoDTO])
 def list_productos(uc: ListProducts = Depends(get_all_productos_service)):
     return uc.execute()
 
@@ -36,7 +35,7 @@ def list_productos(uc: ListProducts = Depends(get_all_productos_service)):
 def get_producto_by_id(producto_id: str, uc: GetProductoById = Depends(get_product_by_id_service)):
     return uc.execute(producto_id)
 
-@router.get("/by-categoria/{categoria_id}/", response_model=List[ProductoDTO])
+@router.get("/by-categoria/{categoria_id}/", response_model=list[ProductoDTO])
 def get_productos_by_categoria(categoria_id: int, uc: GetProductoByCategoria = Depends(get_producto_by_categoria_service)):
     return uc.execute(categoria_id)
 

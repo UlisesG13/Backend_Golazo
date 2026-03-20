@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from src.modules.catalogo.app.images.get_images import GetImages
 from src.modules.catalogo.domain.models import ProductoModel

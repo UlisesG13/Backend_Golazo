@@ -5,11 +5,10 @@ from src.modules.auth.domain.models import AuthenticatedUser
 from src.shared.security import get_current_user
 from src.modules.usuarios.presentation.schemas import UserDTO, UserUpdateDTO
 from fastapi import APIRouter, Depends
-from typing import List
 
 router = APIRouter(prefix="/api/users", tags=["users"])
 
-@router.get("/", response_model=List[UserDTO])
+@router.get("/", response_model=list[UserDTO])
 def list_users(uc: GetAllUsers = Depends(get_all_users_service)):
     return uc.execute()
 
@@ -70,7 +69,7 @@ def delete_admin(
 ):
     return uc.execute(usuario_id)
 
-@router.get("/admins", response_model=List[UserDTO])
+@router.get("/admins", response_model=list[UserDTO])
 def get_admins(
         uc: GetAllAdmins = Depends(get_all_admins_service)
 ):
