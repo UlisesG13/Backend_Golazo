@@ -25,36 +25,65 @@ from src.modules.catalogo.app.products import (
     ChangeDestacado,
     ChangeStatus
 )
-router = APIRouter(prefix="/api/productos", tags=["catalogo"])
 
-@router.get("/", response_model=list[ProductoDTO])
+router = APIRouter()
+
+# --- 1. RUTAS DE COLECCIÓN (Raíz) ---
+@router.get("", response_model=list[ProductoDTO])
 def list_productos(uc: ListProducts = Depends(get_all_productos_service)):
     return uc.execute()
 
-@router.get("/{producto_id}/", response_model=ProductoDTO)
-def get_producto_by_id(producto_id: str, uc: GetProductoById = Depends(get_product_by_id_service)):
-    return uc.execute(producto_id)
-
-@router.get("/by-categoria/{categoria_id}/", response_model=list[ProductoDTO])
-def get_productos_by_categoria(categoria_id: int, uc: GetProductoByCategoria = Depends(get_producto_by_categoria_service)):
-    return uc.execute(categoria_id)
-
-@router.post("/", response_model=ProductoDTO)
+@router.post("", response_model=ProductoDTO)
 def create_producto(dto: ProductoCreateDTO, uc: CreateProducto = Depends(create_producto_service)):
     return uc.execute(dto)
 
-@router.put("/{producto_id}/alter-destacado/", response_model=ProductoDTO)
-def change_destacado(producto_id: str, destacado: bool ,uc: ChangeDestacado = Depends(change_destacado_service)):
+
+# --- 2. FILTROS Y BÚSQUEDAS ESPECÍFICAS ---
+@router.get("/by-categoria/{categoria_id}", response_model=list[ProductoDTO])
+def get_productos_by_categoria(
+    categoria_id: int,
+    uc: GetProductoByCategoria = Depends(get_producto_by_categoria_service)
+):
+    return uc.execute(categoria_id)
+
+
+# --- 3. ACCIONES SOBRE RECURSOS (Verbos de negocio) ---
+@router.put("/{producto_id}/alter-destacado", response_model=ProductoDTO)
+def change_destacado(
+    producto_id: str,
+    destacado: bool,
+    uc: ChangeDestacado = Depends(change_destacado_service)
+):
     return uc.execute(producto_id, destacado)
 
-@router.put("/{producto_id}/alter-status/", response_model=ProductoDTO)
-def change_status(producto_id: str,status: bool, uc: ChangeStatus = Depends(change_status_service)):
+@router.put("/{producto_id}/alter-status", response_model=ProductoDTO)
+def change_status(
+    producto_id: str,
+    status: bool,
+    uc: ChangeStatus = Depends(change_status_service)
+):
     return uc.execute(producto_id, status)
 
-@router.put("/{producto_id}/", response_model=ProductoDTO)
-def update_producto(producto_id: str, dto: ProductoUpdateDTO, uc: UpdateProducto = Depends(update_producto_service)):
+
+# --- 4. CRUD BÁSICO (Genéricas / Atrapa-todo) ---
+@router.get("/{producto_id}", response_model=ProductoDTO)
+def get_producto_by_id(
+    producto_id: str,
+    uc: GetProductoById = Depends(get_product_by_id_service)
+):
+    return uc.execute(producto_id)
+
+@router.put("/{producto_id}", response_model=ProductoDTO)
+def update_producto(
+    producto_id: str,
+    dto: ProductoUpdateDTO,
+    uc: UpdateProducto = Depends(update_producto_service)
+):
     return uc.execute(producto_id, dto)
 
-@router.delete("/{producto_id}/", status_code=204)
-def delete_producto(producto_id: str, uc: DeleteProducto = Depends(delete_producto_service)):
+@router.delete("/{producto_id}", status_code=204)
+def delete_producto(
+    producto_id: str,
+    uc: DeleteProducto = Depends(delete_producto_service)
+):
     return uc.execute(producto_id)

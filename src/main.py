@@ -1,46 +1,31 @@
-from src.core.config import app
-from src.core.routers import (
-    seccion_router,
-    categoria_router,
-    color_router,
-    producto_color_router,
-    talla_router,
-    producto_talla_router,
-    carrito_router,
-    carrito_item_router,
-    pedido_router,
-    pedido_item_router,
-    factura_router,
-    promocion_router,
-    auth_routes,
-    usuario_routes,
-    direccion_routes,
-    products_routes,
-    images_routes
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from src.core.config import settings
+from src.core.routers import api_router
+
+app = FastAPI(
+    title="Golazo",
+    description="Backend del e-commerce Golazo",
+    version="1.1.0"
 )
 
-app.include_router(seccion_router)
-app.include_router(categoria_router)
-app.include_router(color_router)
-app.include_router(producto_color_router)
-app.include_router(talla_router)
-app.include_router(producto_talla_router)
-app.include_router(carrito_router)
-app.include_router(carrito_item_router)
-app.include_router(pedido_router)
-app.include_router(pedido_item_router)
-app.include_router(factura_router)
-app.include_router(promocion_router)
+# Middleware (CORS)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[settings.origins],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# nuevas rutas
+# UNA SOLA LÍNEA para cargar todas las rutas
+app.include_router(api_router, prefix="/api")
 
-app.include_router(auth_routes)
-app.include_router(usuario_routes)
-app.include_router(direccion_routes)
-app.include_router(products_routes)
-app.include_router(images_routes)
-
-print("Docs: http://127.0.0.1:8000/docs")
-@app.get("/")
+@app.get("/", tags=["Root"])
 def root():
-    return {"message": "Bienvenido a Golazo"}
+    return {"message": "Bienvenido a Golazo API"}
+
+if __name__ == "__main__":
+    print("Docs disponible en: http://127.0.0.1:8000/docs")
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

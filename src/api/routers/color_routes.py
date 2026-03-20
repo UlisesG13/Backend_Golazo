@@ -4,13 +4,20 @@ from src.usecases.color_usecase import ColorUsecases
 from src.core.dependency_inyection.colores_di import get_color_service
 from src.api.schemas.color_dto import ColorDTO, ColorCreateDTO, ColorUpdateDTO
 
-router = APIRouter(prefix="/api/colores", tags=["colores"])
+router = APIRouter()
 
-@router.get("/", response_model=List[ColorDTO])
+@router.get("", response_model=List[ColorDTO])
 def list_colors(
     color_service: ColorUsecases = Depends(get_color_service)
 ):
     return color_service.get_all_colors()
+
+@router.post("", response_model=ColorDTO)
+def create_color(
+    dto: ColorCreateDTO,
+    color_service: ColorUsecases = Depends(get_color_service)
+):
+    return color_service.create_color(dto)
 
 @router.get("/{color_id}", response_model=ColorDTO)
 def get_color_by_id(
@@ -18,13 +25,6 @@ def get_color_by_id(
     color_service: ColorUsecases = Depends(get_color_service)
 ):
     return color_service.get_color_by_id(color_id)
-
-@router.post("/", response_model=ColorDTO)
-def create_color(
-    dto: ColorCreateDTO,
-    color_service: ColorUsecases = Depends(get_color_service)
-):
-    return color_service.create_color(dto)
 
 @router.put("/{color_id}", response_model=ColorDTO)
 def update_color(

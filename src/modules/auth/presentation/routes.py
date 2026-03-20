@@ -22,7 +22,7 @@ from src.modules.auth.presentation.schemas import (
     LoginResponseDTO,
 )
 
-router = APIRouter(prefix="/api/auth", tags=["auth"])
+router = APIRouter()
 
 
 @router.post("/register", response_model=LoginResponseDTO)

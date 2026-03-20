@@ -23,10 +23,10 @@ from src.modules.catalogo.presentation.images.images_dto import (
     ProductoImagenDTO,
     ProductoImagenCreateDTO
 )
+router = APIRouter()
 
-router = APIRouter(prefix="/api/imagenes", tags=["imagenes"])
-
-@router.post("/", response_model=ImagenDTO, status_code=status.HTTP_201_CREATED)
+# --- 1. GESTIÓN GLOBAL DE IMÁGENES (Subida y Eliminación Física) ---
+@router.post("", response_model=ImagenDTO, status_code=status.HTTP_201_CREATED)
 async def subir_imagen(
     dto: ImagenCreateDTO = Depends(ImagenCreateDTO.as_form),
     file: UploadFile = File(...),
@@ -45,24 +45,26 @@ async def subir_imagen(
         orden=imagen.orden
     )
 
-@router.post("/producto", response_model=ProductoImagenDTO)
+@router.delete("/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
+def eliminar_imagen(
+    imagen_id: int,
+    service: DeleteImage = Depends(delete_image_service)
+):
+    service.execute(imagen_id)
+
+
+# --- 2. ASOCIACIÓN CON PRODUCTOS (Rutas fijas /productos) ---
+@router.post("/productos", response_model=ProductoImagenDTO)
 def asociar_imagen(
     dto: ProductoImagenCreateDTO,
     service: AsociarImageToProduct = Depends(asociar_image_service)
 ):
-    relacion = service.execute(dto)
-    return relacion
+    return service.execute(dto)
 
-@router.get("/producto/{producto_id}", response_model=list[ImagenDTO])
-def get_imagenes_por_producto(
-    producto_id: str,
-    service: GetImagesByProduct = Depends(get_by_product_service)
-):
-    imagenes = service.execute(producto_id)
 
-    return [ImagenDTO(imagen_id=img.imagen_id, path=img.path, orden=img.orden) for img in imagenes]
+# --- 3. OPERACIONES POR PRODUCTO (Sub-recursos) ---
 
-@router.delete("/producto/{producto_id}/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/productos/{producto_id}/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
 def desasociar_imagen(
     producto_id: str,
     imagen_id: int,
@@ -70,16 +72,17 @@ def desasociar_imagen(
 ):
     service.execute(producto_id, imagen_id)
 
-@router.delete("/producto/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.get("/productos/{producto_id}", response_model=list[ImagenDTO])
+def get_imagenes_por_producto(
+    producto_id: str,
+    service: GetImagesByProduct = Depends(get_by_product_service)
+):
+    imagenes = service.execute(producto_id)
+    return [ImagenDTO(imagen_id=img.imagen_id, path=img.path, orden=img.orden) for img in imagenes]
+
+@router.delete("/productos/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_imagenes_producto(
     producto_id: str,
     service: DeleteImagesByProduct = Depends(delete_image_by_product_service)
 ):
     service.execute(producto_id)
-
-@router.delete("/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
-def eliminar_imagen(
-    imagen_id: int,
-    service: DeleteImage = Depends(delete_image_service)
-):
-    service.execute(imagen_id)
