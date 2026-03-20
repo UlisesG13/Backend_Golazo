@@ -1,5 +1,3 @@
-from typing import Optional
-
 from src.modules.catalogo.app.images.get_images import GetImages
 from src.modules.catalogo.domain.models import ProductoModel
 from src.modules.catalogo.domain.ports import ProductoPort
@@ -9,7 +7,7 @@ class GetProductoById:
         self.repo = repo
         self.img_uc = uc
 
-    def execute(self, producto_id: str) -> Optional[ProductoModel]:
+    def execute(self, producto_id: str) -> ProductoModel | None:
         producto = self.repo.get_by_id(producto_id)
         if not producto:
             return None

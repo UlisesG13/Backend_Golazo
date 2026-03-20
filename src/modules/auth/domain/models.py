@@ -1,22 +1,20 @@
 from datetime import datetime
 from dataclasses import dataclass
-from typing import Optional
-
 
 @dataclass
 class AuthUser:
     usuario_id: str
     nombre: str
     email: str
-
     rol: str
     fecha_creacion: datetime
     is_authenticated: bool = False
 
-    password: Optional[str] = None
-    telefono: Optional[str] = ""
-    google_id: Optional[str] = None
-    fecha_eliminacion: Optional[datetime] = None
+    # Actualizados a la sintaxis moderna | None
+    password: str | None = None
+    telefono: str | None = ""
+    google_id: str | None = None
+    fecha_eliminacion: datetime | None = None
 
 @dataclass
 class AuthenticatedUser:
@@ -33,7 +31,7 @@ class TokenPayload:
 
 @dataclass
 class TokenResult:
-    token: str
+    access_token: str # Sugerencia: suele llamarse access_token en OAuth2
     usuario_id: str
     email: str
     rol: str

@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from src.modules.catalogo.domain.models import ImagenModel
@@ -26,7 +25,7 @@ class ImageRepository(ImagePort):
         self.db_session.refresh(nueva_imagen)
         return _to_domain(nueva_imagen)
 
-    def get_by_id(self, imagen_id: int) -> Optional[ImagenModel]:
+    def get_by_id(self, imagen_id: int) -> ImagenModel | None:
         stmt = select(ImagenTable).where(ImagenTable.imagen_id == imagen_id)
         r = self.db_session.execute(stmt).scalar_one_or_none()
         if r is None:

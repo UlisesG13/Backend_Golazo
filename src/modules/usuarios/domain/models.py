@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 @dataclass
 class UserModel:
@@ -10,8 +9,8 @@ class UserModel:
 
     rol: str
     fecha_creacion: datetime
-    telefono: Optional[str] = None
-    fecha_eliminacion: Optional[datetime] = None
+    telefono: str | None = None
+    fecha_eliminacion: datetime | None = None
 
 @dataclass
 class DireccionModel:

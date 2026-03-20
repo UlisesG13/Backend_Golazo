@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic import BaseModel, field_validator
 from fastapi import Form
 from src.core.config import settings
@@ -7,7 +6,7 @@ from src.core.config import settings
 class ProductoImagenCreateDTO(BaseModel):
     producto_id: str
     imagen_id: int
-    es_principal: Optional[bool]
+    es_principal: bool | None = False
 
 
 class ImagenCreateDTO(BaseModel):

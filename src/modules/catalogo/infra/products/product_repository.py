@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from src.modules.catalogo.domain.models import ProductoModel
@@ -22,7 +21,7 @@ class ProductoRepository(ProductoPort):
     def __init__(self, db_session: Session):
         self.db_session = db_session
 
-    def get_by_id(self, producto_id: str) -> Optional[ProductoModel]:
+    def get_by_id(self, producto_id: str) -> ProductoModel | None:
         stmt = select(ProductoTable).filter_by(producto_id=producto_id)
         r = self.db_session.execute(stmt).scalar_one_or_none()
         return _to_domain(r)
@@ -52,7 +51,7 @@ class ProductoRepository(ProductoPort):
         self.db_session.commit()
         return _to_domain(new_producto)
 
-    def update_producto(self, producto_id: str, producto: ProductoModel) -> Optional[ProductoModel]:
+    def update_producto(self, producto_id: str, producto: ProductoModel) -> ProductoModel | None:
         stmt = select(ProductoTable).filter_by(producto_id=producto_id)
         r = self.db_session.execute(stmt).scalar_one_or_none()
         if not r:

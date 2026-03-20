@@ -1,15 +1,14 @@
 from dataclasses import dataclass
-from typing import Optional
 
 @dataclass
 class ImagenModel:
-    imagen_id: Optional[int]
+    imagen_id: int | None
     path: str
     orden: int
 
 @dataclass
 class ProductoImagenModel:
-    producto_imagen_id: Optional[int]
+    producto_imagen_id: int | None
     producto_id: str
     imagen_id: int
     es_principal: bool

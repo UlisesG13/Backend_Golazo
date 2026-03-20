@@ -4,7 +4,6 @@ from src.modules.usuarios.infra.tables import UserTable, Rol
 from src.modules.usuarios.domain.ports import UserPort
 from src.core.exceptions import NotFoundError
 from sqlalchemy.orm import Session
-from typing import Optional
 from datetime import datetime, timezone
 from sqlalchemy import select
 
@@ -29,7 +28,7 @@ class UserRepository(UserPort):
         rows = self.session.execute(stmt).scalars().all()
         return [_to_domain(r) for r in rows]
 
-    def get_by_id(self, usuario_id: str) -> Optional[UserModel]:
+    def get_by_id(self, usuario_id: str) -> UserModel | None:
         stmt = (
             select(UserTable)
             .where(
@@ -40,7 +39,7 @@ class UserRepository(UserPort):
         r = self.session.execute(stmt).scalar_one_or_none()
         return _to_domain(r) if r else None
 
-    def get_by_email(self, email: str) -> Optional[UserModel]:
+    def get_by_email(self, email: str) -> UserModel | None:
         stmt = (
             select(UserTable)
             .where(

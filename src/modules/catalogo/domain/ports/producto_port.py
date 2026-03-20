@@ -1,8 +1,8 @@
-from typing import Protocol, Optional
+from typing import Protocol
 from ..models import ProductoModel
 
 class ProductoPort(Protocol):
-    def get_by_id(self, producto_id: str) -> Optional[ProductoModel]: ...
+    def get_by_id(self, producto_id: str) -> ProductoModel | None: ...
 
     def get_all(self) -> list[ProductoModel]: ...
 

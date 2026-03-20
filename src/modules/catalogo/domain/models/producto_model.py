@@ -1,6 +1,5 @@
 from datetime import datetime
 from dataclasses import dataclass, field
-from typing import Optional
 from .imagen_model import ImagenModel
 
 @dataclass
@@ -14,5 +13,5 @@ class ProductoModel:
 
     imagenes: list[ImagenModel] = field(default_factory=list)
 
-    descripcion: Optional[str] = None
-    categoria_id: Optional[int] = None
+    descripcion: str | None = None
+    categoria_id: int | None = None

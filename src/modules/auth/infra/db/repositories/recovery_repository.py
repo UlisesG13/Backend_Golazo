@@ -4,7 +4,6 @@ from src.modules.auth.domain.models import RecoveryCode
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from typing import Optional
 
 
 def _to_domain(r: RecoveryCodeTable) -> RecoveryCode:
@@ -31,7 +30,7 @@ class RecoveryCodeService(RecoveryCodePort):
         self.session.commit()
         return _to_domain(code)
 
-    def get_by_user_id(self, user_id: str) -> Optional[RecoveryCode]:
+    def get_by_user_id(self, user_id: str) -> RecoveryCode | None:
         stmt = select(RecoveryCodeTable).where(RecoveryCodeTable.usuario_id == user_id)
         r = self.session.execute(stmt).scalar_one_or_none()
         return _to_domain(r)

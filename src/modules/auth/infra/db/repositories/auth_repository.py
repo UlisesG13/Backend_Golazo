@@ -5,8 +5,6 @@ from src.core.exceptions import NotFoundError
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import select
 from sqlalchemy import update
-from typing import Optional
-
 
 def _to_domain(obj: UserTable) -> AuthUser:
     return AuthUser(
@@ -43,21 +41,21 @@ class AuthRepository(AuthPort):
         self.db.refresh(model)
         return _to_domain(model)
 
-    def get_by_id(self, usuario_id: str) -> Optional[AuthUser]:
+    def get_by_id(self, usuario_id: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.usuario_id == usuario_id)
         r = self.db.execute(stmt).scalar()
         if r is None:
             return None
         return _to_domain(r)
 
-    def get_by_email(self, email: str) -> Optional[AuthUser]:
+    def get_by_email(self, email: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.email == email)
         r = self.db.execute(stmt).scalar_one_or_none()
         if r is None:
             return None
         return _to_domain(r)
 
-    def get_by_google_id(self, google_id: str) -> Optional[AuthUser]:
+    def get_by_google_id(self, google_id: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.google_id == google_id)
         r = self.db.execute(stmt).scalar()
         if r is None:
