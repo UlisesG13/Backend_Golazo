@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-from src.api.routers.seccion_routes import router as seccion_router
 from src.api.routers.categoria_routes import router as categoria_router
 from src.api.routers.color_routes import router as color_router
 from src.api.routers.producto_color_routes import router as producto_color_router
@@ -20,11 +19,9 @@ from src.modules.usuarios.presentation.user_routes import router as usuario_rout
 from src.modules.usuarios.presentation.direccion_routes import router as direccion_routes
 from src.modules.catalogo.presentation.products.products_routes import router as products_routes
 from src.modules.catalogo.presentation.images.image_routes import router as images_routes
-
+from src.modules.catalogo.presentation.section.seccion_routes import router as seccion_router
 api_router = APIRouter()
 
-# Rutas de las secciones de los productos
-api_router.include_router(seccion_router, prefix="/secciones", tags=["secciones"])
 # Rutas de las categorias de los productos
 api_router.include_router(categoria_router, prefix="/categorias", tags=["categorias"])
 # Ruta de los colores de un producto
@@ -63,3 +60,6 @@ api_router.include_router(usuario_routes, prefix="/users", tags=["users"])
 api_router.include_router(products_routes, prefix="/productos", tags=["catalogo"])
 # Ruta de las imagenes de los productos
 api_router.include_router(images_routes, prefix="/imagenes", tags=["imagenes"])
+
+# Rutas de las secciones de los productos
+api_router.include_router(seccion_router, prefix="/secciones", tags=["secciones"])

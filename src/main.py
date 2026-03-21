@@ -19,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# UNA SOLA LÍNEA para cargar todas las rutas
 app.include_router(api_router, prefix="/api")
 
 @app.get("/", tags=["Root"])
