@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-from src.api.routers.categoria_routes import router as categoria_router
 from src.api.routers.color_routes import router as color_router
 from src.api.routers.producto_color_routes import router as producto_color_router
 from src.api.routers.talla_routes import router as talla_router
@@ -12,7 +11,6 @@ from src.api.routers.pedido_item_routes import router as pedido_item_router
 from src.api.routers.factura_routes import router as factura_router
 from src.api.routers.promocion_routes import router as promocion_router
 
-
 # nuevas rutas
 from src.modules.auth.presentation.routes import router as auth_routes
 from src.modules.usuarios.presentation.user_routes import router as usuario_routes
@@ -20,10 +18,10 @@ from src.modules.usuarios.presentation.direccion_routes import router as direcci
 from src.modules.catalogo.presentation.products.products_routes import router as products_routes
 from src.modules.catalogo.presentation.images.image_routes import router as images_routes
 from src.modules.catalogo.presentation.section.seccion_routes import router as seccion_router
+from src.modules.catalogo.presentation.category.categoria_routes import router as categoria_router
+
 api_router = APIRouter()
 
-# Rutas de las categorias de los productos
-api_router.include_router(categoria_router, prefix="/categorias", tags=["categorias"])
 # Ruta de los colores de un producto
 api_router.include_router(color_router, prefix="/colores", tags=["colores"])
 # Ruta de la union de colores-productos
@@ -63,3 +61,6 @@ api_router.include_router(images_routes, prefix="/imagenes", tags=["imagenes"])
 
 # Rutas de las secciones de los productos
 api_router.include_router(seccion_router, prefix="/secciones", tags=["secciones"])
+
+# Rutas de las categorias de los productos
+api_router.include_router(categoria_router, prefix="/categorias", tags=["categorias"])

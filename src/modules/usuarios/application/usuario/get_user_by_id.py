@@ -1,4 +1,4 @@
-from src.domain.models.user_model import UserModel
+from src.modules.usuarios.domain.models import UserModel
 from src.modules.usuarios.domain.ports import UserPort
 
 class GetUserById:
