@@ -1,7 +1,7 @@
 from fastapi import Depends
 from src.core.database import get_session
 from src.modules.catalogo.app.sections import GetSecciones, CreateSeccion, UpdateSeccion, DeleteSeccion, GetByIdSeccion
-from src.modules.catalogo.infra.sections.seccion_reopsitory import SeccionRepository
+from src.modules.catalogo.infra.sections.seccion_repository import SeccionRepository
 
 def get_all_secciones(session = Depends(get_session)):
     repo = SeccionRepository(session)
