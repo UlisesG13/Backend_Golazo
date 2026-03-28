@@ -1,6 +1,8 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 from src.modules.catalogo.presentation.images.images_dto import ImagenDTO
+from src.modules.catalogo.presentation.sizes.talla_dto import TallaDTO
+
 
 class ProductoDTO(BaseModel):
     # Usamos ConfigDict para Pydantic V2 (es lo más moderno)
@@ -12,9 +14,10 @@ class ProductoDTO(BaseModel):
     descripcion: str | None = None
     esta_activo: bool
     esta_destacado: bool
-    categoria_id: int
+    categoria_id: int | None = None
     fecha_creacion: datetime
     imagenes: list[ImagenDTO] = []
+    tallas: list[TallaDTO] =  []
 
 class ProductoCreateDTO(BaseModel):
     nombre: str

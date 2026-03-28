@@ -1,5 +1,14 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
+
 from src.core.database import Base
+
+
+class TallaTable(Base):
+    __tablename__ = "talla"
+
+    talla_id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String, nullable=False)
+
 
 class ProductoTallaTable(Base):
     __tablename__ = "producto_talla"
