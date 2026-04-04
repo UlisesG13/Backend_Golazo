@@ -1,7 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
+
 from src.modules.catalogo.presentation.images.images_dto import ImagenDTO
 from src.modules.catalogo.presentation.sizes.talla_dto import TallaDTO
+from src.modules.catalogo.presentation.colors.color_dto import ColorDTO
 
 
 class ProductoDTO(BaseModel):
@@ -18,6 +20,7 @@ class ProductoDTO(BaseModel):
     fecha_creacion: datetime
     imagenes: list[ImagenDTO] = []
     tallas: list[TallaDTO] =  []
+    colores: list[ColorDTO] = []
 
 class ProductoCreateDTO(BaseModel):
     nombre: str
@@ -28,7 +31,7 @@ class ProductoCreateDTO(BaseModel):
     categoria_id: int
 
 class ProductoUpdateDTO(BaseModel):
-    # En un Update, todo suele ser opcional porque puedes actualizar solo un campo
+    # En un Update, all suele ser opcional porque puedes actualizar solo un campo
     nombre: str | None = None
     precio: int | None = None
     descripcion: str | None = None

@@ -65,7 +65,7 @@ def change_status(
     return uc.execute(producto_id, status)
 
 
-# --- 4. CRUD BÁSICO (Genéricas / Atrapa-todo) ---
+# --- 4. CRUD BÁSICO (Genéricas / Atrapa-todoo) ---
 @router.get("/{producto_id}", response_model=ProductoDTO)
 def get_producto_by_id(
     producto_id: str,
