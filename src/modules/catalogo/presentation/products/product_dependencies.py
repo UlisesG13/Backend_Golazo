@@ -12,33 +12,19 @@ from src.modules.catalogo.app.products import (
     ChangeStatus,
     ChangeDestacado,
 )
-from src.modules.catalogo.app.sizes import GetTallasByProducto
 from src.modules.catalogo.infra.images.db.image_repository import ImageRepository
 from src.modules.catalogo.infra.images.db.product_image_repository import ProductImageRepository
 from src.modules.catalogo.infra.products.product_repository import ProductoRepository
-from src.modules.catalogo.infra.sizes.talla_repository import ProductoTallaRepository
 
 
 def get_all_productos_service(session=Depends(get_session)):
-    imagen_repo = ImageRepository(session)
-    product_image_repo = ProductImageRepository(session)
-    talla_repo = ProductoTallaRepository(session)
-
-    get_images_uc = GetImages(imagen_repo, product_image_repo)
     producto_repo = ProductoRepository(session)
-    get_tallas_uc = GetTallasByProducto(talla_repo)
-    return ListProducts(producto_repo, get_images_uc, get_tallas_uc)
+    return ListProducts(producto_repo)
 
 
 def get_product_by_id_service(session=Depends(get_session)):
-    imagen_repo = ImageRepository(session)
-    product_image_repo = ProductImageRepository(session)
-    talla_repo = ProductoTallaRepository(session)
-
-    get_images_uc = GetImages(imagen_repo, product_image_repo)
     producto_repo = ProductoRepository(session)
-    get_tallas_uc = GetTallasByProducto(talla_repo)
-    return GetProductoById(producto_repo, get_images_uc, get_tallas_uc)
+    return GetProductoById(producto_repo)
 
 
 def get_producto_by_categoria_service(session=Depends(get_session)):

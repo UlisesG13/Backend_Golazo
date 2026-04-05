@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy.orm import relationship
+
 from src.core.database import Base
 
 
@@ -8,6 +10,8 @@ class ImagenTable(Base):
     imagen_id = Column(Integer, primary_key=True, autoincrement=True)
     path = Column(String, nullable=False)
     orden = Column(Integer, nullable=False)
+
+    productos = relationship("ProductoTable", secondary="producto_imagen", back_populates="imagenes")
 
 
 class ProductoImagenTable(Base):

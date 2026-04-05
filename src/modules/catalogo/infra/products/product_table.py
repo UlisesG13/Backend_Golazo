@@ -1,5 +1,8 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, Boolean
+from sqlalchemy.orm import relationship
+
 from src.core.database import Base
+
 
 class ProductoTable(Base):
     __tablename__ = "producto"
@@ -12,3 +15,7 @@ class ProductoTable(Base):
     esta_destacado = Column(Boolean, default=False)
     fecha_creacion = Column(DateTime, nullable=False)
     categoria_id = Column(Integer, ForeignKey("categoria.categoria_id"), nullable=True)
+
+    imagenes = relationship("ImagenTable", secondary="producto_imagen")
+    tallas = relationship("TallaTable", "producto_talla", viewonly=True)
+    colores = relationship("ColorTable", "producto_color", viewonly=True)
