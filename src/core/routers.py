@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 
-from src.api.routers.carrito_routes import router as carrito_router
-from src.api.routers.carrito_item_routes import router as carrito_item_router
 from src.api.routers.pedido_routes import router as pedido_router
 from src.api.routers.pedido_item_routes import router as pedido_item_router
 from src.api.routers.factura_routes import router as factura_router
@@ -17,13 +15,11 @@ from src.modules.catalogo.presentation.section.seccion_routes import router as s
 from src.modules.catalogo.presentation.category.categoria_routes import router as categoria_router
 from src.modules.catalogo.presentation.sizes.talla_routes import router as talla_router
 from src.modules.catalogo.presentation.colors.color_routes import router as color_router
+from src.modules.carrito.presentation.carrito_routes import router as carrito_router
+
 api_router = APIRouter()
 
 
-# Ruta del carrito
-api_router.include_router(carrito_router, prefix="/carritos", tags=["carritos"])
-# Ruta de la union de carrito-producto
-api_router.include_router(carrito_item_router, prefix="/carritos", tags=["carritos"])
 # Ruta de los pedidos
 api_router.include_router(pedido_router, prefix="/pedidos", tags=["pedidos"])
 # Ruta de la union de pedido-producto
@@ -60,3 +56,6 @@ api_router.include_router(talla_router, prefix="/tallas", tags=["tallas"])
 
 # Ruta de los colores de un producto
 api_router.include_router(color_router, prefix="/colores", tags=["colores"])
+
+# Ruta del carrito
+api_router.include_router(carrito_router, prefix="/carritos", tags=["carritos"])
