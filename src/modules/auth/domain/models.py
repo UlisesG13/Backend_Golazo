@@ -31,7 +31,7 @@ class TokenPayload:
 
 @dataclass
 class TokenResult:
-    access_token: str # Sugerencia: suele llamarse access_token en OAuth2
+    token: str
     usuario_id: str
     email: str
     rol: str

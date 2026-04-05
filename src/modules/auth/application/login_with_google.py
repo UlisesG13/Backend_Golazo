@@ -58,7 +58,7 @@ class LoginWithGoogle:
         token = self.token_service.generate(payload)
 
         return TokenResult(
-            access_token=token,
+            token=token,
             usuario_id=user.usuario_id,
             email=user.email,
             rol=user.rol
