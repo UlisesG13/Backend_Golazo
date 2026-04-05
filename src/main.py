@@ -26,5 +26,6 @@ def root():
     return {"message": "Bienvenido a Golazo API"}
 
 if __name__ == "__main__":
-    print("Docs disponible en: http://127.0.0.1:8000/docs")
+    print("Documentacion Interactiva: http://127.0.0.1:8000/docs")
+    print("Documentacion Descriptiva: http://127.0.0.1:8000/redoc")
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
