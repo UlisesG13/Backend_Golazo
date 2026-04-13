@@ -1,7 +1,11 @@
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
+CORE_DIR = Path(__file__).resolve().parent
+
 
 class Settings:
     # SUPABASE
@@ -24,10 +28,10 @@ class Settings:
 
     BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
 
-    FIREBASE_CREDENTIALS_PATH = "src/core/golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json"
+    FIREBASE_CREDENTIALS_PATH = str(CORE_DIR / "golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json")
     origins = [
         "*"
     ]
 
-settings = Settings()
 
+settings = Settings()

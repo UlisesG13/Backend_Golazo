@@ -120,9 +120,11 @@ class CreatePedido:
         tokens = self.token_repo.get_all()
 
         for token in tokens:
+            print(tokens)
             print("Entro en el for")
             try:
-                print("envio")
+                print("enviando")
+                print(f"token: {token}")
                 self.fcm_service.send(
                     token=token.token,
                     title="Nuevo pedido",
@@ -132,6 +134,7 @@ class CreatePedido:
                         "pedido_id": str(pedido_guardado.pedido_id)
                     }
                 )
-            except Exception:
+            except Exception as e:
+                print(f"Error enviando FCM: {e}")
                 self.token_repo.delete(token.token)
         return pedido_guardado
