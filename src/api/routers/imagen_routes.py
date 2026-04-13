@@ -35,14 +35,6 @@ async def subir_imagen(
         orden=imagen.orden
     )
 
-@router.post("/producto", response_model=ProductoImagenDTO)
-def asociar_imagen(
-    dto: ProductoImagenCreateDTO,
-    service: ImagenUsecases = Depends(get_imagen_service)
-):
-    relacion = service.asociar_imagen_a_producto(dto)
-    return relacion
-
 @router.get("/producto/{producto_id}", response_model=List[ImagenDTO])
 def get_imagenes_por_producto(
     producto_id: str,
@@ -60,6 +52,14 @@ def get_imagenes_por_producto(
             )
         )
     return productoImagenes
+
+@router.post("/producto", response_model=ProductoImagenDTO, status_code=status.HTTP_201_CREATED)
+def asociar_imagen(
+    dto: ProductoImagenCreateDTO,
+    service: ImagenUsecases = Depends(get_imagen_service)
+):
+    relacion = service.asociar_imagen_a_producto(dto)
+    return relacion
 
 @router.delete("/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
 def eliminar_imagen(

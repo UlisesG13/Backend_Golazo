@@ -21,7 +21,7 @@ def get_promocion_by_id(promocion_id: int, promocion_service: PromocionUsecases 
 
 @router.delete("/{promocion_id}")
 def delete_promocion(promocion_id: int, promocion_service: PromocionUsecases = Depends(get_promocion_service)):
-    promocion_service.delete(promocion_id)
+    promocion_service.remove_promocion(promocion_id)
     return {"message": "Promoción eliminada exitosamente."}
 
 @router.put("/{promocion_id}", response_model=PromocionDTO)
