@@ -24,3 +24,21 @@ class DireccionModel:
     referencia: str | None
     usuario_id: str
     is_primary: bool
+
+    def to_dict(self) -> dict:
+        return {
+            "calle": self.calle,
+            "colonia": self.colonia,
+            "calle_uno": self.calle_uno,
+            "calle_dos": self.calle_dos,
+            "numero_casa": self.numero_casa,
+            "codigo_postal": self.codigo_postal,
+            "referencia": self.referencia
+        }
+
+@dataclass
+class DeviceToken:
+    id: int | None
+    user_id: str
+    token: str
+    created_at: datetime

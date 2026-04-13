@@ -37,6 +37,7 @@ class PromocionRepository(PromocionPort):
         self.db.add(new_promocion)
         self.db.flush()  # Envía los cambios a la BD pero NO cierra la transacción
         self.db.refresh(new_promocion)
+        self.db.commit()
         return to_domain(new_promocion)
 
     def get_all(self) -> list[PromocionModel]:
@@ -82,6 +83,10 @@ class PromocionRepository(PromocionPort):
     def get_by_codigo(self, codigo: str) -> PromocionModel | None:
         stmt = select(PromocionTable).filter(PromocionTable.codigo == codigo)
         r = self.db.execute(stmt).scalars().first()
-        if not r:
-            return None
-        return to_domain(r)
+        return to_domain(r) if r else None  # type: ignore[arg-type]
+
+    def save_usage(self, promocion: PromocionModel) -> None:
+        r = self.db.get(PromocionTable, promocion.promocion_id)
+        r.contador_usos = promocion.contador_usos
+        self.db.commit()
+        self.db.refresh(r)

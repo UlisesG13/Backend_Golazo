@@ -7,7 +7,7 @@ from .update_user import UpdateUser
 from .get_all_users import GetAllUsers
 from .create_admin import CreateAdmin
 from .get_admins import GetAllAdmins
-
+from .register_device_token import RegisterDeviceToken
 __all__ = [
     GetUserById,
     AnonymizeUser,
@@ -16,5 +16,6 @@ __all__ = [
     GetAllUsers,
     UpdateUser,
     CreateAdmin,
-    GetAllAdmins
+    GetAllAdmins,
+    RegisterDeviceToken
 ]

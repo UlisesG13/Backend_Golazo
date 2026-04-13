@@ -9,5 +9,5 @@ class ChangeStatus:
         current = self.repo.get_by_id(promocion_id)
         if not current:
             raise ValueError(f"Promocion {promocion_id} no existe")
-        current.status = status
+        current.esta_activa = status
         return current

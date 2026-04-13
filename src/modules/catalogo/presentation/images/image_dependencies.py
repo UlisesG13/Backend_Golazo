@@ -1,5 +1,5 @@
 from fastapi import Depends
-from src.core.supabase import get_supabase_client
+from src.core.supabase_config import get_supabase_client
 from src.core.database import get_session
 from src.modules.catalogo.infra.images.db.image_repository import ImageRepository
 from src.modules.catalogo.infra.images.db.product_image_repository import ProductImageRepository

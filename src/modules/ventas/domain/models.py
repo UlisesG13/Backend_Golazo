@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 
@@ -51,3 +51,36 @@ class PromocionModel:
             self.contador_usos += 1
         else:
             raise ValueError("La promoción ha alcanzado su límite de usos.")
+
+
+@dataclass
+class PedidoItemModel:
+    pedido_item_id: int | None
+    pedido_id: int | None
+    producto_id: str
+    nombre_producto: str
+    color_id: int
+    talla_id: int
+    cantidad: int
+    precio_unitario: float
+
+    @property
+    def subtotal(self) -> float:
+        return self.cantidad * self.precio_unitario
+
+@dataclass
+class PedidoModel:
+    pedido_id: int | None
+    usuario_id: str
+    promocion_id: int | None
+    estado: str
+    fecha_pedido: datetime
+    fecha_actualizacion: datetime
+
+    subtotal: float
+    descuento: float
+    total: float
+
+    notas: str
+    direccion: dict
+    items: list[PedidoItemModel] = field(default_factory=list)

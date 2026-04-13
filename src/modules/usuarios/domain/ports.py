@@ -1,6 +1,7 @@
-from src.modules.auth.domain.models import AuthUser
-from src.modules.usuarios.domain.models import UserModel, DireccionModel
 from typing import Protocol
+
+from src.modules.auth.domain.models import AuthUser
+from src.modules.usuarios.domain.models import UserModel, DireccionModel, DeviceToken
 
 class UserPort(Protocol):
     def get_all(self) -> list[UserModel]: ...
@@ -31,3 +32,18 @@ class DireccionPort(Protocol):
     def delete_direccion(self, direccion_id: int, usuario_id: str) -> None: ...
 
     def set_primary(self, direccion_id: int, usuario_id: str) -> None: ...
+
+
+class DeviceTokenPort(Protocol):
+
+    def save(self, user_id: str, token: str) -> None:
+        ...
+
+    def get_by_user(self, user_id: int) -> list[DeviceToken]:
+        ...
+
+    def get_all(self) -> list[DeviceToken]:
+        ...
+
+    def delete(self, token: str) -> None:
+        ...

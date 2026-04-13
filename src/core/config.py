@@ -24,6 +24,7 @@ class Settings:
 
     BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
 
+    FIREBASE_CREDENTIALS_PATH = "src/core/golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json"
     origins = [
         "*"
     ]

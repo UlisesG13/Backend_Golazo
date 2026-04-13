@@ -35,3 +35,12 @@ class DireccionTable(Base):
     referencia = Column(String, nullable=True)
     usuario_id = Column(String, ForeignKey("usuario.usuario_id"), nullable=False)
     is_primary = Column(Boolean, default=False)
+
+
+class DeviceTokenTable(Base):
+    __tablename__ = "device_tokens"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String, ForeignKey('usuario.usuario_id'), nullable=False)
+    token = Column(String(50), nullable=False)
+    created_at = Column(DateTime, nullable=False)

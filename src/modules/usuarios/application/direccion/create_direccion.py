@@ -8,7 +8,7 @@ class CreateDireccion:
 
     def execute(self, usuario_id: str, dto: DireccionRequestDTO) -> DireccionModel:
         model = DireccionModel(
-            direccion_id=0, # La base de datos generara el ID
+            direccion_id=None, # La base de datos generara el ID
             calle=dto.calle,
             colonia=dto.colonia,
             calle_uno=dto.calle_uno,

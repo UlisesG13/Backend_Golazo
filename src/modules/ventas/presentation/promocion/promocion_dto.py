@@ -20,7 +20,6 @@ class PromocionCreateDTO(BaseModel):
     codigo: str
     descuento: float
     tipo_descuento: str
-    contador_usos: int
     usos_maximos: int
     fecha_inicio: datetime
     fecha_expiracion: datetime

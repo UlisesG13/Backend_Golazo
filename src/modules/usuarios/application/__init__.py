@@ -7,7 +7,8 @@ DeleteUser,
 GetAllUsers,
 UpdateUser,
 CreateAdmin,
-GetAllAdmins
+GetAllAdmins,
+RegisterDeviceToken
 )
 from .direccion import (
 GetAllDirecciones,
@@ -26,6 +27,7 @@ __all__ = [
     UpdateUser,
     CreateAdmin,
     GetAllAdmins,
+    RegisterDeviceToken,
 
     GetDireccionById,
     GetAllDirecciones,

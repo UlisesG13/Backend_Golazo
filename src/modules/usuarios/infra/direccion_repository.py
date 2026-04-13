@@ -40,7 +40,6 @@ class DireccionRepository(DireccionPort):
 
     def create_direccion(self, direccion: DireccionModel) -> DireccionModel:
         model = DireccionTable(
-            direccion_id=0,
             calle=direccion.calle,
             colonia=direccion.colonia,
             calle_uno=direccion.calle_uno,

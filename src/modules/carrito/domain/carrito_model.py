@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
 
 @dataclass
 class CarritoItemModel:
@@ -21,7 +20,7 @@ class CarritoModel:
     usuario_id: str
     fecha_creacion: datetime
     fecha_actualizacion: datetime
-    items: List[CarritoItemModel] = field(default_factory=list)
+    items: list[CarritoItemModel] = field(default_factory=list)
 
     @property
     def total(self) -> float:

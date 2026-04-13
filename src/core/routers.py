@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
 from src.api.routers.factura_routes import router as factura_router
-from src.api.routers.pedido_item_routes import router as pedido_item_router
-from src.api.routers.pedido_routes import router as pedido_router
 # nuevas rutas
 from src.modules.auth.presentation.routes import router as auth_routes
 from src.modules.carrito.presentation.carrito_routes import router as carrito_router
@@ -14,13 +12,11 @@ from src.modules.catalogo.presentation.section.seccion_routes import router as s
 from src.modules.catalogo.presentation.sizes.talla_routes import router as talla_router
 from src.modules.usuarios.presentation.direccion_routes import router as direccion_routes
 from src.modules.usuarios.presentation.user_routes import router as usuario_routes
+from src.modules.ventas.presentation.pedido.pedido_routes import router as pedido_router
 from src.modules.ventas.presentation.promocion.promocion_routes import router as promocion_router
+
 api_router = APIRouter()
 
-# Ruta de los pedidos
-api_router.include_router(pedido_router, prefix="/pedidos", tags=["pedidos"])
-# Ruta de la union de pedido-producto
-api_router.include_router(pedido_item_router, prefix="/pedidos", tags=["pedidos"])
 # Ruta de las facturas
 api_router.include_router(factura_router, prefix="/facturas", tags=["facturas"])
 
@@ -57,3 +53,6 @@ api_router.include_router(carrito_router, prefix="/carritos", tags=["carritos"])
 
 # Ruta de las promociones
 api_router.include_router(promocion_router, prefix="/promociones", tags=["promociones"])
+
+# Ruta de los pedidos
+api_router.include_router(pedido_router, prefix="/pedidos", tags=["pedidos"])
