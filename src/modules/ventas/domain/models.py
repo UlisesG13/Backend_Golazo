@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 
 
 @dataclass
@@ -68,6 +69,7 @@ class PedidoItemModel:
     def subtotal(self) -> float:
         return self.cantidad * self.precio_unitario
 
+
 @dataclass
 class PedidoModel:
     pedido_id: int | None
@@ -84,3 +86,51 @@ class PedidoModel:
     notas: str
     direccion: dict
     items: list[PedidoItemModel] = field(default_factory=list)
+
+
+class EstadoFactura(Enum):
+    EMITIDA = "EMITIDA"
+    PAGADA = "PAGADA"
+    CANCELADA = "CANCELADA"
+    REEMBOLSADA = "REEMBOLSADA"
+
+
+@dataclass
+class FacturaModel:
+    factura_id: int | None
+    pedido_id: int
+
+    # Identificación Fiscal
+    folio: str
+    uuid_fiscal: str | None = None
+
+    # Fechas
+    fecha_emision: datetime = field(default_factory=datetime.now)
+    fecha_vencimiento: datetime | None = None
+
+    # Entidades (Snapshot de los datos en ese momento)
+    emisor_datos: dict = field(default_factory=dict)  # RFC empresa
+    receptor_datos: dict = field(default_factory=dict)  # RFC del cliente
+
+    # Desglose Económico
+    moneda: str = "MXN"  # O USD, etc.
+    subtotal: float = 0.0
+    descuento_total: float = 0.0
+    impuestos_totales: float = 0.0
+    total: float = 0.0
+
+    # Estado y Control
+    estado: EstadoFactura = EstadoFactura.EMITIDA
+    metodo_pago: str = "PUE"  # Pago en una sola exhibición / Parcialidades
+    forma_pago: str = "01"  # Efectivo, Tarjeta, Transferencia (usar códigos estándar)
+
+    # Relación con items (Copia exacta de los precios facturados)
+    items: list[PedidoItemModel] = field(default_factory=list)
+
+    def calcular_totales(self, tasa_impuesto: float = 0.16):
+        """Calcula los valores finales basándose en los items."""
+        self.subtotal = sum(item.subtotal for item in self.items)
+        # El descuento ya debería venir calculado del Pedido o de la Promo
+        base_imponible = self.subtotal - self.descuento_total
+        self.impuestos_totales = base_imponible * tasa_impuesto
+        self.total = base_imponible + self.impuestos_totales

@@ -5,9 +5,11 @@ from src.core.config import settings
 from src.core.routers import api_router
 
 app = FastAPI(
-    title="Golazo",
-    description="Backend del e-commerce Golazo",
-    version="1.1.0"
+    title="Golazo-API",
+    description="API del e-commerce Golazo, en constante actualizacion y mejoria",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    version="2.0.0"
 )
 
 # Middleware (CORS)

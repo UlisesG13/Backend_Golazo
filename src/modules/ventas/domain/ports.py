@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Protocol
 
-from src.modules.ventas.domain.models import PromocionModel, PedidoModel
+from src.modules.ventas.domain.models import PromocionModel, PedidoModel, FacturaModel
 
 
 class PromocionPort(Protocol):
@@ -55,4 +55,28 @@ class PedidoPort(Protocol):
 class NotificationPort(Protocol):
 
     def send_new_promocion(self, token: str, codigo: str, descuento: str):
+        ...
+
+
+class FacturaPort(Protocol):
+
+    def create(self, factura: FacturaModel) -> FacturaModel:
+        ...
+
+    def get_all(self) -> list[FacturaModel]:
+        ...
+
+    def get_by_id(self, factura_id: int) -> FacturaModel | None:
+        ...
+
+    def get_by_folio(self, folio: str) -> FacturaModel | None:
+        ...
+
+    def get_by_usuario_id(self, usuario_id: str) -> list[FacturaModel]:
+        ...
+
+    def update(self, factura_id: int, factura: FacturaModel) -> FacturaModel | None:
+        ...
+
+    def delete(self, factura_id: int) -> bool:
         ...

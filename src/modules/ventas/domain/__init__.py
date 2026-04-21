@@ -1,5 +1,5 @@
-from .models import PromocionModel, PedidoModel, PedidoItemModel
-from .ports import PromocionPort, NotificationPort, PedidoPort
+from .models import PromocionModel, PedidoModel, PedidoItemModel, FacturaModel
+from .ports import PromocionPort, NotificationPort, PedidoPort, FacturaPort
 
 __all__ = [
     PromocionModel,
@@ -8,4 +8,6 @@ __all__ = [
     PedidoPort,
     PedidoItemModel,
     PedidoModel,
+    FacturaModel,
+    FacturaPort,
 ]

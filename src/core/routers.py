@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 
-from src.api.routers.factura_routes import router as factura_router
-# nuevas rutas
 from src.modules.auth.presentation.routes import router as auth_routes
 from src.modules.carrito.presentation.carrito_routes import router as carrito_router
 from src.modules.catalogo.presentation.category.categoria_routes import router as categoria_router
@@ -14,17 +12,10 @@ from src.modules.usuarios.presentation.direccion_routes import router as direcci
 from src.modules.usuarios.presentation.user_routes import router as usuario_routes
 from src.modules.ventas.presentation.pedido.pedido_routes import router as pedido_router
 from src.modules.ventas.presentation.promocion.promocion_routes import router as promocion_router
+from src.modules.ventas.presentation.factura.factura_routes import router as factura_router
 
 api_router = APIRouter()
 
-# Ruta de las facturas
-api_router.include_router(factura_router, prefix="/facturas", tags=["facturas"])
-
-"""
-----------------------------------------
-|        RUTAS REFACTORIZADAS          |
-----------------------------------------
-"""
 # Ruta de autenticacion (Login, Register, etc)
 api_router.include_router(auth_routes, prefix="/auth", tags=["auth"])
 # Ruta de las direcciones de los usuarios
@@ -56,3 +47,6 @@ api_router.include_router(promocion_router, prefix="/promociones", tags=["promoc
 
 # Ruta de los pedidos
 api_router.include_router(pedido_router, prefix="/pedidos", tags=["pedidos"])
+
+# Ruta de las facturas
+api_router.include_router(factura_router, prefix="/facturas", tags=["facturas"])
