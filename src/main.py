@@ -1,43 +1,33 @@
-from src.core.config import app
-from src.core.routers import (
-    user_router, 
-    auth_google_router, 
-    direccion_router, 
-    seccion_router, 
-    categoria_router,
-    producto_router,
-    color_router,
-    producto_color_router,
-    talla_router,
-    producto_talla_router,
-    carrito_router,
-    carrito_item_router,
-    imagen_router,
-    pedido_router,
-    pedido_item_router,
-    factura_router,
-    promocion_router
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from src.core.config import settings
+from src.core.routers import api_router
+
+app = FastAPI(
+    title="Golazo-API",
+    description="API del e-commerce Golazo, en constante actualizacion y mejoria",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    version="2.0.0"
 )
 
-app.include_router(user_router)
-app.include_router(auth_google_router)
-app.include_router(direccion_router)
-app.include_router(seccion_router)
-app.include_router(categoria_router)
-app.include_router(producto_router)
-app.include_router(color_router)
-app.include_router(producto_color_router)
-app.include_router(talla_router)
-app.include_router(producto_talla_router)
-app.include_router(carrito_router)
-app.include_router(carrito_item_router)
-app.include_router(imagen_router)
-app.include_router(pedido_router)
-app.include_router(pedido_item_router)
-app.include_router(factura_router)
-app.include_router(promocion_router)
+# Middleware (CORS)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-print("Docs: http://127.0.0.1:8000/docs")
-@app.get("/")
+app.include_router(api_router, prefix="/api")
+
+@app.get("/", tags=["Root"])
 def root():
-    return {"message": "Bienvenido a Golazo"}
+    return {"message": "Bienvenido a Golazo API"}
+
+if __name__ == "__main__":
+    print("Documentacion Interactiva: http://127.0.0.1:8000/docs")
+    print("Documentacion Descriptiva: http://127.0.0.1:8000/redoc")
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

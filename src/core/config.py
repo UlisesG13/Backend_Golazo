@@ -1,10 +1,11 @@
 import os
-from fastapi import FastAPI
+from pathlib import Path
+
 from dotenv import load_dotenv
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
+CORE_DIR = Path(__file__).resolve().parent
+
 
 class Settings:
     # SUPABASE
@@ -25,22 +26,12 @@ class Settings:
     ALGORITHM: str = os.getenv("ALGORITHM")
     TIME_MINUTES: int = int(os.getenv("TIME_MINUTES", "30"))
 
+    BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
+
+    FIREBASE_CREDENTIALS_PATH = str(CORE_DIR / "golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json")
+    origins = [
+        "*",
+        "http://localhost: 5173"
+    ]
+
 settings = Settings()
-
-app = FastAPI(
-    title="Golazo",
-    description="Backend del e-commerce Golazo",
-    version="1.0.5"
-)
-origins = [
-    "http://localhost:8000",
-    "http://localhost:3000",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins="*",
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
-)

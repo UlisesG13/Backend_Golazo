@@ -34,7 +34,7 @@ class NotFoundError(HTTPException):
 
 
 class MethodNotAllowedError(HTTPException):
-    """405 Method Not Allowed - Método no permitido en el endpoint."""
+    """405 Method Not Allowed - Méthodo no permitido en el endpoint."""
 
     def __init__(self, detail: str = "Método no permitido"):
         super().__init__(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail=detail)
