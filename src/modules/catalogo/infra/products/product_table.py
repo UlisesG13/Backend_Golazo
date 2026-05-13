@@ -13,6 +13,7 @@ class ProductoTable(Base):
     precio = Column(Integer, nullable=False)
     esta_activo = Column(Boolean, default=True)
     esta_destacado = Column(Boolean, default=False)
+    stock = Column(Integer, default=0)
     fecha_creacion = Column(DateTime, nullable=False)
     categoria_id = Column(Integer, ForeignKey("categoria.categoria_id"), nullable=True)
 

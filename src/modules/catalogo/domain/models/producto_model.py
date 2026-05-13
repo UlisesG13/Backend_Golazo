@@ -13,6 +13,7 @@ class ProductoModel:
     esta_activo: bool
     esta_destacado: bool
     fecha_creacion: datetime
+    stock: int = 0
 
     imagenes: list[ImagenModel] = field(default_factory=list)
     tallas: list[TallaModel] = field(default_factory=list)

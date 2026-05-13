@@ -53,6 +53,11 @@ class CreatePedido:
             if not producto:
                 raise ValueError(f"Producto no encontrado: {item.producto_id}")
 
+            # Validación de Stock Dinámico
+            if producto.stock != 0:
+                if item.cantidad > producto.stock:
+                    raise ValueError(f"El producto {producto.nombre} ya no tiene stock suficiente. Disponible: {producto.stock}")
+
             items_pedido.append(
                 PedidoItemModel(
                     pedido_item_id=None,

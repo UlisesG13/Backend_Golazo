@@ -28,6 +28,22 @@ class AddItemUseCase:
         if not producto:
             raise Exception("Producto no encontrado")
 
+        # Validación de Stock Dinámico
+        if producto.stock != 0:
+            cantidad_total = dto.cantidad
+            item_existente = next((
+                item for item in carrito.items
+                if item.producto_id == dto.producto_id
+                and item.color_id == dto.color_id
+                and item.talla_id == dto.talla_id
+            ), None)
+            
+            if item_existente:
+                cantidad_total += item_existente.cantidad
+                
+            if cantidad_total > producto.stock:
+                raise ValueError(f"No hay suficiente stock. Límite disponible: {producto.stock}")
+
         nuevo_item = CarritoItemModel(
             carrito_item_id=None,
             producto_id=dto.producto_id,

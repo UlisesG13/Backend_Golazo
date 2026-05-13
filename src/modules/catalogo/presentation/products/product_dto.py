@@ -16,6 +16,7 @@ class ProductoDTO(BaseModel):
     descripcion: str | None = None
     esta_activo: bool
     esta_destacado: bool
+    stock: int = 0
     categoria_id: int | None = None
     fecha_creacion: datetime
     imagenes: list[ImagenDTO] = []
@@ -28,6 +29,7 @@ class ProductoCreateDTO(BaseModel):
     descripcion: str | None = None
     esta_activo: bool
     esta_destacado: bool
+    stock: int = 0
     categoria_id: int
 
 class ProductoUpdateDTO(BaseModel):
@@ -37,4 +39,5 @@ class ProductoUpdateDTO(BaseModel):
     descripcion: str | None = None
     esta_activo: bool | None = None
     esta_destacado: bool | None = None
+    stock: int | None = None
     categoria_id: int | None = None

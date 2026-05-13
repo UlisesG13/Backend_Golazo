@@ -25,4 +25,5 @@ def delete_cart(session=Depends(get_session)):
 
 def update_quantity(session=Depends(get_session)):
     repo = CarritoRepository(session)
-    return UpdateQuantityUseCase(repo)
+    p_repo = ProductoRepository(session)
+    return UpdateQuantityUseCase(repo, p_repo)

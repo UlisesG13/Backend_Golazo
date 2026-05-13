@@ -11,7 +11,7 @@ app = FastAPI(
     description="API del e-commerce Golazo, en constante actualizacion y mejoria",
     docs_url="/docs",
     redoc_url="/redoc",
-    version="2.0.0"
+    version="2.0.4"
 )
 
 # Middleware (CORS)
