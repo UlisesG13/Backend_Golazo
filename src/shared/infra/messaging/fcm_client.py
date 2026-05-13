@@ -1,6 +1,5 @@
 import firebase_admin
 from firebase_admin import credentials, messaging
-
 from src.core.config import settings
 
 def init_firebase():

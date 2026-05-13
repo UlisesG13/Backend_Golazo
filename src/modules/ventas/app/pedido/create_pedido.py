@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.core.messaging.fcm_service import FCMService
+from src.shared.domain.ports.messaging_port import MessagingPort
 from src.modules.carrito.domain import CarritoPort
 from src.modules.catalogo.domain.ports import ProductoPort
 from src.modules.usuarios.domain.ports import DireccionPort, DeviceTokenPort
@@ -19,7 +19,7 @@ class CreatePedido:
             producto_repo: ProductoPort,
             promocion_repo: PromocionPort,
             token_repo: DeviceTokenPort,
-            notification_service: FCMService,
+            notification_service: MessagingPort,
     ):
         self.pedido_repo = pedido_repo
         self.carrito_repo = carrito_repo
