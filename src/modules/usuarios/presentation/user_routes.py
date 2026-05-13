@@ -8,7 +8,7 @@ from src.modules.usuarios.presentation.schemas import UserDTO, UserUpdateDTO
 from src.modules.usuarios.presentation.user_dependencies import get_user_by_id_service, get_user_by_email_service, \
     anonymize_user_service, delete_user_service, get_all_users_service, update_user_service, register_admin_service, \
     get_all_admins_service, register_token_service
-from src.shared.security import get_current_user
+from src.core.security import get_current_user
 
 router = APIRouter()
 

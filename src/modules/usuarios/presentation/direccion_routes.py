@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.modules.usuarios.presentation.schemas import DireccionDTO, DireccionRequestDTO
-from src.shared.security import get_current_user
+from src.core.security import get_current_user
 from src.modules.usuarios.presentation.direccion_dependencies import get_all_direcciones_service, get_direccion_service, create_direccion_service, update_direccion_service, delete_direccion_service, set_primary_service
 from src.modules.usuarios.application.direccion import GetAllDirecciones, GetDireccionById, CreateDireccion, UpdateDireccion, DeleteDireccion, SetPrimaryDireccion
 

@@ -4,7 +4,7 @@ from src.modules.carrito.presentation.carrito_dto import CarritoResponse, AddIte
 
 from src.modules.carrito.presentation.carrito_dependencies import add_item, delete_cart, get_cart, delete_item, update_quantity
 from src.modules.carrito.app import RemoveCartUseCase, GetCartUseCase, RemoveItemUseCase, AddItemUseCase, UpdateQuantityUseCase
-from src.shared.security import get_current_user
+from src.core.security import get_current_user
 
 router = APIRouter()
 

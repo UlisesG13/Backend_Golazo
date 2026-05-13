@@ -1,5 +1,5 @@
 from src.modules.auth.domain.models import AuthenticatedUser
-from src.shared.security import get_current_user
+from src.core.security import get_current_user
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from pydantic import EmailStr

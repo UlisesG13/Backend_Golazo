@@ -19,7 +19,7 @@ from src.modules.ventas.presentation.pedido.pedido_dependencies import (
     get_change_status,
 )
 from src.modules.ventas.presentation.pedido.pedido_dto import CreatePedidoDTO, PedidoDTO, ChangeStatusDTO
-from src.shared.security import get_current_user
+from src.core.security import get_current_user
 
 router = APIRouter()
 
