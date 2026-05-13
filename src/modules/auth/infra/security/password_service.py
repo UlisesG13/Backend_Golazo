@@ -5,5 +5,5 @@ class PasswordService(PasswordPort):
     def hash(self, password: str) -> str:
         return hashlib.sha256(password.encode()).hexdigest()
 
-    def verify(self, plain_password: str, hashed_password: str) -> bool:
-        return hashlib.sha256(plain_password.encode()).hexdigest() == hashed_password
+    def verify(self, plain: str, hash: str) -> bool:
+        return hashlib.sha256(plain.encode()).hexdigest() == hash

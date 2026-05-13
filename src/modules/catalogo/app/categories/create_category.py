@@ -10,7 +10,7 @@ class CreateCategory:
     def execute(self, dto: CategoriaCreate) -> CategoriaModel:
         model = CategoriaModel(
             categoria_id=None,
-            name=dto.name,
+            nombre=dto.nombre,
             seccion_id=dto.seccion_id,
         )
         return self.repo.create(model)

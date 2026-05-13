@@ -5,15 +5,16 @@ class CategoriaDto(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     categoria_id: int
-    name: str
+    nombre: str
     seccion_id: int
+    nombre_seccion: str | None = None
 
 
 class CategoriaCreate(BaseModel):
-    name: str
+    nombre: str
     seccion_id: int
 
 
 class CategoriaUpdate(BaseModel):
-    name: str
+    nombre: str
     seccion_id: int

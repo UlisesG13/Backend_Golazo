@@ -34,4 +34,6 @@ class Settings:
         "http://localhost: 5173"
     ]
 
+    LOG_LEVEL: str = "INFO"
+
 settings = Settings()

@@ -3,7 +3,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.core.config import settings
 from src.core.routers import api_router
+from src.core.logging import setup_logging
 
+setup_logging()
 app = FastAPI(
     title="Golazo-API",
     description="API del e-commerce Golazo, en constante actualizacion y mejoria",

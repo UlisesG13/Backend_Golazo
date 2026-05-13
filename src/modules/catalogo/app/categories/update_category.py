@@ -11,7 +11,7 @@ class UpdateCategory:
         if not current:
             raise ValueError(f"Categoria {categoria_id} not found")
 
-        current.name = dto.name
+        current.nombre = dto.nombre
         current.seccion_id = dto.seccion_id
 
         return self.repo.update(categoria_id, current)
