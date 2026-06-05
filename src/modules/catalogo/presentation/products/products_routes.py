@@ -86,4 +86,5 @@ def delete_producto(
     producto_id: str,
     uc: DeleteProducto = Depends(delete_producto_service)
 ):
-    return uc.execute(producto_id)
+    uc.execute(producto_id)
+    return None

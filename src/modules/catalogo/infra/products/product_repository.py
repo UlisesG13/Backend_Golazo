@@ -95,4 +95,5 @@ class ProductoRepository(ProductoPort):
         r = self.db_session.execute(stmt).scalar_one_or_none()
         if r:
             self.db_session.delete(r)
+            self.db_session.commit()
         return None
