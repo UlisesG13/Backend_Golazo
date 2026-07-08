@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey
+from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, Text
 from src.core.database import Base
 from sqlalchemy.types import Enum
 from enum import Enum as PyEnum
@@ -42,5 +42,5 @@ class DeviceTokenTable(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(String, ForeignKey('usuario.usuario_id'), nullable=False)
-    token = Column(String(50), nullable=False)
+    token = Column(Text, nullable=False)
     created_at = Column(DateTime, nullable=False)

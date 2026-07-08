@@ -36,10 +36,10 @@ async def create_pedido(
 
 @router.get("/", response_model=List[PedidoDTO])
 async def get_pedidos(
-        status: EstadoPedido | None = Query(default=None),
+        estado: EstadoPedido | None = Query(default=None),
         uc: GetPedidos = Depends(get_all_pedidos),
 ):
-    return await uc.execute(status)
+    return await uc.execute(estado)
 
 
 @router.get("/{pedido_id}", response_model=PedidoDTO)

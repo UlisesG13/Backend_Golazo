@@ -4,10 +4,3 @@ from .get_by_id import GetPedidoById
 from .get_by_user import GetPedidosByUser
 from .get_pedidos import GetPedidos
 
-__all__ = [
-    ChangePedidoStatus,
-    CreatePedido,
-    GetPedidoById,
-    GetPedidosByUser,
-    GetPedidos,
-]

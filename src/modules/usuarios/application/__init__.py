@@ -17,21 +17,3 @@ UpdateDireccion,
 DeleteDireccion,
 SetPrimaryDireccion
 )
-__all__ = [
-    GetUserById,
-    AnonymizeUser,
-    GetUserByEmail,
-    DeleteUser,
-    GetAllUsers,
-    UpdateUser,
-    CreateAdmin,
-    GetAllAdmins,
-    RegisterDeviceToken,
-
-    GetDireccionById,
-    GetAllDirecciones,
-    CreateDireccion,
-    UpdateDireccion,
-    DeleteDireccion,
-    SetPrimaryDireccion
-]

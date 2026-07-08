@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
@@ -12,7 +13,7 @@ class ColorCreateDTO(BaseModel):
 
 
 class ColorUpdateDTO(BaseModel):
-    nombre: str | None
+    nombre: Optional[str]
 
 
 class ProductoColorCreateDTO(BaseModel):

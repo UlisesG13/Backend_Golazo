@@ -1,11 +1,12 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr, ConfigDict
+from typing import Optional
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 
 
 class UserRegister(BaseModel):
     nombre: str
     email: EmailStr
-    password: str
+    password: str = Field(min_length=8, max_length=128)
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -20,13 +21,12 @@ class UserResponse(BaseModel):
     email: EmailStr
     fecha_creacion: datetime
 
-    # Sintaxis limpia: tipo | None = defecto
-    telefono: str | None = None
-    rol: str | None = "cliente"
+    telefono: Optional[str] = None
+    rol: Optional[str] = "cliente"
     is_authenticated: bool = False
-    google_id: str | None = None
-    password: str | None = None
-    fecha_eliminacion: datetime | None = None
+    google_id: Optional[str] = None
+    password: Optional[str] = None
+    fecha_eliminacion: Optional[datetime] = None
 
 
 class LoginResponseDTO(BaseModel):

@@ -5,11 +5,3 @@ from .delete_category import DeleteCategory
 from .create_category import CreateCategory
 from .get_all_by_section import GetAllBySection
 
-__all__ = [
-    GetAllCategories,
-    GetCategoryById,
-    UpdateCategory,
-    DeleteCategory,
-    CreateCategory,
-    GetAllBySection,
-]

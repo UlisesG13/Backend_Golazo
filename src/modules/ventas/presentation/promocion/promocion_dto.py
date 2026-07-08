@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -27,11 +28,11 @@ class PromocionCreateDTO(BaseModel):
 
 
 class PromocionUpdateDTO(BaseModel):
-    codigo: str | None
-    descuento: float | None
-    tipo_descuento: str | None
-    contador_usos: int | None
-    usos_maximos: int | None
-    fecha_inicio: datetime | None
-    fecha_expiracion: datetime | None
-    esta_activa: bool | None
+    codigo: Optional[str]
+    descuento: Optional[float]
+    tipo_descuento: Optional[str]
+    contador_usos: Optional[int]
+    usos_maximos: Optional[int]
+    fecha_inicio: Optional[datetime]
+    fecha_expiracion: Optional[datetime]
+    esta_activa: Optional[bool]

@@ -8,14 +8,3 @@ from .update_producto import UpdateProducto
 from .change_status import ChangeStatus
 from .change_destacado import ChangeDestacado
 
-__all__ = [
-    CreateProducto,
-    GetProductoById,
-    GetProductoByCategoria,
-    CreateProducto,
-    ListProducts,
-    DeleteProducto,
-    UpdateProducto,
-    ChangeStatus,
-    ChangeDestacado,
-]

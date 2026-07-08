@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 
@@ -7,7 +8,7 @@ class CategoriaDto(BaseModel):
     categoria_id: int
     nombre: str
     seccion_id: int
-    nombre_seccion: str | None = None
+    nombre_seccion: Optional[str] = None
 
 
 class CategoriaCreate(BaseModel):

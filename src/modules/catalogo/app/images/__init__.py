@@ -6,12 +6,3 @@ from .get_images import GetImages
 from .get_images_by_product import GetImagesByProduct
 from .upload_imagen import UploadImage
 
-__all__ = [
-    AsociarImageToProduct,
-    DeleteImage,
-    DeleteImagesByProduct,
-    DesasociarImageFromProduct,
-    GetImagesByProduct,
-    UploadImage,
-    GetImages
-]

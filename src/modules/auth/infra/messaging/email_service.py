@@ -2,9 +2,10 @@ from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr, make_msgid, formatdate
-import smtplib
+import aiosmtplib
 from src.modules.auth.domain.ports import EmailPort
 from src.core.config import settings
+from src.core.exceptions import BadRequestError
 
 class EmailService(EmailPort):
 
@@ -34,12 +35,12 @@ class EmailService(EmailPort):
         </html>
         """
 
-    def send_code(self, to_email: str, code: str):
+    async def send_code(self, to_email: str, code: str):
         username = self.mail_username
         password = self.mail_password
 
         if not username or not password:
-            raise ValueError("Faltan credenciales")
+            raise BadRequestError("Faltan credenciales")
 
         html = self.build_email_html(
             code,
@@ -55,8 +56,12 @@ class EmailService(EmailPort):
 
         msg.attach(MIMEText(html, "html"))
 
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(username, password)
-            server.sendmail(username, to_email, msg.as_string())
+        await aiosmtplib.send(
+            msg,
+            hostname="smtp.gmail.com",
+            port=587,
+            start_tls=True,
+            username=username,
+            password=password,
+        )
         return True

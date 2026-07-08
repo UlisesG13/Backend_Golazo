@@ -8,14 +8,3 @@ from .get_all_users import GetAllUsers
 from .create_admin import CreateAdmin
 from .get_admins import GetAllAdmins
 from .register_device_token import RegisterDeviceToken
-__all__ = [
-    GetUserById,
-    AnonymizeUser,
-    GetUserByEmail,
-    DeleteUser,
-    GetAllUsers,
-    UpdateUser,
-    CreateAdmin,
-    GetAllAdmins,
-    RegisterDeviceToken
-]

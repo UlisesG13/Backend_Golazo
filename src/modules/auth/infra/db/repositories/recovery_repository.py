@@ -33,7 +33,7 @@ class RecoveryCodeService(RecoveryCodePort):
     async def get_by_user_id(self, user_id: str) -> RecoveryCode | None:
         stmt = select(RecoveryCodeTable).where(RecoveryCodeTable.usuario_id == user_id)
         r = (await self.session.execute(stmt)).scalar_one_or_none()
-        return _to_domain(r)
+        return _to_domain(r) if r else None
 
     async def delete_by_user_id(self, usuario_id: str):
         stmt = select(RecoveryCodeTable).where(

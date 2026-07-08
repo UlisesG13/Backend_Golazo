@@ -9,17 +9,3 @@ from src.modules.auth.application.reset_password import ResetPassword
 from src.modules.auth.application.verify_code import VerifyRecoveryCode
 from src.modules.auth.application.send_recovery_code import SendRecoveryCode
 from src.modules.auth.application.verify_user import VerifyUser
-
-__all__ = [
-    "VerifyToken",
-    "GetByGoogle",
-    "LoginUser",
-    "RegisterUser",
-    "GetGoogleAuthUrl",
-    "GenerateRecoveryCode",
-    "LoginWithGoogle",
-    "ResetPassword",
-    "VerifyRecoveryCode",
-    "SendRecoveryCode",
-    "VerifyUser"
-]

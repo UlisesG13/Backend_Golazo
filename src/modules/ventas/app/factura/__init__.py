@@ -6,12 +6,3 @@ from .create_factura import CreateFactura
 from .change_status import ChangeStatus
 from .delete_factura import DeleteFactura
 
-__all__ = [
-    GetAll,
-    GetById,
-    GetByFolio,
-    GetByUsuario,
-    CreateFactura,
-    ChangeStatus,
-    DeleteFactura,
-]

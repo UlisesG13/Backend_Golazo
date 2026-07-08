@@ -21,12 +21,15 @@ from src.modules.auth.presentation.schemas import (
     UserLogin,
     LoginResponseDTO,
 )
+from src.core.limiter import limiter
 
 router = APIRouter()
 
 
 @router.post("/register", response_model=LoginResponseDTO, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def register(
+        request: Request,
         data: UserRegister,
         usecase=Depends(register_user_service),
 ):
@@ -36,7 +39,9 @@ async def register(
 
 
 @router.post("/login", response_model=LoginResponseDTO, status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def login(
+        request: Request,
         data: UserLogin,
         usecase=Depends(login_user_service),
 ):
@@ -70,7 +75,9 @@ async def google_callback(
 
 
 @router.post("/recovery/request", status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def request_recovery(
+        request: Request,
         email: EmailStr,
         generate_uc=Depends(generate_recovery_code_service),
         send_uc=Depends(send_recovery_code_service),
@@ -80,7 +87,9 @@ async def request_recovery(
 
 
 @router.post("/recovery/verify", status_code=status.HTTP_201_CREATED)
+@limiter.limit("5/minute")
 async def verify_code(
+        request: Request,
         usuario_id: str,
         code: str,
         usecase_code=Depends(verify_recovery_code_service),

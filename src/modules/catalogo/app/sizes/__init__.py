@@ -8,14 +8,3 @@ from .get_p_talla_by_id import GetPTallaById
 from .get_talla_by_id import GetTallaById
 from .update_talla import UpdateTalla
 
-__all__ = [
-    AsociarTalla,
-    CreateTalla,
-    DeleteTalla,
-    DesasociarTalla,
-    GetAllTallas,
-    GetTallasByProducto,
-    GetPTallaById,
-    GetTallaById,
-    UpdateTalla
-]

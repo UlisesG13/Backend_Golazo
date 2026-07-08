@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta, timezone
 
-from cryptography.hazmat.primitives.twofactor import InvalidToken
 from jose import jwt, JWTError
 
 from src.modules.auth.domain.models import TokenPayload
 from src.modules.auth.domain.ports import TokenPort
 from src.core.config import settings
+from src.core.exceptions import UnauthorizedError
 
 
 class JwtTokenService(TokenPort):
@@ -42,4 +42,4 @@ class JwtTokenService(TokenPort):
                 exp=decoded["exp"],
             )
         except JWTError:
-            raise InvalidToken()
+            raise UnauthorizedError("Token inválido")

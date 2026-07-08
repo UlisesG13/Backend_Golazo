@@ -1,39 +1,42 @@
-import os
+import secrets
 from pathlib import Path
 
 from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 load_dotenv()
 CORE_DIR = Path(__file__).resolve().parent
 
 
-class Settings:
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
     # SUPABASE
-    DATABASE_URL: str = os.getenv("DATABASE_URL")
-    SUPABASE_URL: str = os.getenv("SUPABASE_URL")
-    SUPABASE_KEY: str = os.getenv("SUPABASE_KEY")
-    SUPABASE_BUCKET: str = os.getenv("SUPABASE_BUCKET")
+    DATABASE_URL: str = ""
+    SUPABASE_URL: str = ""
+    SUPABASE_KEY: str = ""
+    SUPABASE_BUCKET: str = ""
 
     # GOOGLE OAUTH
-    MAIL_USERNAME: str = os.getenv("MAIL_USERNAME")
-    MAIL_PASSWORD: str = os.getenv("MAIL_PASSWORD")
-    GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")
-    GOOGLE_CLIENT_SECRET: str = os.getenv("GOOGLE_CLIENT_SECRET")
-    GOOGLE_REDIRECT_URI: str = os.getenv("GOOGLE_REDIRECT_URI")
+    MAIL_USERNAME: str = ""
+    MAIL_PASSWORD: str = ""
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    GOOGLE_REDIRECT_URI: str = ""
 
     # JWT CONFIGURATION
-    SECRET_KEY: str = os.getenv("SECRET_KEY")
-    ALGORITHM: str = os.getenv("ALGORITHM")
-    TIME_MINUTES: int = int(os.getenv("TIME_MINUTES", "30"))
+    SECRET_KEY: str = secrets.token_hex(32)
+    ALGORITHM: str = "HS256"
+    TIME_MINUTES: int = 30
 
-    BCRYPT_ROUNDS: int = int(os.getenv("BCRYPT_ROUNDS", "12"))
+    FIREBASE_CREDENTIALS_PATH: str = str(CORE_DIR / "golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json")
 
-    FIREBASE_CREDENTIALS_PATH = str(CORE_DIR / "golazo-b1c36-firebase-adminsdk-fbsvc-33611d463a.json")
-    origins = [
+    origins: list[str] = [
         "*",
-        "http://localhost: 5173"
+        "http://localhost:5173",
     ]
 
     LOG_LEVEL: str = "INFO"
+
 
 settings = Settings()

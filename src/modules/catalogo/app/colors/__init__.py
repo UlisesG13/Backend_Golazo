@@ -8,14 +8,3 @@ from .get_color_by_producto import GetColoresByProducto
 from .get_p_color_by_id import GetPColorById
 from .update_color import UpdateColor
 
-__all__ = [
-    AsociarColor,
-    CreateColor,
-    DeleteColor,
-    DesasociarColor,
-    GetAllColors,
-    GetColorById,
-    GetColoresByProducto,
-    GetPColorById,
-    UpdateColor
-]

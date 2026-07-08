@@ -1,5 +1,5 @@
 from typing import Mapping, Any
-import requests
+import httpx
 from urllib.parse import urlencode
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
@@ -21,7 +21,7 @@ class GoogleOAuthService(GoogleOAuthPort):
         }
         return "https://accounts.google.com/o/oauth2/auth?" + urlencode(params)
 
-    def exchange_code(self, code: str) -> Mapping[str, Any]:
+    async def exchange_code(self, code: str) -> Mapping[str, Any]:
         url = "https://oauth2.googleapis.com/token"
 
         data = {
@@ -32,7 +32,8 @@ class GoogleOAuthService(GoogleOAuthPort):
             "grant_type": "authorization_code",
         }
 
-        response = requests.post(url, data=data)
+        async with httpx.AsyncClient() as client:
+            response = await client.post(url, data=data)
         response.raise_for_status()
 
         return response.json()

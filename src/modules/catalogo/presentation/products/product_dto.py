@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
 from src.modules.catalogo.presentation.images.images_dto import ImagenDTO
@@ -10,14 +11,14 @@ class ProductoDTO(BaseModel):
     # Usamos ConfigDict para Pydantic V2 (es lo más moderno)
     model_config = ConfigDict(from_attributes=True)
 
-    producto_id: str | None = None
+    producto_id: Optional[str] = None
     nombre: str
     precio: int
-    descripcion: str | None = None
+    descripcion: Optional[str] = None
     esta_activo: bool
     esta_destacado: bool
     stock: int = 0
-    categoria_id: int | None = None
+    categoria_id: Optional[int] = None
     fecha_creacion: datetime
     imagenes: list[ImagenDTO] = []
     tallas: list[TallaDTO] =  []
@@ -26,7 +27,7 @@ class ProductoDTO(BaseModel):
 class ProductoCreateDTO(BaseModel):
     nombre: str
     precio: int
-    descripcion: str | None = None
+    descripcion: Optional[str] = None
     esta_activo: bool
     esta_destacado: bool
     stock: int = 0
@@ -34,10 +35,10 @@ class ProductoCreateDTO(BaseModel):
 
 class ProductoUpdateDTO(BaseModel):
     # En un Update, all suele ser opcional porque puedes actualizar solo un campo
-    nombre: str | None = None
-    precio: int | None = None
-    descripcion: str | None = None
-    esta_activo: bool | None = None
-    esta_destacado: bool | None = None
-    stock: int | None = None
-    categoria_id: int | None = None
+    nombre: Optional[str] = None
+    precio: Optional[int] = None
+    descripcion: Optional[str] = None
+    esta_activo: Optional[bool] = None
+    esta_destacado: Optional[bool] = None
+    stock: Optional[int] = None
+    categoria_id: Optional[int] = None

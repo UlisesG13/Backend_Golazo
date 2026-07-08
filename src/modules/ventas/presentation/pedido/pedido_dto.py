@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -7,8 +8,8 @@ from src.modules.ventas.infra.pedido.pedido_table import EstadoPedido
 
 class CreatePedidoDTO(BaseModel):
     direccion_id: int
-    promocion: str | None = None
-    notas: str | None = None
+    promocion: Optional[str] = None
+    notas: Optional[str] = None
 
 
 class ChangeStatusDTO(BaseModel):
@@ -19,8 +20,8 @@ class PedidoItemDTO(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     producto_id: str
     nombre_producto: str
-    color_id: int | None
-    talla_id: int | None
+    color_id: Optional[int]
+    talla_id: Optional[int]
     cantidad: int
     precio_unitario: float
     subtotal: float
@@ -37,4 +38,4 @@ class PedidoDTO(BaseModel):
     total: float
     direccion: dict
     items: list[PedidoItemDTO]
-    notas: str | None
+    notas: Optional[str]
