@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from src.modules.catalogo.app.categories import GetCategoryById, GetAllCategories, GetAllBySection, CreateCategory, UpdateCategory, DeleteCategory
 from src.modules.catalogo.presentation.category.categoria_dependencies import get_all_by_seccion, get_all, get_by_id, create_categoria, update_categoria, delete_categoria
@@ -12,7 +12,7 @@ async def get_categorias(
 ):
     return await uc.execute()
 
-@router.post("", response_model=CategoriaDto)
+@router.post("", response_model=CategoriaDto, status_code=status.HTTP_201_CREATED)
 async def create_categoria(
         dto: CategoriaCreate,
         uc: CreateCategory = Depends(create_categoria)

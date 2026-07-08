@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query, status
 
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.modules.ventas.app.pedido import (
@@ -24,7 +24,7 @@ from src.core.security import get_current_user
 router = APIRouter()
 
 
-@router.post("/", response_model=PedidoDTO)
+@router.post("/", response_model=PedidoDTO, status_code=status.HTTP_201_CREATED)
 async def create_pedido(
         dto: CreatePedidoDTO,
         uc: CreatePedido = Depends(get_create_pedido),

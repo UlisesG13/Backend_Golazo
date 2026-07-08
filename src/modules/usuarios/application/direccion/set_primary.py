@@ -1,4 +1,3 @@
-from src.modules.usuarios.domain.models import DireccionModel
 from src.modules.usuarios.domain.ports import DireccionPort
 
 class SetPrimaryDireccion:

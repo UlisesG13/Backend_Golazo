@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 from typing import List
 from src.modules.ventas.domain.models import EstadoFactura
 from src.modules.ventas.presentation.factura.factura_dto import (

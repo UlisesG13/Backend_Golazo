@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi.params import Depends
 
 from src.modules.catalogo.app.colors import GetAllColors, CreateColor, GetColorById, UpdateColor, DeleteColor, \
@@ -18,7 +18,7 @@ async def get_all_colores(
     return await uc.execute()
 
 
-@router.post("", response_model=ColorDTO)
+@router.post("", response_model=ColorDTO, status_code=status.HTTP_201_CREATED)
 async def create_color(
         dto: ColorCreateDTO,
         uc: CreateColor = Depends(create_color)
@@ -52,7 +52,7 @@ async def delete_color(
 
 
 # RUTAS DE COLORES Y PRODUCTOS
-@router.post("/productos", response_model=ProductoColorDTO)
+@router.post("/productos", response_model=ProductoColorDTO, status_code=status.HTTP_201_CREATED)
 async def assign_color_to_producto(
         dto: ProductoColorCreateDTO,
         uc: AsociarColor = Depends(asociar_color),

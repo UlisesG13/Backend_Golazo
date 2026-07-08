@@ -54,7 +54,7 @@ async def eliminar_imagen(
 
 
 # --- 2. ASOCIACIÓN CON PRODUCTOS (Rutas fijas /productos) ---
-@router.post("/productos", response_model=ProductoImagenDTO)
+@router.post("/productos", response_model=ProductoImagenDTO, status_code=status.HTTP_201_CREATED)
 async def asociar_imagen(
     dto: ProductoImagenCreateDTO,
     service: AsociarImageToProduct = Depends(asociar_image_service)

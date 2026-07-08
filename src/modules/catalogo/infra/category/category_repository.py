@@ -4,7 +4,6 @@ from sqlalchemy.orm import joinedload
 from src.modules.catalogo.domain.models import CategoriaModel
 from src.modules.catalogo.domain.ports.categoria_port import CategoriaPort
 from src.modules.catalogo.infra.category.category_table import CategoriaTable
-from src.modules.catalogo.infra.sections.seccion_table import SeccionTable
 
 
 def to_domain(r: CategoriaTable) -> CategoriaModel:

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.modules.auth.presentation.schemas import LoginResponseDTO, UserRegister
@@ -69,7 +69,7 @@ async def get_admins(uc: GetAllAdmins = Depends(get_all_admins_service)):
     return await uc.execute()
 
 
-@router.post("/admins", response_model=LoginResponseDTO)
+@router.post("/admins", response_model=LoginResponseDTO, status_code=status.HTTP_201_CREATED)
 async def create_admin(user: UserRegister, uc: CreateAdmin = Depends(register_admin_service)):
     return await uc.execute(user)
 
@@ -84,7 +84,7 @@ async def delete_admin(usuario_id: str, uc: DeleteUser = Depends(delete_user_ser
     return await uc.execute(usuario_id)
 
 
-@router.post("/device-token")
+@router.post("/device-token", status_code=status.HTTP_201_CREATED)
 async def register_token(
         token: str,
         user : AuthenticatedUser=Depends(get_current_user),

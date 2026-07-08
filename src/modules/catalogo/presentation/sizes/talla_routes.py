@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi.params import Depends
 
 from src.modules.catalogo.app.sizes import GetAllTallas, CreateTalla, GetTallaById, UpdateTalla, DeleteTalla, \
@@ -18,7 +18,7 @@ async def get_all_tallas(
     return await uc.execute()
 
 
-@router.post("", response_model=TallaDTO)
+@router.post("", response_model=TallaDTO, status_code=status.HTTP_201_CREATED)
 async def create_talla(
         dto: TallaCreateDTO,
         uc: CreateTalla = Depends(create_talla)
@@ -52,7 +52,7 @@ async def delete_talla(
 
 
 # RUTAS DE TALLAS Y PRODUCTOS
-@router.post("/productos", response_model=ProductoTallaDTO)
+@router.post("/productos", response_model=ProductoTallaDTO, status_code=status.HTTP_201_CREATED)
 async def assign_talla_to_producto(
         dto: ProductoTallaCreateDTO,
         uc: AsociarTalla = Depends(asociar_talla),

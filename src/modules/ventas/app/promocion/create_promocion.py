@@ -1,5 +1,4 @@
 from src.core.exceptions import BadRequestError, ConflictError
-from src.modules.ventas.domain.ports import NotificationPort
 from src.modules.ventas.domain import PromocionPort, PromocionModel
 from src.modules.ventas.infra.promocion.promocion_table import TipoDescuento
 from src.modules.ventas.presentation.promocion.promocion_dto import PromocionCreateDTO

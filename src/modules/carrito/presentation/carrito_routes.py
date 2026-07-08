@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from src.modules.carrito.presentation.carrito_dto import CarritoResponse, AddItemRequest, UpdateItemQuantityRequest
 
@@ -8,7 +8,7 @@ from src.core.security import get_current_user
 
 router = APIRouter()
 
-@router.post("", response_model=CarritoResponse)
+@router.post("", response_model=CarritoResponse, status_code=status.HTTP_201_CREATED)
 async def add_item_cart(
         request: AddItemRequest,
         uc: AddItemUseCase = Depends(add_item),

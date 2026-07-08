@@ -1,6 +1,6 @@
 from src.modules.auth.domain.models import AuthenticatedUser
 from src.core.security import get_current_user
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, status
 from fastapi.responses import RedirectResponse
 from pydantic import EmailStr
 
@@ -25,7 +25,7 @@ from src.modules.auth.presentation.schemas import (
 router = APIRouter()
 
 
-@router.post("/register", response_model=LoginResponseDTO)
+@router.post("/register", response_model=LoginResponseDTO, status_code=status.HTTP_201_CREATED)
 async def register(
         data: UserRegister,
         usecase=Depends(register_user_service),
@@ -35,7 +35,7 @@ async def register(
     )
 
 
-@router.post("/login", response_model=LoginResponseDTO)
+@router.post("/login", response_model=LoginResponseDTO, status_code=status.HTTP_201_CREATED)
 async def login(
         data: UserLogin,
         usecase=Depends(login_user_service),
@@ -69,7 +69,7 @@ async def google_callback(
     return await usecase.execute(code)
 
 
-@router.post("/recovery/request")
+@router.post("/recovery/request", status_code=status.HTTP_201_CREATED)
 async def request_recovery(
         email: EmailStr,
         generate_uc=Depends(generate_recovery_code_service),
@@ -79,7 +79,7 @@ async def request_recovery(
     return await send_uc.execute(email, code)
 
 
-@router.post("/recovery/verify")
+@router.post("/recovery/verify", status_code=status.HTTP_201_CREATED)
 async def verify_code(
         usuario_id: str,
         code: str,
@@ -91,7 +91,7 @@ async def verify_code(
     return None
 
 
-@router.post("/recovery/reset")
+@router.post("/recovery/reset", status_code=status.HTTP_201_CREATED)
 async def reset_password(
         usuario_id: str,
         new_password: str,

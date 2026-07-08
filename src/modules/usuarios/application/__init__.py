@@ -1,5 +1,4 @@
 from .usuario import (
-get_user_by_email,
 GetUserById,
 AnonymizeUser,
 GetUserByEmail,

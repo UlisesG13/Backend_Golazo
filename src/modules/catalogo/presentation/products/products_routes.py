@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from src.modules.catalogo.presentation.products.product_dto import (
     ProductoDTO,
@@ -33,7 +33,7 @@ router = APIRouter()
 async def list_productos(uc: ListProducts = Depends(get_all_productos_service)):
     return await uc.execute()
 
-@router.post("", response_model=ProductoDTO)
+@router.post("", response_model=ProductoDTO, status_code=status.HTTP_201_CREATED)
 async def create_producto(dto: ProductoCreateDTO, uc: CreateProducto = Depends(create_producto_service)):
     return await uc.execute(dto)
 

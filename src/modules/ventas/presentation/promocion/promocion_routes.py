@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 
 from src.modules.ventas.app.promocion import (
     CreatePromocion,
@@ -28,7 +28,7 @@ async def get_promociones(
     return await uc.execute()
 
 
-@router.post("", response_model=PromocionDTO)
+@router.post("", response_model=PromocionDTO, status_code=status.HTTP_201_CREATED)
 async def create_promocion_route(
         dto: PromocionCreateDTO,
         uc: CreatePromocion = Depends(create_promocion)

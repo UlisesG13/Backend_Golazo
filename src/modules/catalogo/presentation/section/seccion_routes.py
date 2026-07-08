@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi.params import Depends
 
 from src.modules.catalogo.app.sections import GetSecciones, CreateSeccion, UpdateSeccion, DeleteSeccion
@@ -20,7 +20,7 @@ async def list_secciones(
     return await uc.execute()
 
 
-@router.post("", response_model=SeccionDto)
+@router.post("", response_model=SeccionDto, status_code=status.HTTP_201_CREATED)
 async def create(
         dto: SeccionCreate,
         uc: CreateSeccion = Depends(create_seccion)
