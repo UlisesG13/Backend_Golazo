@@ -5,5 +5,5 @@ class GetAllAdmins:
     def __init__(self, repo: UserPort):
         self.user_repository = repo
 
-    def execute(self) -> list[UserModel]:
-        return self.user_repository.get_all_admins()
+    async def execute(self) -> list[UserModel]:
+        return await self.user_repository.get_all_admins()

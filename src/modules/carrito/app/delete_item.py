@@ -5,9 +5,9 @@ class RemoveItemUseCase:
     def __init__(self, repo: CarritoPort):
         self.repo = repo
 
-    def execute(self, usuario_id: str, item_id: int) -> CarritoModel:
+    async def execute(self, usuario_id: str, item_id: int) -> CarritoModel:
         # 1. Obtenemos el carrito completo del usuario
-        carrito = self.repo.get_by_user_id(usuario_id)
+        carrito = await self.repo.get_by_user_id(usuario_id)
         if not carrito:
             raise Exception("Carrito no encontrado")
 
@@ -20,4 +20,4 @@ class RemoveItemUseCase:
 
         # 3. Guardamos el estado actual.
         # SQLAlchemy detectará que falta un ítem en la lista y lo borrará de la DB.
-        return self.repo.save(carrito)
+        return await self.repo.save(carrito)

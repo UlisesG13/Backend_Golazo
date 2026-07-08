@@ -4,6 +4,7 @@ from src.modules.auth.presentation.schemas import UserRegister
 from datetime import datetime, timedelta, timezone
 from src.modules.usuarios.infra.tables import Rol
 from uuid import uuid4
+from src.core.exceptions import ConflictError
 
 class CreateAdmin:
 
@@ -17,10 +18,10 @@ class CreateAdmin:
         self.password_repo = password_port
         self.token_repo = token_port
 
-    def execute(self, user: UserRegister):
-        existing = self.auth_repo.get_by_email(user.email)
+    async def execute(self, user: UserRegister):
+        existing = await self.auth_repo.get_by_email(user.email)
         if existing:
-            raise ValueError("Email already registered")
+            raise ConflictError("Email already registered")
 
         hashed = self.password_repo.hash(user.password)
 
@@ -36,7 +37,7 @@ class CreateAdmin:
             google_id=None,
         )
 
-        user_created = self.auth_repo.create(model)
+        user_created = await self.auth_repo.create(model)
 
         payload = TokenPayload(
             usuario_id=user_created.usuario_id,

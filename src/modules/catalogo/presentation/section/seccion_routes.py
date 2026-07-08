@@ -14,32 +14,32 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[SeccionDto])
-def list_secciones(
+async def list_secciones(
         uc: GetSecciones = Depends(get_all_secciones)
 ):
-    return uc.execute()
+    return await uc.execute()
 
 
 @router.post("", response_model=SeccionDto)
-def create(
+async def create(
         dto: SeccionCreate,
         uc: CreateSeccion = Depends(create_seccion)
 ):
-    return uc.execute(dto)
+    return await uc.execute(dto)
 
 
 @router.put("/{seccion_id}", response_model=SeccionDto)
-def update(
+async def update(
         seccion_id: int,
         dto: SeccionUpdate,
         uc: UpdateSeccion = Depends(update_seccion)
 ):
-    return uc.execute(seccion_id, dto)
+    return await uc.execute(seccion_id, dto)
 
 
 @router.delete("/{seccion_id}", status_code=204)
-def delete(
+async def delete(
         seccion_id: int,
         uc: DeleteSeccion = Depends(delete_seccion)
 ):
-    return uc.execute(seccion_id)
+    await uc.execute(seccion_id)

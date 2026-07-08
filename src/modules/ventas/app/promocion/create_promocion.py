@@ -1,3 +1,4 @@
+from src.core.exceptions import BadRequestError, ConflictError
 from src.modules.ventas.domain.ports import NotificationPort
 from src.modules.ventas.domain import PromocionPort, PromocionModel
 from src.modules.ventas.infra.promocion.promocion_table import TipoDescuento
@@ -8,12 +9,12 @@ class CreatePromocion:
     def __init__(self, repo: PromocionPort):
         self.repo = repo
 
-    def execute(self, dto: PromocionCreateDTO) -> PromocionModel:
+    async def execute(self, dto: PromocionCreateDTO) -> PromocionModel:
         # 0. Validación elegante usando el Enum
         # Esto verifica si el valor enviado está entre ("porcentaje", "monto_fijo")
         if dto.tipo_descuento not in [t.value for t in TipoDescuento]:
             validos = [t.value for t in TipoDescuento]
-            raise ValueError(f"Tipo de promoción '{dto.tipo_descuento}' no es válido. Opciones: {validos}")
+            raise BadRequestError(f"Tipo de promoción '{dto.tipo_descuento}' no es válido. Opciones: {validos}")
 
         # 1. Instanciamos el modelo con los datos del DTO
         nueva_promocion = PromocionModel(
@@ -30,11 +31,11 @@ class CreatePromocion:
 
         # 2. Validaciones de Regla de Negocio
         if not nueva_promocion.date_is_valid():
-            raise ValueError("La fecha de inicio debe ser anterior a la de expiración.")
+            raise BadRequestError("La fecha de inicio debe ser anterior a la de expiración.")
 
         # 3. Verificación de duplicados
-        if self.repo.get_by_codigo(nueva_promocion.codigo):
-            raise ValueError(f"Ya existe una promoción con el código {nueva_promocion.codigo}")
+        if await self.repo.get_by_codigo(nueva_promocion.codigo):
+            raise ConflictError(f"Ya existe una promoción con el código {nueva_promocion.codigo}")
 
         # 4. Guardamos
-        return self.repo.create(nueva_promocion)
+        return await self.repo.create(nueva_promocion)

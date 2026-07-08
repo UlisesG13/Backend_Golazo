@@ -6,6 +6,6 @@ class ListProducts:
     def __init__(self, repo: ProductoPort):
         self.repo = repo
 
-    def execute(self) -> list[ProductoModel]:
-        productos = self.repo.get_all()
+    async def execute(self) -> list[ProductoModel]:
+        productos = await self.repo.get_all()
         return productos

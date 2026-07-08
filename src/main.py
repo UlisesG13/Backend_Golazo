@@ -11,10 +11,9 @@ app = FastAPI(
     description="API del e-commerce Golazo, en constante actualizacion y mejoria",
     docs_url="/docs",
     redoc_url="/redoc",
-    version="2.0.4"
+    version="2.1.0"
 )
 
-# Middleware (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.origins,
@@ -26,7 +25,7 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 
 @app.get("/", tags=["Root"])
-def root():
+async def root():
     return {"message": "Bienvenido a Golazo API"}
 
 if __name__ == "__main__":

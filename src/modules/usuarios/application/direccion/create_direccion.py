@@ -6,7 +6,7 @@ class CreateDireccion:
     def __init__(self, repo: DireccionPort) -> None:
         self.repo = repo
 
-    def execute(self, usuario_id: str, dto: DireccionRequestDTO) -> DireccionModel:
+    async def execute(self, usuario_id: str, dto: DireccionRequestDTO) -> DireccionModel:
         model = DireccionModel(
             direccion_id=None, # La base de datos generara el ID
             calle=dto.calle,
@@ -19,4 +19,4 @@ class CreateDireccion:
             usuario_id=usuario_id,
             is_primary=dto.is_primary
         )
-        return self.repo.create_direccion(model)
+        return await self.repo.create_direccion(model)

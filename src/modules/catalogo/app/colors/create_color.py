@@ -7,9 +7,9 @@ class CreateColor:
     def __init__(self, repo: ColorPort):
         self.repo = repo
 
-    def execute(self, dto: ColorCreateDTO) -> ColorModel:
+    async def execute(self, dto: ColorCreateDTO) -> ColorModel:
         model = ColorModel(
             color_id=None,
             nombre=dto.nombre
         )
-        return self.repo.create(model)
+        return await self.repo.create(model)

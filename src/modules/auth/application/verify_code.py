@@ -9,15 +9,15 @@ class VerifyRecoveryCode:
     def __init__(self, repo: RecoveryCodePort):
         self.repo = repo
 
-    def execute(self, user_id: str, input_code: str) -> bool:
+    async def execute(self, user_id: str, input_code: str) -> bool:
 
-        recovery = self.repo.get_by_user_id(user_id)
+        recovery = await self.repo.get_by_user_id(user_id)
 
         if not recovery:
             return False
 
         if recovery.is_expired(datetime.now(timezone.utc)):
-            self.repo.delete_by_user_id(user_id)
+            await self.repo.delete_by_user_id(user_id)
             return False
 
         hashed_input = hashlib.sha256(input_code.encode()).hexdigest()
@@ -25,5 +25,5 @@ class VerifyRecoveryCode:
         if hashed_input != recovery.code:
             return False
 
-        self.repo.delete_by_user_id(user_id)
+        await self.repo.delete_by_user_id(user_id)
         return True

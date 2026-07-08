@@ -6,7 +6,7 @@ from jose import JWTError
 
 security = HTTPBearer()
 
-def get_current_user(
+async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     usecase=Depends(verify_token_service)
 ) -> AuthenticatedUser:
@@ -14,7 +14,7 @@ def get_current_user(
     token = credentials.credentials
 
     try:
-        payload = usecase.execute(token)
+        payload = await usecase.execute(token)
 
         return AuthenticatedUser(
             usuario_id=payload.usuario_id,

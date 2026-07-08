@@ -5,5 +5,5 @@ class GetAllCategories:
     def __init__(self, repo: CategoriaPort):
         self.repo = repo
 
-    def execute(self) -> list[CategoriaModel]:
-        return self.repo.get_all()
+    async def execute(self) -> list[CategoriaModel]:
+        return await self.repo.get_all()

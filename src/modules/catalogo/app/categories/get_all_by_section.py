@@ -5,5 +5,5 @@ class GetAllBySection:
     def __init__(self, repo: CategoriaPort):
         self.repo = repo
 
-    def execute(self, seccion_id: int):
-        return self.repo.get_all_by_seccion(seccion_id)
+    async def execute(self, seccion_id: int):
+        return await self.repo.get_all_by_seccion(seccion_id)

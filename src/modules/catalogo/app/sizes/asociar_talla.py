@@ -7,10 +7,10 @@ class AsociarTalla:
     def __init__(self, repo: ProductoTallaPort):
         self.repo = repo
 
-    def execute(self, dto: ProductoTallaCreateDTO) -> ProductoTallaModel:
+    async def execute(self, dto: ProductoTallaCreateDTO) -> ProductoTallaModel:
         model = ProductoTallaModel(
             producto_talla_id=None,
             producto_id=dto.producto_id,
             talla_id=dto.talla_id
         )
-        return self.repo.assign_to_producto(model)
+        return await self.repo.assign_to_producto(model)

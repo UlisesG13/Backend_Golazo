@@ -1,5 +1,6 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session, subqueryload
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import subqueryload
 
 from src.modules.catalogo.domain.models import ProductoModel, ImagenModel, TallaModel, ColorModel
 from src.modules.catalogo.domain.ports import ProductoPort
@@ -24,19 +25,20 @@ def _to_domain(r: ProductoTable) -> ProductoModel:
 
 
 class ProductoRepository(ProductoPort):
-    def __init__(self, db_session: Session):
+    def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
-    def get_by_id(self, producto_id: str) -> ProductoModel | None:
+    async def get_by_id(self, producto_id: str) -> ProductoModel | None:
         stmt = select(ProductoTable).filter_by(producto_id=producto_id).options(
             subqueryload(ProductoTable.imagenes),
             subqueryload(ProductoTable.tallas),
             subqueryload(ProductoTable.colores)
         )
-        r = self.db_session.execute(stmt).scalar_one_or_none()
+        r = await self.db_session.execute(stmt)
+        r = r.scalar_one_or_none()
         return _to_domain(r)
 
-    def get_all(self) -> list[ProductoModel]:
+    async def get_all(self) -> list[ProductoModel]:
         stmt = (
             select(ProductoTable)
             .options(
@@ -45,19 +47,21 @@ class ProductoRepository(ProductoPort):
                 subqueryload(ProductoTable.colores)
             )
         )
-        rows = self.db_session.execute(stmt).scalars().all()
+        rows = await self.db_session.execute(stmt)
+        rows = rows.scalars().all()
         return [_to_domain(r) for r in rows]
 
-    def get_by_categoria(self, categoria_id: int) -> list[ProductoModel]:
+    async def get_by_categoria(self, categoria_id: int) -> list[ProductoModel]:
         stmt = select(ProductoTable).filter_by(categoria_id=categoria_id).options(
             subqueryload(ProductoTable.imagenes),
             subqueryload(ProductoTable.tallas),
             subqueryload(ProductoTable.colores)
         )
-        rows = self.db_session.execute(stmt).scalars()
+        rows = await self.db_session.execute(stmt)
+        rows = rows.scalars()
         return [_to_domain(r) for r in rows]
 
-    def create_producto(self, producto: ProductoModel) -> ProductoModel:
+    async def create_producto(self, producto: ProductoModel) -> ProductoModel:
         new_producto = ProductoTable(
             producto_id=producto.producto_id,
             nombre=producto.nombre,
@@ -70,12 +74,13 @@ class ProductoRepository(ProductoPort):
             fecha_creacion=producto.fecha_creacion
         )
         self.db_session.add(new_producto)
-        self.db_session.commit()
+        await self.db_session.commit()
         return _to_domain(new_producto)
 
-    def update_producto(self, producto_id: str, producto: ProductoModel) -> ProductoModel | None:
+    async def update_producto(self, producto_id: str, producto: ProductoModel) -> ProductoModel | None:
         stmt = select(ProductoTable).filter_by(producto_id=producto_id)
-        r = self.db_session.execute(stmt).scalar_one_or_none()
+        r = await self.db_session.execute(stmt)
+        r = r.scalar_one_or_none()
         if not r:
             return None
 
@@ -87,13 +92,14 @@ class ProductoRepository(ProductoPort):
         r.stock = producto.stock
         r.categoria_id = producto.categoria_id
         # no se modifica ni el ID ni la fecha_creacion
-        self.db_session.commit()
+        await self.db_session.commit()
         return _to_domain(r)
 
-    def delete_producto(self, producto_id: str) -> None:
+    async def delete_producto(self, producto_id: str) -> None:
         stmt = select(ProductoTable).filter_by(producto_id=producto_id)
-        r = self.db_session.execute(stmt).scalar_one_or_none()
+        r = await self.db_session.execute(stmt)
+        r = r.scalar_one_or_none()
         if r:
-            self.db_session.delete(r)
-            self.db_session.commit()
+            await self.db_session.delete(r)
+            await self.db_session.commit()
         return None

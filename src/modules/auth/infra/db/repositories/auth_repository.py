@@ -2,7 +2,7 @@ from src.modules.usuarios.infra.tables import UserTable
 from src.modules.auth.domain.models import AuthUser
 from src.modules.auth.domain.ports import AuthPort
 from src.core.exceptions import NotFoundError
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select
 from sqlalchemy import update
 
@@ -20,10 +20,10 @@ def _to_domain(obj: UserTable) -> AuthUser:
         fecha_eliminacion=obj.fecha_eliminacion
     )
 class AuthRepository(AuthPort):
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
-    def create(self, user: AuthUser) -> AuthUser:
+    async def create(self, user: AuthUser) -> AuthUser:
         model = UserTable(
             usuario_id=user.usuario_id,
             nombre=user.nombre,
@@ -37,69 +37,69 @@ class AuthRepository(AuthPort):
             fecha_eliminacion=user.fecha_eliminacion
         )
         self.db.add(model)
-        self.db.commit()
-        self.db.refresh(model)
+        await self.db.commit()
+        await self.db.refresh(model)
         return _to_domain(model)
 
-    def get_by_id(self, usuario_id: str) -> AuthUser | None:
+    async def get_by_id(self, usuario_id: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.usuario_id == usuario_id)
-        r = self.db.execute(stmt).scalar()
+        r = (await self.db.execute(stmt)).scalar()
         if r is None:
             return None
         return _to_domain(r)
 
-    def get_by_email(self, email: str) -> AuthUser | None:
+    async def get_by_email(self, email: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.email == email)
-        r = self.db.execute(stmt).scalar_one_or_none()
+        r = (await self.db.execute(stmt)).scalar_one_or_none()
         if r is None:
             return None
         return _to_domain(r)
 
-    def get_by_google_id(self, google_id: str) -> AuthUser | None:
+    async def get_by_google_id(self, google_id: str) -> AuthUser | None:
         stmt = select(UserTable).where(UserTable.google_id == google_id)
-        r = self.db.execute(stmt).scalar()
+        r = (await self.db.execute(stmt)).scalar()
         if r is None:
             return None
         return _to_domain(r)
 
 
-    def update_password(self, usuario_id: str, password_hash: str) -> None:
+    async def update_password(self, usuario_id: str, password_hash: str) -> None:
         stmt = (
             update(UserTable)
             .where(UserTable.usuario_id == usuario_id)
             .values(password=password_hash)
         )
 
-        result = self.db.execute(stmt)
+        result = await self.db.execute(stmt)
 
         if result.rowcount == 0:
             raise NotFoundError("User not found")
 
-        self.db.commit()
+        await self.db.commit()
 
-    def verify_user(self, usuario_id: str) -> None:
+    async def verify_user(self, usuario_id: str) -> None:
         stmt = (
             update(UserTable)
             .where(UserTable.usuario_id == usuario_id)
             .values(is_authenticated=True)
         )
-        result = self.db.execute(stmt)
+        result = await self.db.execute(stmt)
 
         if result.rowcount == 0:
             raise NotFoundError("User not found")
 
-        self.db.commit()
+        await self.db.commit()
 
-    def link_google(self, usuario_id: str, google_id: str) -> None:
+    async def link_google(self, usuario_id: str, google_id: str) -> None:
         stmt = (
             update(UserTable)
             .where(UserTable.usuario_id == usuario_id)
             .values(google_id=google_id)
         )
 
-        result = self.db.execute(stmt)
+        result = await self.db.execute(stmt)
 
         if result.rowcount == 0:
             raise NotFoundError("User not found")
 
-        self.db.commit()
+        await self.db.commit()

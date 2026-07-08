@@ -26,75 +26,75 @@ router = APIRouter()
 
 
 @router.post("/register", response_model=LoginResponseDTO)
-def register(
+async def register(
         data: UserRegister,
         usecase=Depends(register_user_service),
 ):
-    return usecase.execute(
+    return await usecase.execute(
         data
     )
 
 
 @router.post("/login", response_model=LoginResponseDTO)
-def login(
+async def login(
         data: UserLogin,
         usecase=Depends(login_user_service),
 ):
-    return usecase.execute(
+    return await usecase.execute(
         data
     )
 
 
 @router.get("/me")
-def me(
+async def me(
         user: AuthenticatedUser = Depends(get_current_user),
 ):
     return user
 
 
 @router.get("/google/login")
-def google_login(
+async def google_login(
         usecase=Depends(get_google_auth_url_service),
 ):
-    url = usecase.execute()
+    url = await usecase.execute()
     return RedirectResponse(url)
 
 
 @router.get("/google/callback", response_model=LoginResponseDTO)
-def google_callback(
+async def google_callback(
         request: Request,
         usecase=Depends(login_with_google_service),
 ):
     code = request.query_params.get("code")
-    return usecase.execute(code)
+    return await usecase.execute(code)
 
 
 @router.post("/recovery/request")
-def request_recovery(
+async def request_recovery(
         email: EmailStr,
         generate_uc=Depends(generate_recovery_code_service),
         send_uc=Depends(send_recovery_code_service),
 ):
-    code = generate_uc.execute(email)
-    return send_uc.execute(email, code)
+    code = await generate_uc.execute(email)
+    return await send_uc.execute(email, code)
 
 
 @router.post("/recovery/verify")
-def verify_code(
+async def verify_code(
         usuario_id: str,
         code: str,
         usecase_code=Depends(verify_recovery_code_service),
         usecase_auth=Depends(verify_user_service)
 ):
-    if usecase_code.execute(usuario_id, code):
-        return usecase_auth.execute(usuario_id)
+    if await usecase_code.execute(usuario_id, code):
+        return await usecase_auth.execute(usuario_id)
     return None
 
 
 @router.post("/recovery/reset")
-def reset_password(
+async def reset_password(
         usuario_id: str,
         new_password: str,
         usecase=Depends(reset_password_service),
 ):
-    return usecase.execute(usuario_id, new_password)
+    return await usecase.execute(usuario_id, new_password)

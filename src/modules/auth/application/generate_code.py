@@ -12,14 +12,14 @@ class GenerateRecoveryCode:
         self.repo = repo
         self.user_repo = user_repo
 
-    def execute(self, email: str) -> tuple[str, datetime]:
+    async def execute(self, email: str) -> tuple[str, datetime]:
 
-        user = self.user_repo.get_by_email(email)
+        user = await self.user_repo.get_by_email(email)
         plain_code = ''.join(secrets.choice(string.digits) for _ in range(6))
         expires_at = datetime.now(timezone.utc) + timedelta(minutes=15)
         code_hash = hashlib.sha256(plain_code.encode()).hexdigest()
 
-        self.repo.delete_by_user_id(user.usuario_id)
+        await self.repo.delete_by_user_id(user.usuario_id)
 
         recovery = RecoveryCode(
             id=None,
@@ -28,6 +28,6 @@ class GenerateRecoveryCode:
             expires_at=expires_at
         )
 
-        self.repo.save(recovery)
+        await self.repo.save(recovery)
 
         return plain_code, expires_at

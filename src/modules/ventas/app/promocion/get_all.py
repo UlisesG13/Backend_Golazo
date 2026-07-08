@@ -5,5 +5,5 @@ class GetAll:
     def __init__(self, repo: PromocionPort):
         self.repo = repo
 
-    def execute(self) -> list[PromocionModel]:
-        return self.repo.get_all()
+    async def execute(self) -> list[PromocionModel]:
+        return await self.repo.get_all()

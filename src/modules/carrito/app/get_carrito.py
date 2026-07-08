@@ -8,8 +8,8 @@ class GetCartUseCase:
     def __init__(self, repo: CarritoPort):
         self.repo = repo
 
-    def execute(self, usuario_id: str) -> CarritoModel:
-        carrito = self.repo.get_by_user_id(usuario_id)
+    async def execute(self, usuario_id: str) -> CarritoModel:
+        carrito = await self.repo.get_by_user_id(usuario_id)
         if not carrito:
             # si no existe un carrito lo crea
             carrito = CarritoModel(
@@ -19,6 +19,6 @@ class GetCartUseCase:
                 fecha_actualizacion=datetime.now(),
                 items=[]
             )
-            self.repo.save(carrito)  # persistir inmediatamente
+            await self.repo.save(carrito)  # persistir inmediatamente
 
         return carrito

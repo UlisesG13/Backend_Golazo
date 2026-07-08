@@ -6,5 +6,5 @@ class GetAllDirecciones:
     def __init__(self, repo: DireccionPort) -> None:
         self.repo = repo
 
-    def execute(self, usuario_id: str) -> list[DireccionModel]:
-        return self.repo.get_direcciones_by_usuario_id(usuario_id)
+    async def execute(self, usuario_id: str) -> list[DireccionModel]:
+        return await self.repo.get_direcciones_by_usuario_id(usuario_id)

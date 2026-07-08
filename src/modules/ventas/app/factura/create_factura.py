@@ -1,5 +1,6 @@
 from typing import cast
 
+from src.core.exceptions import NotFoundError
 from src.modules.ventas.domain.models import FacturaModel
 from src.modules.ventas.domain.ports import FacturaPort, PedidoPort
 
@@ -9,11 +10,11 @@ class CreateFactura:
         self.factura_repo = factura_repo
         self.pedido_repo = pedido_repo
 
-    def execute(self, pedido_id: int, datos_fiscales_receptor: dict) -> FacturaModel:
+    async def execute(self, pedido_id: int, datos_fiscales_receptor: dict) -> FacturaModel:
         # 1. Obtener el pedido completo con sus items
-        pedido = self.pedido_repo.get_by_id(pedido_id)
+        pedido = await self.pedido_repo.get_by_id(pedido_id)
         if not pedido:
-            raise ValueError("Pedido no encontrado")
+            raise NotFoundError("Pedido no encontrado")
 
         # 2. Crear la entidad de Factura (Snapshot)
         nueva_factura = FacturaModel(
@@ -36,4 +37,4 @@ class CreateFactura:
         nueva_factura.calcular_totales(tasa_impuesto=0.16)
 
         # 4. Persistir en la base de datos
-        return self.factura_repo.create(nueva_factura)
+        return await self.factura_repo.create(nueva_factura)

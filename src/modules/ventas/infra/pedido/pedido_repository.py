@@ -2,7 +2,8 @@ from datetime import datetime
 from typing import cast
 
 from sqlalchemy import select, update
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 import json
 
 from src.modules.ventas.domain import PedidoModel, PedidoPort, PedidoItemModel
@@ -37,18 +38,19 @@ def to_domain(table: PedidoTable) -> PedidoModel:
     )
 
 class PedidoRepository(PedidoPort):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
 
-    def get_all(self) -> list[PedidoModel]:
+    async def get_all(self) -> list[PedidoModel]:
         stmt = (
             select(PedidoTable)
             .options(joinedload(PedidoTable.items))
         )
-        results = self.session.execute(stmt).unique().scalars().all()
+        results = await self.session.execute(stmt)
+        results = results.unique().scalars().all()
         return [to_domain(p) for p in results]
 
-    def save(self, model: PedidoModel) -> PedidoModel:
+    async def save(self, model: PedidoModel) -> PedidoModel:
         pedido_db = PedidoTable(
             usuario_id=model.usuario_id,
             promocion_id=cast(int, model.promocion_id),
@@ -74,13 +76,13 @@ class PedidoRepository(PedidoPort):
         ]
 
         self.session.add(pedido_db)
-        self.session.commit()
-        self.session.refresh(pedido_db)
+        await self.session.commit()
+        await self.session.refresh(pedido_db)
 
         return to_domain(pedido_db)
 
-    def get_by_id(self, pedido_id: int) -> PedidoModel | None:
-        result = self.session.get(
+    async def get_by_id(self, pedido_id: int) -> PedidoModel | None:
+        result = await self.session.get(
             PedidoTable,
             pedido_id,
             options=[joinedload(PedidoTable.items)]
@@ -90,36 +92,38 @@ class PedidoRepository(PedidoPort):
 
         return to_domain(result) # type: ignore[arg-type]
 
-    def get_by_user_id(self, user_id: str) -> list[PedidoModel]:
+    async def get_by_user_id(self, user_id: str) -> list[PedidoModel]:
         stmt = (
             select(PedidoTable)
             .where(PedidoTable.usuario_id == user_id)
             .options(joinedload(PedidoTable.items))
         )
-        results = self.session.execute(stmt).unique().scalars().all()
+        results = await self.session.execute(stmt)
+        results = results.unique().scalars().all()
         return [to_domain(p) for p in results]
 
-    def get_by_status(self, status: str) -> list[PedidoModel]:
+    async def get_by_status(self, status: str) -> list[PedidoModel]:
         stmt = (
             select(PedidoTable)
             .where(PedidoTable.estado == status)
             .options(joinedload(PedidoTable.items))
         )
-        results = self.session.execute(stmt).unique().scalars().all()
+        results = await self.session.execute(stmt)
+        results = results.unique().scalars().all()
         return [to_domain(p) for p in results]
 
-    def update_status(self, pedido_id: int, status: str, time: datetime) -> None:
+    async def update_status(self, pedido_id: int, status: str, time: datetime) -> None:
         stmt = (
             update(PedidoTable)
             .where(PedidoTable.pedido_id == pedido_id)
             .values(estado = status)
             .values(fecha_actualizacion = time)
         )
-        self.session.execute(stmt)
-        self.session.commit()
+        await self.session.execute(stmt)
+        await self.session.commit()
 
-    def delete(self, pedido_id: int) -> None:
-        pedido = self.session.get(PedidoTable, pedido_id)
+    async def delete(self, pedido_id: int) -> None:
+        pedido = await self.session.get(PedidoTable, pedido_id)
         if pedido:
             self.session.delete(pedido)
-            self.session.commit()
+            await self.session.commit()

@@ -2,8 +2,8 @@ from src.modules.catalogo.domain.ports import SeccionPort
 
 
 class DeleteSeccion:
-    def __init__(self, reop: SeccionPort):
-        self.reop = reop
+    def __init__(self, repo: SeccionPort):
+        self.repo = repo
 
-    def execute(self, seccion_id: int) -> None:
-        return self.reop.delete_seccion(seccion_id)
+    async def execute(self, seccion_id: int) -> None:
+        return await self.repo.delete_seccion(seccion_id)

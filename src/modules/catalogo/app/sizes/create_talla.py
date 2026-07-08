@@ -7,9 +7,9 @@ class CreateTalla:
     def __init__(self, repo: TallaPort):
         self.repo = repo
 
-    def execute(self, dto: TallaCreateDTO) -> TallaModel:
+    async def execute(self, dto: TallaCreateDTO) -> TallaModel:
         model = TallaModel(
             talla_id=None,
             nombre=dto.nombre
         )
-        return self.repo.create(model)
+        return await self.repo.create(model)

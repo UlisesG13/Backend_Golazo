@@ -1,7 +1,7 @@
 from src.modules.usuarios.domain.models import DireccionModel
 from src.modules.usuarios.infra.tables import DireccionTable
 from src.modules.usuarios.domain.ports import DireccionPort
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
 def _to_domain(r: DireccionTable) -> DireccionModel:
@@ -19,15 +19,15 @@ def _to_domain(r: DireccionTable) -> DireccionModel:
     )
 
 class DireccionRepository(DireccionPort):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.db = session
 
-    def get_direcciones_by_usuario_id(self, usuario_id: str) -> list[DireccionModel]:
+    async def get_direcciones_by_usuario_id(self, usuario_id: str) -> list[DireccionModel]:
         stmt = select(DireccionTable).where(DireccionTable.usuario_id == usuario_id)
-        rows = self.db.execute(stmt).scalars().all()
+        rows = (await self.db.execute(stmt)).scalars().all()
         return [_to_domain(r) for r in rows]
 
-    def get_direccion_by_id(self, direccion_id: int, usuario_id: str) -> DireccionModel | None:
+    async def get_direccion_by_id(self, direccion_id: int, usuario_id: str) -> DireccionModel | None:
         stmt = (
             select(DireccionTable)
             .where(
@@ -35,10 +35,10 @@ class DireccionRepository(DireccionPort):
                 DireccionTable.usuario_id == usuario_id
             )
         )
-        r = self.db.execute(stmt).scalar_one_or_none()
+        r = (await self.db.execute(stmt)).scalar_one_or_none()
         return _to_domain(r) if r else None
 
-    def create_direccion(self, direccion: DireccionModel) -> DireccionModel:
+    async def create_direccion(self, direccion: DireccionModel) -> DireccionModel:
         model = DireccionTable(
             calle=direccion.calle,
             colonia=direccion.colonia,
@@ -51,18 +51,18 @@ class DireccionRepository(DireccionPort):
             is_primary=direccion.is_primary
         )
         self.db.add(model)
-        self.db.commit()
-        self.db.refresh(model)
+        await self.db.commit()
+        await self.db.refresh(model)
         return _to_domain(model)
 
-    def update_direccion(self, direccion_id: int, direccion: DireccionModel, usuario_id: str) -> DireccionModel | None:
+    async def update_direccion(self, direccion_id: int, direccion: DireccionModel, usuario_id: str) -> DireccionModel | None:
 
         stmt = select(DireccionTable).where(
             DireccionTable.direccion_id == direccion_id,
             DireccionTable.usuario_id == usuario_id
         )
 
-        entity = self.db.execute(stmt).scalar_one_or_none()
+        entity = (await self.db.execute(stmt)).scalar_one_or_none()
 
         if not entity:
             return None
@@ -76,30 +76,30 @@ class DireccionRepository(DireccionPort):
         entity.referencia = direccion.referencia
         entity.is_primary = direccion.is_primary
 
-        self.db.commit()
-        self.db.refresh(entity)
+        await self.db.commit()
+        await self.db.refresh(entity)
 
         return _to_domain(entity)
 
-    def delete_direccion(self, direccion_id: int, usuario_id: str) -> None:
+    async def delete_direccion(self, direccion_id: int, usuario_id: str) -> None:
         stmt = select(DireccionTable).where(
             DireccionTable.direccion_id == direccion_id,
             DireccionTable.usuario_id == usuario_id
         )
-        model = self.db.execute(stmt).scalar_one_or_none()
+        model = (await self.db.execute(stmt)).scalar_one_or_none()
         if model:
-            self.db.delete(model)
-            self.db.commit()
+            await self.db.delete(model)
+            await self.db.commit()
         return
 
-    def set_primary(self, direccion_id: int, usuario_id: str) -> None:
+    async def set_primary(self, direccion_id: int, usuario_id: str) -> None:
 
         stmt = select(DireccionTable).where(
             DireccionTable.direccion_id == direccion_id,
             DireccionTable.usuario_id == usuario_id
         )
 
-        direccion = self.db.execute(stmt).scalar_one_or_none()
+        direccion = (await self.db.execute(stmt)).scalar_one_or_none()
 
         if not direccion:
             return None
@@ -109,7 +109,7 @@ class DireccionRepository(DireccionPort):
             .where(DireccionTable.usuario_id == usuario_id)
             .values(is_primary=False)
         )
-        self.db.execute(stmt_reset)
+        await self.db.execute(stmt_reset)
 
         stmt_set = (
             update(DireccionTable)
@@ -119,5 +119,5 @@ class DireccionRepository(DireccionPort):
             )
             .values(is_primary=True)
         )
-        self.db.execute(stmt_set)
-        return self.db.commit()
+        await self.db.execute(stmt_set)
+        return await self.db.commit()

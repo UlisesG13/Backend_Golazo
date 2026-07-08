@@ -1,5 +1,6 @@
 from src.modules.auth.domain.ports import AuthPort
 from src.modules.auth.domain.models import AuthUser
+from src.core.exceptions import NotFoundError
 
 class GetByGoogle:
 
@@ -9,8 +10,8 @@ class GetByGoogle:
     ):
         self.auth_repo = auth_repo
 
-    def execute(self, uid: str) -> AuthUser:
-        user = self.auth_repo.get_by_google_id(uid)
+    async def execute(self, uid: str) -> AuthUser:
+        user = await self.auth_repo.get_by_google_id(uid)
         if not user:
-            raise ValueError("Usuario no encontrado") # obteniendo el error en `user_routes.py` procedera a crear el usuario
+            raise NotFoundError("Usuario no encontrado") # obteniendo el error en `user_routes.py` procedera a crear el usuario
         return user

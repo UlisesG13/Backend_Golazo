@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any, cast
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.ventas.domain.models import FacturaModel, EstadoFactura, PedidoItemModel
 from src.modules.ventas.domain.ports import FacturaPort
@@ -47,10 +47,10 @@ def to_domain(table: FacturaTable) -> FacturaModel:
 
 
 class FacturaRepository(FacturaPort):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
 
-    def create(self, factura: FacturaModel) -> FacturaModel:
+    async def create(self, factura: FacturaModel) -> FacturaModel:
         factura_db = FacturaTable(
             pedido_id=factura.pedido_id,
             folio=factura.folio,
@@ -82,40 +82,43 @@ class FacturaRepository(FacturaPort):
             ]
         )
         self.session.add(factura_db)
-        self.session.commit()
-        self.session.refresh(factura_db)
+        await self.session.commit()
+        await self.session.refresh(factura_db)
         return to_domain(factura_db)
 
-    def get_all(self) -> list[FacturaModel]:
+    async def get_all(self) -> list[FacturaModel]:
         stmt = select(FacturaTable)
-        results = self.session.execute(stmt).scalars().all()
+        results = await self.session.execute(stmt)
+        results = results.scalars().all()
         return [to_domain(f) for f in results]
 
-    def get_by_id(self, factura_id: int) -> FacturaModel | None:
-        factura_db = self.session.get(FacturaTable, factura_id)
+    async def get_by_id(self, factura_id: int) -> FacturaModel | None:
+        factura_db = await self.session.get(FacturaTable, factura_id)
         if not factura_db:
             return None
         return to_domain(factura_db)  # type: ignore[arg-type]
 
-    def get_by_folio(self, folio: str) -> FacturaModel | None:
+    async def get_by_folio(self, folio: str) -> FacturaModel | None:
         stmt = select(FacturaTable).where(FacturaTable.folio == folio)
-        result = self.session.execute(stmt).scalar_one_or_none()
+        result = await self.session.execute(stmt)
+        result = result.scalar_one_or_none()
         if not result:
             return None
         return to_domain(result)  # type: ignore[arg-type]
 
-    def get_by_usuario_id(self, usuario_id: str) -> list[FacturaModel]:
+    async def get_by_usuario_id(self, usuario_id: str) -> list[FacturaModel]:
         # Unimos con PedidoTable para filtrar por usuario_id
         stmt = (
             select(FacturaTable)
             .join(PedidoTable, FacturaTable.pedido_id == PedidoTable.pedido_id)
             .where(PedidoTable.usuario_id == usuario_id)
         )
-        results = self.session.execute(stmt).scalars().all()
+        results = await self.session.execute(stmt)
+        results = results.scalars().all()
         return [to_domain(f) for f in results]
 
-    def update(self, factura_id: int, factura: FacturaModel) -> FacturaModel | None:
-        factura_db = self.session.get(FacturaTable, factura_id)
+    async def update(self, factura_id: int, factura: FacturaModel) -> FacturaModel | None:
+        factura_db = await self.session.get(FacturaTable, factura_id)
         if not factura_db:
             return None
 
@@ -146,14 +149,14 @@ class FacturaRepository(FacturaPort):
             for item in factura.items
         ]
 
-        self.session.commit()
-        self.session.refresh(factura_db)
+        await self.session.commit()
+        await self.session.refresh(factura_db)
         return to_domain(factura_db)  # type: ignore[arg-type]
 
-    def delete(self, factura_id: int) -> bool:
-        factura_db = self.session.get(FacturaTable, factura_id)
+    async def delete(self, factura_id: int) -> bool:
+        factura_db = await self.session.get(FacturaTable, factura_id)
         if not factura_db:
             return False
         self.session.delete(factura_db)
-        self.session.commit()
+        await self.session.commit()
         return True

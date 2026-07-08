@@ -6,5 +6,5 @@ class GetAllTallas:
     def __init__(self, repo: TallaPort):
         self.repo = repo
 
-    def execute(self) -> list[TallaModel]:
-        return self.repo.get_all()
+    async def execute(self) -> list[TallaModel]:
+        return await self.repo.get_all()

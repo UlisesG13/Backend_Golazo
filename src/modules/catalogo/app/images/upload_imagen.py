@@ -6,8 +6,8 @@ class UploadImage:
         self.imagen_repo = imagen_repo
         self.storage = storage
 
-    def execute(self, imagen_data: bytes, filename: str, orden: int) -> ImagenModel:
+    async def execute(self, imagen_data: bytes, filename: str, orden: int) -> ImagenModel:
         path = f"productos/{filename}"
         self.storage.upload(imagen_data, path)
         imagen = ImagenModel(imagen_id=None, path=path, orden=orden)
-        return self.imagen_repo.create(imagen)
+        return await self.imagen_repo.create(imagen)

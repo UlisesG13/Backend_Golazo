@@ -8,9 +8,9 @@ class GetProductoByCategoria:
         self.repo = repo
         self.img_uc = uc
 
-    def execute(self, categoria_id: int) -> list[ProductoModel]:
-        productos = self.repo.get_by_categoria(categoria_id)
+    async def execute(self, categoria_id: int) -> list[ProductoModel]:
+        productos = await self.repo.get_by_categoria(categoria_id)
 
         for p in productos:
-            p.imagenes = self.img_uc.execute(p.producto_id)
+            p.imagenes = await self.img_uc.execute(p.producto_id)
         return productos

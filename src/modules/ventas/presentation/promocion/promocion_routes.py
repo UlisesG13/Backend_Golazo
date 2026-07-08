@@ -22,49 +22,49 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[PromocionDTO])
-def get_promociones(
+async def get_promociones(
         uc: GetAll = Depends(get_all_promociones)
 ):
-    return uc.execute()
+    return await uc.execute()
 
 
 @router.post("", response_model=PromocionDTO)
-def create_promocion_route(
+async def create_promocion_route(
         dto: PromocionCreateDTO,
         uc: CreatePromocion = Depends(create_promocion)
 ):
-    return uc.execute(dto)
+    return await uc.execute(dto)
 
 
 @router.get("/{promocion_id}", response_model=PromocionDTO)
-def get_promocion_by_id_route(
+async def get_promocion_by_id_route(
         promocion_id: int,
         uc: GetById = Depends(get_promocion_by_id)
 ):
-    return uc.execute(promocion_id)
+    return await uc.execute(promocion_id)
 
 
 @router.put("/{promocion_id}", response_model=PromocionDTO)
-def update_promocion_route(
+async def update_promocion_route(
         promocion_id: int,
         dto: PromocionUpdateDTO,
         uc: UpdatePromocion = Depends(update_promocion)
 ):
-    return uc.execute(promocion_id, dto)
+    return await uc.execute(promocion_id, dto)
 
 
 @router.delete("/{promocion_id}", status_code=204)
-def delete_promocion_route(
+async def delete_promocion_route(
         promocion_id: int,
         uc: DeletePromocion = Depends(delete_promocion)
 ):
-    uc.execute(promocion_id)
+    await uc.execute(promocion_id)
 
 
 @router.patch("/{promocion_id}/status", response_model=PromocionDTO)
-def change_status_route(
+async def change_status_route(
         promocion_id: int,
         nuevo_estado: bool,
         uc: ChangeStatus = Depends(change_promocion_status)
 ):
-    return uc.execute(promocion_id, nuevo_estado)
+    return await uc.execute(promocion_id, nuevo_estado)

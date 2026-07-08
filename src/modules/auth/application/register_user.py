@@ -3,6 +3,7 @@ from src.modules.auth.domain.models import AuthUser, TokenPayload
 from datetime import datetime, timedelta, timezone
 from src.modules.usuarios.infra.tables import Rol
 from uuid import uuid4
+from src.core.exceptions import ConflictError
 
 class RegisterUser:
 
@@ -16,10 +17,10 @@ class RegisterUser:
         self.password_repo = password_port
         self.token_repo = token_port
 
-    def execute(self, user: AuthUser):
-        existing = self.auth_repo.get_by_email(user.email)
+    async def execute(self, user: AuthUser):
+        existing = await self.auth_repo.get_by_email(user.email)
         if existing:
-            raise ValueError("Email already registered")
+            raise ConflictError("Email already registered")
 
         hashed = self.password_repo.hash(user.password)
 
@@ -35,7 +36,7 @@ class RegisterUser:
             google_id=None,
         )
 
-        user_created = self.auth_repo.create(model)
+        user_created = await self.auth_repo.create(model)
 
         payload = TokenPayload(
             usuario_id=user_created.usuario_id,

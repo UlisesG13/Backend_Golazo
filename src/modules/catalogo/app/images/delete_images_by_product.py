@@ -11,11 +11,11 @@ class DeleteImagesByProduct:
         self.producto_imagen_repo = producto_imagen_repo
         self.storage = storage
 
-    def execute(self, producto_id: str) -> None:
-        relaciones = self.producto_imagen_repo.get_by_producto(producto_id)
+    async def execute(self, producto_id: str) -> None:
+        relaciones = await self.producto_imagen_repo.get_by_producto(producto_id)
         for rel in relaciones:
-            imagen = self.imagen_repo.get_by_id(rel.imagen_id)
+            imagen = await self.imagen_repo.get_by_id(rel.imagen_id)
             if imagen:
                 self.storage.delete(imagen.path)
-                self.imagen_repo.delete(imagen.imagen_id)
-        self.producto_imagen_repo.delete_by_producto(producto_id)
+                await self.imagen_repo.delete(imagen.imagen_id)
+        await self.producto_imagen_repo.delete_by_producto(producto_id)

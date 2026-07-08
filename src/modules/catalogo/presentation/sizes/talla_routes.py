@@ -12,74 +12,74 @@ router = APIRouter()
 
 
 @router.get("", response_model=list[TallaDTO])
-def get_all_tallas(
+async def get_all_tallas(
         uc: GetAllTallas = Depends(get_all_tallas)
 ):
-    return uc.execute()
+    return await uc.execute()
 
 
 @router.post("", response_model=TallaDTO)
-def create_talla(
+async def create_talla(
         dto: TallaCreateDTO,
         uc: CreateTalla = Depends(create_talla)
 ):
-    return uc.execute(dto)
+    return await uc.execute(dto)
 
 
 @router.get("/{talla_id}", response_model=TallaDTO)
-def get_talla_by_id(
+async def get_talla_by_id(
         talla_id: int,
         uc: GetTallaById = Depends(get_talla_by_id)
 ):
-    return uc.execute(talla_id)
+    return await uc.execute(talla_id)
 
 
 @router.put("/{talla_id}", response_model=TallaDTO)
-def update_talla(
+async def update_talla(
         talla_id: int,
         dto: TallaUpdateDTO,
         uc: UpdateTalla = Depends(update_talla)
 ):
-    return uc.execute(talla_id, dto)
+    return await uc.execute(talla_id, dto)
 
 
 @router.delete("/{talla_id}", status_code=204)
-def delete_talla(
+async def delete_talla(
         talla_id: int,
         uc: DeleteTalla = Depends(delete_talla)
 ):
-    return uc.execute(talla_id)
+    await uc.execute(talla_id)
 
 
 # RUTAS DE TALLAS Y PRODUCTOS
 @router.post("/productos", response_model=ProductoTallaDTO)
-def assign_talla_to_producto(
+async def assign_talla_to_producto(
         dto: ProductoTallaCreateDTO,
         uc: AsociarTalla = Depends(asociar_talla),
 ):
-    return uc.execute(dto)
+    return await uc.execute(dto)
 
 
 @router.get("/productos/detalles/{p_talla_id}", response_model=ProductoTallaDTO)
-def get_producto_talla_by_id(
+async def get_producto_talla_by_id(
         p_talla_id: int,
         uc: GetPTallaById = Depends(get_ptalla_by_id),
 ):
-    return uc.execute(p_talla_id)
+    return await uc.execute(p_talla_id)
 
 
 @router.get("/productos/{producto_id}", response_model=list[TallaDTO])
-def get_tallas_by_producto(
+async def get_tallas_by_producto(
         producto_id: str,
         uc: GetTallasByProducto = Depends(get_tallas_by_producto),
 ):
-    return uc.execute(producto_id)
+    return await uc.execute(producto_id)
 
 
 @router.delete("/productos/{producto_id}/{talla_id}", status_code=204)
-def remove_talla_from_producto(
+async def remove_talla_from_producto(
         producto_id: str,
         talla_id: int,
         uc: DesasociarTalla = Depends(desasociar_talla),
 ):
-    return uc.execute(producto_id, talla_id)
+    return await uc.execute(producto_id, talla_id)

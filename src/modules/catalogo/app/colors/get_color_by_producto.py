@@ -6,5 +6,5 @@ class GetColoresByProducto:
     def __init__(self, repo: ProductoColorPort):
         self.repo = repo
 
-    def execute(self, producto_id: str) -> list[ColorModel]:
-        return self.repo.get_all_by_producto(producto_id)
+    async def execute(self, producto_id: str) -> list[ColorModel]:
+        return await self.repo.get_all_by_producto(producto_id)

@@ -7,10 +7,10 @@ class AsociarColor:
     def __init__(self, repo: ProductoColorPort):
         self.repo = repo
 
-    def execute(self, dto: ProductoColorCreateDTO) -> ProductoColorModel:
+    async def execute(self, dto: ProductoColorCreateDTO) -> ProductoColorModel:
         model = ProductoColorModel(
             producto_color_id=None,
             producto_id=dto.producto_id,
             color_id=dto.color_id
         )
-        return self.repo.assign_to_producto(model)
+        return await self.repo.assign_to_producto(model)

@@ -34,7 +34,7 @@ async def subir_imagen(
 ):
     content = await file.read()
     file.filename = file.filename.replace(" ", "_")
-    imagen = service.execute(
+    imagen = await service.execute(
         imagen_data=content,
         filename=file.filename,
         orden=dto.orden
@@ -46,43 +46,43 @@ async def subir_imagen(
     )
 
 @router.delete("/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
-def eliminar_imagen(
+async def eliminar_imagen(
     imagen_id: int,
     service: DeleteImage = Depends(delete_image_service)
 ):
-    service.execute(imagen_id)
+    await service.execute(imagen_id)
 
 
 # --- 2. ASOCIACIÓN CON PRODUCTOS (Rutas fijas /productos) ---
 @router.post("/productos", response_model=ProductoImagenDTO)
-def asociar_imagen(
+async def asociar_imagen(
     dto: ProductoImagenCreateDTO,
     service: AsociarImageToProduct = Depends(asociar_image_service)
 ):
-    return service.execute(dto)
+    return await service.execute(dto)
 
 
 # --- 3. OPERACIONES POR PRODUCTO (Sub-recursos) ---
 
 @router.delete("/productos/{producto_id}/{imagen_id}", status_code=status.HTTP_204_NO_CONTENT)
-def desasociar_imagen(
+async def desasociar_imagen(
     producto_id: str,
     imagen_id: int,
     service: DesasociarImageFromProduct = Depends(desasociar_image_service)
 ):
-    service.execute(producto_id, imagen_id)
+    await service.execute(producto_id, imagen_id)
 
 @router.get("/productos/{producto_id}", response_model=list[ImagenDTO])
-def get_imagenes_por_producto(
+async def get_imagenes_por_producto(
     producto_id: str,
     service: GetImagesByProduct = Depends(get_by_product_service)
 ):
-    imagenes = service.execute(producto_id)
+    imagenes = await service.execute(producto_id)
     return [ImagenDTO(imagen_id=img.imagen_id, path=img.path, orden=img.orden) for img in imagenes]
 
 @router.delete("/productos/{producto_id}", status_code=status.HTTP_204_NO_CONTENT)
-def eliminar_imagenes_producto(
+async def eliminar_imagenes_producto(
     producto_id: str,
     service: DeleteImagesByProduct = Depends(delete_image_by_product_service)
 ):
-    service.execute(producto_id)
+    await service.execute(producto_id)

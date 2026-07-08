@@ -5,5 +5,5 @@ class RemoveCartUseCase:
     def __init__(self, port: CarritoPort):
         self.repo = port
 
-    def execute(self, cart_id: str):
-        return self.repo.delete(cart_id)
+    async def execute(self, cart_id: str):
+        return await self.repo.delete(cart_id)

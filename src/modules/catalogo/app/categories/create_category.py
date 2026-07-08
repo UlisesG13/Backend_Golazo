@@ -7,10 +7,10 @@ class CreateCategory:
     def __init__(self, repo: CategoriaPort):
         self.repo = repo
 
-    def execute(self, dto: CategoriaCreate) -> CategoriaModel:
+    async def execute(self, dto: CategoriaCreate) -> CategoriaModel:
         model = CategoriaModel(
             categoria_id=None,
             nombre=dto.nombre,
             seccion_id=dto.seccion_id,
         )
-        return self.repo.create(model)
+        return await self.repo.create(model)

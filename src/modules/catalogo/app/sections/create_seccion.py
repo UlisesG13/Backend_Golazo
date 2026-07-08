@@ -7,9 +7,9 @@ class CreateSeccion:
     def __init__(self, repo: SeccionPort):
         self.repo = repo
 
-    def execute(self, dto: SeccionCreate) -> SeccionModel:
+    async def execute(self, dto: SeccionCreate) -> SeccionModel:
         seccion = SeccionModel(
             seccion_id=None,
             nombre=dto.nombre,
         )
-        return self.repo.create_seccion(seccion)
+        return await self.repo.create_seccion(seccion)

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from src.core.exceptions import NotFoundError, BadRequestError
 from src.shared.domain.ports.messaging_port import MessagingPort
 from src.modules.carrito.domain import CarritoPort
 from src.modules.catalogo.domain.ports import ProductoPort
@@ -29,34 +30,34 @@ class CreatePedido:
         self.token_repo = token_repo
         self.fcm_service = notification_service
 
-    def execute(self, dto: CreatePedidoDTO, usuario_id: str) -> PedidoModel:
+    async def execute(self, dto: CreatePedidoDTO, usuario_id: str) -> PedidoModel:
 
         now = datetime.now()
 
         # 1. Carrito
-        carrito = self.carrito_repo.get_by_user_id(usuario_id)
+        carrito = await self.carrito_repo.get_by_user_id(usuario_id)
         if not carrito or not carrito.items:
-            raise ValueError("Carrito vacío")
+            raise BadRequestError("Carrito vacío")
 
         # 2. Dirección
-        direccion = self.direccion_repo.get_direccion_by_id(dto.direccion_id, usuario_id)
+        direccion = await self.direccion_repo.get_direccion_by_id(dto.direccion_id, usuario_id)
         if not direccion:
-            raise ValueError("Dirección no encontrada")
+            raise NotFoundError("Dirección no encontrada")
 
         direccion = direccion.to_dict()
         # 3. Items (SNAPSHOT)
         items_pedido = []
 
         for item in carrito.items:
-            producto = self.producto_repo.get_by_id(item.producto_id)
+            producto = await self.producto_repo.get_by_id(item.producto_id)
 
             if not producto:
-                raise ValueError(f"Producto no encontrado: {item.producto_id}")
+                raise NotFoundError(f"Producto no encontrado: {item.producto_id}")
 
             # Validación de Stock Dinámico
             if producto.stock != 0:
                 if item.cantidad > producto.stock:
-                    raise ValueError(f"El producto {producto.nombre} ya no tiene stock suficiente. Disponible: {producto.stock}")
+                    raise BadRequestError(f"El producto {producto.nombre} ya no tiene stock suficiente. Disponible: {producto.stock}")
 
             items_pedido.append(
                 PedidoItemModel(
@@ -79,18 +80,18 @@ class CreatePedido:
         promocion_id = None
 
         if dto.promocion:
-            promo = self.promocion_repo.get_by_codigo(dto.promocion)
+            promo = await self.promocion_repo.get_by_codigo(dto.promocion)
 
             if not promo:
-                raise ValueError("Promoción no encontrada")
+                raise NotFoundError("Promoción no encontrada")
 
             if not promo.is_available(now):
-                raise ValueError("Promoción no válida")
+                raise BadRequestError("Promoción no válida")
 
             descuento = promo.calculate_discount_amount(subtotal)
             promo.apply_usage()
 
-            self.promocion_repo.save_usage(promo)
+            await self.promocion_repo.save_usage(promo)
             promocion_id = promo.promocion_id
 
         # 6. Total
@@ -117,12 +118,12 @@ class CreatePedido:
         )
 
         # 8. Persistir
-        pedido_guardado = self.pedido_repo.save(pedido)
+        pedido_guardado = await self.pedido_repo.save(pedido)
 
         # 9. Limpiar carrito
-        self.carrito_repo.delete(carrito.carrito_id)
+        await self.carrito_repo.delete(carrito.carrito_id)
 
-        tokens = self.token_repo.get_all()
+        tokens = await self.token_repo.get_all()
 
         for token in tokens:
             print(tokens)
@@ -141,5 +142,5 @@ class CreatePedido:
                 )
             except Exception as e:
                 print(f"Error enviando FCM: {e}")
-                self.token_repo.delete(token.token)
+                await self.token_repo.delete(token.token)
         return pedido_guardado

@@ -5,5 +5,5 @@ class RegisterDeviceToken:
     def __init__(self, repo: DeviceTokenPort):
         self.repo = repo
 
-    def execute(self, user_id: str, token: str):
-        self.repo.save(user_id, token)
+    async def execute(self, user_id: str, token: str):
+        await self.repo.save(user_id, token)

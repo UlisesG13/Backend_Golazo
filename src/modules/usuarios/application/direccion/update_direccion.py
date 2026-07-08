@@ -1,15 +1,16 @@
 from src.modules.usuarios.presentation.schemas import DireccionRequestDTO
 from src.modules.usuarios.domain.models import DireccionModel
 from src.modules.usuarios.domain.ports import DireccionPort
+from src.core.exceptions import NotFoundError
 
 class UpdateDireccion:
     def __init__(self, repo: DireccionPort):
         self.repo = repo
 
-    def execute(self, direccion_id: int, data: DireccionRequestDTO, usuario_id: str) -> DireccionModel:
-        existing = self.repo.get_direccion_by_id(direccion_id, usuario_id)
+    async def execute(self, direccion_id: int, data: DireccionRequestDTO, usuario_id: str) -> DireccionModel:
+        existing = await self.repo.get_direccion_by_id(direccion_id, usuario_id)
         if not existing:
-            raise ValueError(f"Dirección con ID {direccion_id} no encontrada")
+            raise NotFoundError(f"Dirección con ID {direccion_id} no encontrada")
         updated = DireccionModel(
             direccion_id=existing.direccion_id,
             calle=data.calle if data.calle is not None else existing.calle,
@@ -22,4 +23,4 @@ class UpdateDireccion:
             referencia=data.referencia if data.referencia is not None else existing.referencia,
             is_primary=data.is_primary if data.is_primary is not None else existing.is_primary,
         )
-        return self.repo.update_direccion(direccion_id, updated, usuario_id)
+        return await self.repo.update_direccion(direccion_id, updated, usuario_id)

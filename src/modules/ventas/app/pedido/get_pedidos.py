@@ -7,8 +7,8 @@ class GetPedidos:
     def __init__(self, repo: PedidoPort):
         self.repo = repo
 
-    def execute(self, status: EstadoPedido | None) -> list[PedidoModel]:
+    async def execute(self, status: EstadoPedido | None) -> list[PedidoModel]:
         if status is None:
-            return self.repo.get_all()
+            return await self.repo.get_all()
         else:
-            return self.repo.get_by_status(status.value)
+            return await self.repo.get_by_status(status.value)

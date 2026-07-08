@@ -5,5 +5,5 @@ class DeleteCategory:
     def __init__(self, repo: CategoriaPort):
         self.repo = repo
 
-    def execute(self, categoria_id: int) -> None:
-        return self.repo.delete(categoria_id)
+    async def execute(self, categoria_id: int) -> None:
+        return await self.repo.delete(categoria_id)

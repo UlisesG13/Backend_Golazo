@@ -16,7 +16,7 @@ class LoginWithGoogle:
         self.user_repo = user_repo
         self.token_service = token_service
 
-    def execute(self, code: str) -> TokenResult:
+    async def execute(self, code: str) -> TokenResult:
 
         tokens = self.google_oauth.exchange_code(code)
         user_info = self.google_oauth.verify_id_token(tokens["id_token"])
@@ -25,13 +25,13 @@ class LoginWithGoogle:
         email = user_info["email"]
         nombre = user_info.get("name", "")
 
-        user = self.user_repo.get_by_google_id(google_id)
+        user = await self.user_repo.get_by_google_id(google_id)
 
         if not user: # si no encuentra el usuario por google id
-            existing = self.user_repo.get_by_email(email) #busca por email
+            existing = await self.user_repo.get_by_email(email) #busca por email
 
             if existing: # si existe agrega su google_id
-                self.user_repo.link_google(existing.usuario_id, google_id)
+                await self.user_repo.link_google(existing.usuario_id, google_id)
                 user = existing
             else: # si no existe lo crea
                 user = AuthUser(
@@ -46,7 +46,7 @@ class LoginWithGoogle:
                     fecha_creacion=datetime.now(timezone.utc),
                     fecha_eliminacion=None
                 )
-                user = self.user_repo.create(user)
+                user = await self.user_repo.create(user)
 
         payload = TokenPayload(
             usuario_id=user.usuario_id,
@@ -54,7 +54,7 @@ class LoginWithGoogle:
             rol=user.rol,
             exp=...  # definido por tu TokenService
         )
-        self.user_repo.verify_user(user.usuario_id)
+        await self.user_repo.verify_user(user.usuario_id)
         token = self.token_service.generate(payload)
 
         return TokenResult(

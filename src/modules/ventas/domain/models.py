@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
+from src.core.exceptions import BadRequestError
+
 
 @dataclass
 class PromocionModel:
@@ -51,7 +53,7 @@ class PromocionModel:
         if self.has_uses_left():
             self.contador_usos += 1
         else:
-            raise ValueError("La promoción ha alcanzado su límite de usos.")
+            raise BadRequestError("La promoción ha alcanzado su límite de usos.")
 
 
 @dataclass

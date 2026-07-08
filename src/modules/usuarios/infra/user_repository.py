@@ -3,7 +3,7 @@ from src.modules.usuarios.domain.models import UserModel
 from src.modules.usuarios.infra.tables import UserTable, Rol
 from src.modules.usuarios.domain.ports import UserPort
 from src.core.exceptions import NotFoundError
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timezone
 from sqlalchemy import select
 
@@ -20,15 +20,15 @@ def _to_domain(r: UserTable) -> UserModel:
     )
 
 class UserRepository(UserPort):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
 
-    def get_all(self) -> list[UserModel]:
+    async def get_all(self) -> list[UserModel]:
         stmt = select(UserTable)
-        rows = self.session.execute(stmt).scalars().all()
+        rows = (await self.session.execute(stmt)).scalars().all()
         return [_to_domain(r) for r in rows]
 
-    def get_by_id(self, usuario_id: str) -> UserModel | None:
+    async def get_by_id(self, usuario_id: str) -> UserModel | None:
         stmt = (
             select(UserTable)
             .where(
@@ -36,10 +36,10 @@ class UserRepository(UserPort):
                 UserTable.fecha_eliminacion.is_(None)
             )
         )
-        r = self.session.execute(stmt).scalar_one_or_none()
+        r = (await self.session.execute(stmt)).scalar_one_or_none()
         return _to_domain(r) if r else None
 
-    def get_by_email(self, email: str) -> UserModel | None:
+    async def get_by_email(self, email: str) -> UserModel | None:
         stmt = (
             select(UserTable)
             .where(
@@ -47,13 +47,13 @@ class UserRepository(UserPort):
                 UserTable.fecha_eliminacion.is_(None)
             )
         )
-        r = self.session.execute(stmt).scalar_one_or_none()
+        r = (await self.session.execute(stmt)).scalar_one_or_none()
 
         return _to_domain(r) if r else None
 
-    def update(self, usuario_id: str, user: UserModel) -> UserModel:
+    async def update(self, usuario_id: str, user: UserModel) -> UserModel:
         stmt = select(UserTable).where(UserTable.usuario_id == usuario_id)
-        model = self.session.execute(stmt).scalar_one_or_none()
+        model = (await self.session.execute(stmt)).scalar_one_or_none()
 
         if not model:
             raise NotFoundError(f"Usuario {usuario_id} no existe")
@@ -61,25 +61,24 @@ class UserRepository(UserPort):
         model.nombre = user.nombre
         model.telefono = user.telefono
 
-        self.session.commit()
-        self.session.refresh(model)
+        await self.session.commit()
+        await self.session.refresh(model)
 
         return _to_domain(model)
 
-    def delete(self, usuario_id: str) -> None:
-        model = self.session.query(UserTable).filter(UserTable.usuario_id == usuario_id).first()
+    async def delete(self, usuario_id: str) -> None:
+        model = (await self.session.execute(
+            select(UserTable).filter(UserTable.usuario_id == usuario_id)
+        )).scalar_one_or_none()
         if not model:
             raise NotFoundError(f"Usuario {usuario_id} no existe")
-        self.session.delete(model)
-        self.session.commit()
+        await self.session.delete(model)
+        await self.session.commit()
 
-    def anonymize_and_soft_delete(self, usuario_id: str) -> None:
-        user = (
-            self.session
-            .query(UserTable)
-            .filter(UserTable.usuario_id == usuario_id)
-            .first()
-        )
+    async def anonymize_and_soft_delete(self, usuario_id: str) -> None:
+        user = (await self.session.execute(
+            select(UserTable).filter(UserTable.usuario_id == usuario_id)
+        )).scalar_one_or_none()
         if not user:
             raise NotFoundError("Usuario no existe")
 
@@ -88,9 +87,9 @@ class UserRepository(UserPort):
         user.telefono = None
         user.fecha_eliminacion = datetime.now(timezone.utc)
 
-        self.session.commit()
+        await self.session.commit()
 
-    def create_admin(self, user: AuthUser) -> UserModel:
+    async def create_admin(self, user: AuthUser) -> UserModel:
         model = UserTable(
             usuario_id=user.usuario_id,
             nombre=user.nombre,
@@ -104,11 +103,11 @@ class UserRepository(UserPort):
             fecha_eliminacion=user.fecha_eliminacion
         )
         self.session.add(model)
-        self.session.commit()
-        self.session.refresh(model)
+        await self.session.commit()
+        await self.session.refresh(model)
         return _to_domain(model)
 
-    def get_all_admins(self) -> list[UserModel]:
+    async def get_all_admins(self) -> list[UserModel]:
         stmt = select(UserTable).where(UserTable.rol == Rol.administrador.value)
-        rows = self.session.execute(stmt).scalars().all()
+        rows = (await self.session.execute(stmt)).scalars().all()
         return [_to_domain(r) for r in rows]

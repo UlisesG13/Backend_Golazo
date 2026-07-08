@@ -1,5 +1,6 @@
 from uuid import uuid4
 from datetime import datetime
+from src.core.exceptions import BadRequestError
 from src.modules.carrito.domain import CarritoModel, CarritoPort, CarritoItemModel
 from src.modules.carrito.presentation.carrito_dto import AddItemRequest
 from src.modules.catalogo.domain.ports import ProductoPort
@@ -10,8 +11,8 @@ class AddItemUseCase:
         self.repo = repo
         self.producto_repo = producto_repo
 
-    def execute(self, usuario_id: str, dto: AddItemRequest) -> CarritoModel:
-        carrito = self.repo.get_by_user_id(usuario_id)
+    async def execute(self, usuario_id: str, dto: AddItemRequest) -> CarritoModel:
+        carrito = await self.repo.get_by_user_id(usuario_id)
 
         if not carrito:
             carrito = CarritoModel(
@@ -21,9 +22,9 @@ class AddItemUseCase:
                 fecha_actualizacion=datetime.now(),
                 items=[]
             )
-            carrito = self.repo.save(carrito)  # persistir inmediatamente
+            carrito = await self.repo.save(carrito)  # persistir inmediatamente
 
-        producto = self.producto_repo.get_by_id(dto.producto_id)
+        producto = await self.producto_repo.get_by_id(dto.producto_id)
 
         if not producto:
             raise Exception("Producto no encontrado")
@@ -42,7 +43,7 @@ class AddItemUseCase:
                 cantidad_total += item_existente.cantidad
                 
             if cantidad_total > producto.stock:
-                raise ValueError(f"No hay suficiente stock. Límite disponible: {producto.stock}")
+                raise BadRequestError(f"No hay suficiente stock. Límite disponible: {producto.stock}")
 
         nuevo_item = CarritoItemModel(
             carrito_item_id=None,
@@ -67,4 +68,4 @@ class AddItemUseCase:
 
         carrito.fecha_actualizacion = datetime.now()
 
-        return self.repo.save(carrito)
+        return await self.repo.save(carrito)

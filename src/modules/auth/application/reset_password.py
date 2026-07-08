@@ -7,6 +7,6 @@ class ResetPassword:
         self.auth_repo = repo
         self.password_repo = password_repo
 
-    def execute(self, user_id: str, password: str):
+    async def execute(self, user_id: str, password: str):
         hash = self.password_repo.hash(password)
-        return self.auth_repo.update_password(user_id, hash)
+        return await self.auth_repo.update_password(user_id, hash)

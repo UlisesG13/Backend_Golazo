@@ -1,5 +1,6 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from src.modules.carrito.domain import CarritoPort
 from src.modules.carrito.domain.carrito_model import CarritoModel, CarritoItemModel
@@ -27,23 +28,24 @@ def to_domain(table: CarritoTable) -> CarritoModel:
 
 
 class CarritoRepository(CarritoPort):
-    def __init__(self, session: Session):
+    def __init__(self, session: AsyncSession):
         self.session = session
 
-    def get_by_user_id(self, user_id: str) -> CarritoModel | None:
+    async def get_by_user_id(self, user_id: str) -> CarritoModel | None:
         # Usamos joinedload para traer los ítems en una sola consulta (Eager Loading)
         stmt = select(CarritoTable).where(CarritoTable.usuario_id == user_id).options(
             joinedload(CarritoTable.items)
         )
-        result = self.session.execute(stmt).unique().scalar_one_or_none()
+        result = await self.session.execute(stmt)
+        result = result.unique().scalar_one_or_none()
 
         if not result:
             return None
 
         return to_domain(result)
 
-    def save(self, model: CarritoModel):
-        carrito_db = self.session.get(CarritoTable, model.carrito_id)
+    async def save(self, model: CarritoModel):
+        carrito_db = await self.session.get(CarritoTable, model.carrito_id)
 
         if not carrito_db:
             carrito_db = CarritoTable(
@@ -81,13 +83,13 @@ class CarritoRepository(CarritoPort):
         carrito_db.fecha_creacion = model.fecha_creacion
         carrito_db.fecha_actualizacion = model.fecha_actualizacion
 
-        self.session.commit()
-        self.session.refresh(carrito_db)
+        await self.session.commit()
+        await self.session.refresh(carrito_db)
 
         return to_domain(carrito_db)  # # type: ignore[arg-type]
 
-    def delete(self, cart_id: str) -> None:
-        carrito = self.session.get(CarritoTable, cart_id)
+    async def delete(self, cart_id: str) -> None:
+        carrito = await self.session.get(CarritoTable, cart_id)
         if carrito:
             self.session.delete(carrito)
-            self.session.commit()
+            await self.session.commit()

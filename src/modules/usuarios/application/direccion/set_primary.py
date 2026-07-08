@@ -5,8 +5,8 @@ class SetPrimaryDireccion:
     def __init__(self, repo: DireccionPort):
         self.repo = repo
 
-    def execute(self, direccion_id: int, usuario_id: str) -> None:
-        direccion = self.repo.get_direccion_by_id(direccion_id, usuario_id)
+    async def execute(self, direccion_id: int, usuario_id: str) -> None:
+        direccion = await self.repo.get_direccion_by_id(direccion_id, usuario_id)
         if not direccion:
             return None
-        return self.repo.set_primary(direccion_id, usuario_id)
+        return await self.repo.set_primary(direccion_id, usuario_id)

@@ -6,5 +6,5 @@ class GetAllColors:
     def __init__(self, repo: ColorPort):
         self.repo = repo
 
-    def execute(self) -> list[ColorModel]:
-        return self.repo.get_all()
+    async def execute(self) -> list[ColorModel]:
+        return await self.repo.get_all()

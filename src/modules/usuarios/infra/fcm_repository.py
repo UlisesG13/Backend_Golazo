@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.modules.usuarios.domain.models import DeviceToken
 from src.modules.usuarios.domain.ports import DeviceTokenPort
@@ -16,12 +16,12 @@ def to_domain(r: DeviceTokenTable) -> DeviceToken:
 
 
 class DeviceTokenRepository(DeviceTokenPort):
-    def __init__(self, db_session: Session):
+    def __init__(self, db_session: AsyncSession):
         self.db = db_session
 
-    def save(self, user_id: str, token: str) -> None:
+    async def save(self, user_id: str, token: str) -> None:
         stmt = select(DeviceTokenTable).filter(DeviceTokenTable.token == token)
-        existing = self.db.execute(stmt).scalars().first()
+        existing = (await self.db.execute(stmt)).scalars().first()
         if existing:
             return
         new_token = DeviceTokenTable(
@@ -30,26 +30,26 @@ class DeviceTokenRepository(DeviceTokenPort):
         )
 
         self.db.add(new_token)
-        self.db.flush()
-        self.db.refresh(new_token)
-        self.db.commit()
+        await self.db.flush()
+        await self.db.refresh(new_token)
+        await self.db.commit()
 
-    def get_by_user(self, user_id: int) -> list[DeviceToken]:
+    async def get_by_user(self, user_id: int) -> list[DeviceToken]:
         stmt = select(DeviceTokenTable).filter(DeviceTokenTable.user_id == user_id)
-        rows = self.db.execute(stmt).scalars().all()
+        rows = (await self.db.execute(stmt)).scalars().all()
         return [to_domain(r) for r in rows]
 
-    def get_all(self) -> list[DeviceToken]:
+    async def get_all(self) -> list[DeviceToken]:
         stmt = select(DeviceTokenTable)
-        rows = self.db.execute(stmt).scalars().all()
+        rows = (await self.db.execute(stmt)).scalars().all()
         return [to_domain(r) for r in rows]
 
-    def delete(self, token: str) -> None:
+    async def delete(self, token: str) -> None:
         stmt = select(DeviceTokenTable).filter(DeviceTokenTable.token == token)
-        r = self.db.execute(stmt).scalars().first()
+        r = (await self.db.execute(stmt)).scalars().first()
 
         if not r:
             return
 
-        self.db.delete(r)
-        self.db.commit()
+        await self.db.delete(r)
+        await self.db.commit()

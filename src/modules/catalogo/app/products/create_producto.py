@@ -8,7 +8,7 @@ class CreateProducto:
     def __init__(self, repo: ProductoPort):
         self.repo = repo
         
-    def execute(self, dto: ProductoCreateDTO) -> ProductoModel:
+    async def execute(self, dto: ProductoCreateDTO) -> ProductoModel:
         producto = ProductoModel(
             producto_id=str(uuid4()),
             nombre=dto.nombre,
@@ -19,4 +19,4 @@ class CreateProducto:
             categoria_id=dto.categoria_id,
             fecha_creacion=datetime.now()
         )
-        return self.repo.create_producto(producto)
+        return await self.repo.create_producto(producto)
